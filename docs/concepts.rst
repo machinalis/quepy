@@ -40,3 +40,36 @@ For example, if your IRkeys are always in lowercase, you can define:
 .. code-block:: python
 
     HasKeyword.sanitize = staticmethod(lambda x: x.lower())
+
+
+Particles
+---------
+
+It's very common to find patters that are repeated on several regex so quepy
+provides a mechanism to do this easily. For example, in the DBpedia example,
+a country it's used several times as regex and it has always the same semantics.
+In order to do this in a clean way, one can define a Particle by doing:
+
+.. code-block:: python
+
+    class Country(Particle):
+        regex = Plus(Pos("NN") | Pos("NNP"))
+
+        def semantics(self, match):
+            name = match.words.tokens.title()
+            return IsCountry() + HasKeyword(name)
+
+this 'particle' can be used to match thing in regex like this:
+
+.. code-block:: python
+
+    regex = Lemma("who") + Token("is") + Pos("DT") + Lemma("president") + \
+        Pos("IN") + Country() + Question(Pos("."))
+
+
+and can be used in the semantics() method just as an attribut of the match object:
+
+.. code-block:: python
+
+    def semantics(self, match):
+        president = PresidentOf(match.country)
