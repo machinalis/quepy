@@ -1,0 +1,3 @@
+recursive-include docs *.rst Makefile
+recursive-include examples *.py
+recursive-include tests *.py

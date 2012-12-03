@@ -1,0 +1,237 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+"""
+Quepy command line tool.
+"""
+
+import os
+import sys
+import base64
+import subprocess
+from xml.sax.saxutils import escape
+
+import quepy
+from quepy.printout import expression_to_dot, expression_to_sparql
+
+
+HTML_TEMPLATE = """
+<html><body>
+<table style="border:0" align="center">
+    <tr>
+        <td colspan="2"><h2 style="text-align: center">{question}</h2></td>
+    </tr>
+    <tr><td colspan="2"><hr /></td></tr>
+    {rows}
+</table>
+</body></html>
+"""
+
+QUERY_TEMPLATE = """
+<tr>
+    <td><b style="text-align: center"></b><br /> <pre>{sparql}</pre> </td>
+    <td style="padding-left: 50px">
+        <img src="data:image/png;base64,{image_base64}" />
+    </td>
+</tr>
+<tr>
+    <td colspan="2"><hr /></td>
+</tr>
+"""
+
+
+class CommandNotFound(Exception):
+    pass
+
+
+def startapp(name, *args):
+    """ Creates an application template. """
+
+    san_name = name.decode("ascii", "ignore").lower().replace(" ", "_")
+
+    header_template = "#!/usr/bin/env python\n" \
+                      "# coding: utf-8\n\n"\
+
+    main_template = "import quepy\n" \
+        "{san_name} = quepy.install(\"{name}\")\n"
+
+    description_template = "\"\"\"\n" \
+        "{module} for {name} quepy.\n" \
+        "\"\"\"\n\n" \
+
+    # Create the main folder
+    folder = san_name
+    os.mkdir(folder)
+    os.mkdir(os.path.join(folder, folder))
+
+    main_filename = os.path.join(folder, "main.py")
+    regex_filename = os.path.join(folder, folder, "regex.py")
+    init_filename = os.path.join(folder, folder, "__init__.py")
+    semantics_filename = os.path.join(folder, folder, "semantics.py")
+
+    # We'll copy the content of the settings on quepy to the app
+    quepy_folder = os.path.dirname(quepy.__file__)
+    settings_real_file = os.path.join(quepy_folder, "settings.py")
+    settings_filename = os.path.join(folder, folder, "settings.py")
+
+    with open(main_filename, "w") as fh:
+        fh.write(header_template)
+        fh.write(description_template.format(module="Main script",
+                                             name=name))
+        fh.write(main_template .format(san_name=san_name, name=name))
+
+    with open(regex_filename, "w") as fh:
+        fh.write(header_template)
+        fh.write(description_template.format(module="Regex", name=name))
+
+    with open(semantics_filename, "w") as fh:
+        fh.write(header_template)
+        fh.write(description_template.format(module="Semantics",
+                                             name=name))
+
+    with open(init_filename, "w") as fh:
+        fh.write(header_template)
+        fh.write(description_template.format(module="Init",
+                                             name=name))
+
+    # Copy the content of settings
+    with open(settings_real_file, "r") as fh:
+        settings_content = fh.read()
+    with open(settings_filename, "w") as fh:
+        fh.write(settings_content)
+
+
+def print_help(*args):
+    """ Shows this help message. """
+
+    print >> sys.stderr, "Usage {0} COMMAND [args]".format(sys.argv[0])
+    print >> sys.stderr, "Avaliable commands:"
+    for command, handler in COMMANDS_MAP.iteritems():
+        docs = handler.__doc__.strip()
+        print >> sys.stderr, " * {0} - {1}".format(command, docs)
+
+
+def print_version(*args):
+    """ Prints the current version of quepy. """
+
+    print "Quepy {0}".format(quepy.VERSION)
+
+
+def graph_query(app_name, question, *args):
+    """ HTML inform with a graph representation of the query generated.
+    Usage: app_name QUESTION
+    """
+
+    question = question.decode("utf-8")
+
+    # Set the path to the app
+    sys.path.append(os.getcwd())
+
+    try:
+        app = quepy.install(app_name)
+    except Exception, error:
+        print >> sys.stderr, "Couldn't install app '%s': %s" % \
+                             (app_name, error)
+        sys.exit(1)
+
+    rows = ""
+    for expression, userdata in app._iter_compiled_forms(question):
+        dot_string = expression_to_dot(expression)
+        target, query = expression_to_sparql(expression)
+
+        dot_path = "/tmp/quepy_graph.dot"
+        cmdline = "dot -Tpng %s" % dot_path
+
+        with open(dot_path, "w") as filehandler:
+            filehandler.write(dot_string)
+
+        call = subprocess.Popen(cmdline.split(), stdout=subprocess.PIPE)
+        output, _ = call.communicate()
+
+        image_base64 = base64.b64encode(output)
+
+        query = "\n".join([x for x in query.split("\n")
+                           if not x.startswith("PREFIX")])
+        query = escape(query)
+        rows += QUERY_TEMPLATE.format(sparql=query, image_base64=image_base64)
+
+    html = HTML_TEMPLATE.format(question=question, rows=rows)
+    with open("inform.html", "w") as filehandler:
+        filehandler.write(html)
+
+
+def print_tags(app_name, *args):
+    """ Prints the POS tags of a given text.
+    Usage: app_name TEXT.
+    """
+
+    # Set the path to the app
+    sys.path.append(os.getcwd())
+
+    try:
+        # Install the app to set the settings
+        quepy.install(app_name)
+    except Exception, error:
+        print >> sys.stderr, "Couldn't install app '%s': %s" % \
+                             (app_name, error)
+        sys.exit(1)
+
+    text = " ".join(args).decode("ascii")
+    tagger = quepy.tagger.get_tagger()
+    tagger_out = tagger(text)
+
+    attrs = "TOKEN LEMMA POS PROB SENSE".split()
+    print " ".join(["{:13.13}".format(x) for x in attrs])
+
+    for word in tagger_out:
+        print word.fullstr()
+
+
+def nltkdata(path, *args):
+    """Downloads needed nltk data files into a supplied path """
+
+    print "Preparing to download..."
+    import nltk
+    try:
+        os.mkdir(path)
+    except OSError:
+        pass
+    nltk.download("wordnet", path)
+    nltk.download("maxent_treebank_pos_tagger", path)
+    print "Finished"
+
+
+def run_command(command, args):
+    if command not in COMMANDS_MAP:
+        message = "Command {0!r} does not exists"
+        raise CommandNotFound(message.format(command))
+
+    handler = COMMANDS_MAP.get(command)
+    handler(*args)
+
+
+COMMANDS_MAP = {
+    "startapp": startapp,
+    "help": print_help,
+    "version": print_version,
+    "graph": graph_query,
+    "--version": print_version,
+    "nltkdata": nltkdata,
+    "tag": print_tags,
+}
+
+
+if __name__ == "__main__":
+    if len(sys.argv) <= 1:
+        print_help()
+        sys.exit(1)
+
+    command = sys.argv[1]
+    args = sys.argv[2:]
+
+    try:
+        run_command(command, args)
+    except CommandNotFound, error:
+        print >> sys.stderr, error
+        print
+        print_help()
