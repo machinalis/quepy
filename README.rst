@@ -77,26 +77,21 @@ Installation
 You need to have installed `numpy <http://numpy.scipy.org/>`_.
 Other than that, you can just type:
 
+::
     
     pip install quepy
 
 You can get more details on the installation here:
 
-----------------------------------
-| TODO: ADD LINK TO INSTALLATION |
-----------------------------------
+`<http://quepy.readthedocs.org/en/latest/installation.html>`_
 
 Learn more
 ==========
 
 You can find a tutorial here:
 
-------------------------------
-| TODO: ADD LINK TO TUTORIAL |
-------------------------------
+`<http://quepy.readthedocs.org/en/latest/tutorial.html>`_
 
 And the full documentation here:
 
------------------------------------
-| TODO: ADD LINK TO DOCUMENTATION |
------------------------------------
+`<http://quepy.readthedocs.org/>`_
