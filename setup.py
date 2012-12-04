@@ -23,7 +23,7 @@ setup(
         "Topic :: Scientific/Engineering :: Human Machine Interfaces",
         "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
         "Topic :: Software Development :: Libraries :: Application Frameworks",
-        "Topic :: Text Processing :: Linguistic"
+        "Topic :: Text Processing :: Linguistic",
         "Topic :: Text Processing",
         "Topic :: Utilities",
         ],
