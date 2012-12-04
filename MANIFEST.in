@@ -1,3 +1,6 @@
 recursive-include docs *.rst Makefile
 recursive-include examples *.py
 recursive-include tests *.py
+include LICENSE
+include MANIFEST.in
+include README.rst
