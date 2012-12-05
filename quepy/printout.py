@@ -15,7 +15,7 @@ Output utilities.
 import logging
 from semantics import IsRelatedTo
 from encodingpolicy import assert_valid_encoding
-from semantics import isnode
+from expression import isnode
 
 
 def adapt(x, sparql=True):
