@@ -26,13 +26,16 @@ An example
 
 To illustrate what can you do with quepy, we included an example application to
 access `DBpedia <http://dbpedia.org/>`_ contents via their `sparql` endpoint.
-By doing:
+
+You can try the example online `here <http://quepy.machinalis.com/>`_
+
+Or, you can try the example yourself by doing:
 
 ::
 
     python examples/dbpedia/main.py "Who is Tom Cruise?"
 
-It outputs:
+And it will output something like this:
 
 .. code-block:: sparql
 
