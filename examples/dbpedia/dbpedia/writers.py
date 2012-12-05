@@ -58,7 +58,7 @@ class WhoWroteRegex(RegexTemplate):
 class BooksByAuthorRegex(RegexTemplate):
     """
     Ex: "list books by George R. R. Martin"
-        "which books did Suzanne Collins write?"
+        "which books did Suzanne Collins wrote?"
     """
 
     regex = (Question(Lemma("list")) + Lemmas("book by") + Author()) | \
