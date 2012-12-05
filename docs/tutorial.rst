@@ -94,15 +94,17 @@ Start by downloading the necesary data for the tagger:
 
     $ quepy nltkdata ~/nltk_data/
 
-All the necesary data will be downloaded to `~/nltk_data/`, but you can choose
+All the necesary data will be downloaded to ``~/nltk_data/``, but you can choose
 any other path you like.
 Now edit *dbpedia/settings.py* and add the path to the nltk data to the
 NLTK_DATA variable.
 This file has some other configuration options, but we are not going to need
 them for this example.
 
-.. What's a tagger anyway?::
+.. Note::
     
+    What's a tagger anyway?
+
     A "tagger" (in this context) is a linguistic tool help analyze natural
     language. It's composed of:
         -`A tokenizer <http://en.wikipedia.org/wiki/Tokenization>`_
@@ -156,7 +158,7 @@ Now let's discuss this procedure step by step.
 
 First of all, note that regex handlers need to be a subclass from
 :class:`quepy.regex.RegexTemplate`. They also need to define a class
-attribute called `regex` with a refo regex.
+attribute called ``regex`` with a refo regex.
 
 Then, we describe the structure of the input question as a regular expression,
 and store it in the *regex* attribute. In our example, this is done in Line 14:
@@ -188,7 +190,7 @@ analyze questions: Freeling and NLTK Tagger. See the Library Reference
 for details as how to use this analyzers within quepy.
 
 Finally, if a regex has a successful match with an input question, the
-`semantics` method will be called with the match. In Lines 16 to 22,
+``semantics`` method will be called with the match. In Lines 16 to 22,
 we define the *semantics* method, which specifies the semantics of a
 matched question:
 
@@ -240,8 +242,8 @@ rdf:comment. By creating a quepy class, we provide a further level of
 abstraction on this feature which allows to integrate it in regular
 expressions seamlessly.
 
-The `reverse` part of the deal it's not easy to explain, so bear with me.
-When we say `relation = "rdfs:comment"` and `definition = IsDefinedIn(target)`
+The ``reverse`` part of the deal it's not easy to explain, so bear with me.
+When we say ``relation = "rdfs:comment"`` and ``definition = IsDefinedIn(target)``
 we are stating that we want
 
 ::
@@ -254,14 +256,9 @@ But how does the framework knows that we are not trying to say this?:
 
     ?definition rdfs:comment ?target
 
-Well, that's where `reverse` kicks in. If you set it to `True` (it's `False`
-by default) you get the first situation, if not you get the second situation.
-
-.. Note::
-
-    If you want to better understand why and how `reverse` works you can read
-    the :ref:`expression-module` documentation. But you are warned: It's way
-    off the scope of a tutorial.
+Well, that's where ``reverse`` kicks in. If you set it to ``True`` (it's
+``False`` by default) you get the first situation, if not you get the second
+situation.
 
 
 Using the application
