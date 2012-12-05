@@ -1,7 +1,12 @@
 Application Tutorial
 ====================
 
-To illustrate how to use quepy, we will build an example application to access DBpedia.
+To illustrate how to use quepy, we will build step by step
+an example application to access DBpedia.
+
+The finished example application can be tried online here: `Online demo <http://quepy.machinalis.com/>`_
+
+The finished example code can be found here: `Code <https://github.com/machinalis/quepy/tree/master/examples/dbpedia/dbpedia>`_
 
 First, we will select some questions to be answered with dbpedia's database and then we will develop the quepy machinery to transform them.
 
