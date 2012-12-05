@@ -15,10 +15,11 @@ Output utilities.
 import logging
 from semantics import IsRelatedTo
 from encodingpolicy import assert_valid_encoding
+from semantics import isnode
 
 
 def adapt(x, sparql=True):
-    if isinstance(x, int):
+    if isnode(x):
         x = u"x{}".format(x)
         if sparql:
             x = u"?" + x
