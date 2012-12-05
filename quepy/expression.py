@@ -8,10 +8,6 @@
 # Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
-from collections import defaultdict
-from copy import deepcopy
-
-
 """
 This file implements the `Expression` class.
 
@@ -54,16 +50,22 @@ following basic operations:
                   `?x rdf:label "John Von Neumann"`.
 
     - `merge`: Given two `Expressions`, it joins their graphs preserving every
-               node and every edge intact except for their `head`s. The `head`s
-               are merged into a single node that is the new `head` and shares
-               all the edges of the previous heads. This is used to combine
-               two graphs like this:
+               node and every edge intact except for their `head` nodes.
+               The `head` nodes are merged into a single node that is the new
+               `head` and shares all the edges of the previous heads.
+               This is used to combine two graphs like this:
 
-                   - `A = ?x rdf:type ?y`
-                   - `B = ?x rdf:label "John Von Neumann"`
+               ::
 
-               Into a new one: `A + B = ?x rdf:type ?y;
-                                        ?x rdf:label "John Von Neumann"`
+                   A = ?x rdf:type ?y
+                   B = ?x rdf:label "John Von Neumann"
+
+               Into a new one:
+
+               ::
+
+                   A + B = ?x rdf:type ?y;
+                           ?x rdf:label "John Von Neumann"
 
 
 You might be saying "Why?! oh gosh why you did it like this?!".
@@ -84,6 +86,10 @@ The reasons are:
       consisely without special cases (if you care for that kind of stuff
       (I do)).
 """
+
+
+from collections import defaultdict
+from copy import deepcopy
 
 
 def isnode(x):
@@ -151,10 +157,10 @@ class Expression(object):
         Adds a `relation` to some constant `value` to the `head` of the
         Expression.
         `value` is recommended be of type:
-            - `unicode`
-            - `str` and can be decoded using the default encoding (settings.py)
-            - A custom class that implements a `__unicode__` method.
-            - It can *NEVER* be an `int`.
+        - `unicode`
+        - `str` and can be decoded using the default encoding (settings.py)
+        - A custom class that implements a `__unicode__` method.
+        - It can *NEVER* be an `int`.
 
         You should not use this to relate nodes in the graph, only to add
         data fields to a node.
@@ -173,9 +179,9 @@ class Expression(object):
         """
         Iterates over the pairs: `(relation, index)` which are the neighbors
         of `node` in the expression graph, where:
-            - `node` is the index of the node (the unique identifier).
-            - `relation` is the label of the edge between the nodes
-            - `index` is the index of the neighbor (the unique identifier).
+        - `node` is the index of the node (the unique identifier).
+        - `relation` is the label of the edge between the nodes
+        - `index` is the index of the neighbor (the unique identifier).
         """
         return iter(self.nodes[node])
 
