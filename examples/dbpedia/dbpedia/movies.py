@@ -85,7 +85,7 @@ class MovieDurationRegex(RegexTemplate):
     """
 
     regex = ((Lemmas("how long be") + Movie()) |
-            (Lemma("what be") + Pos("DT") + Lemma("duration") +
+            (Lemmas("what be") + Pos("DT") + Lemma("duration") +
              Pos("IN") + Movie())) + \
             Question(Pos("."))
 
