@@ -1,19 +1,29 @@
 Application Tutorial
 ====================
 
-To illustrate how to use quepy, we will build step by step
-an example application to access DBpedia.
+.. Note::
 
-The finished example application can be tried online here: `Online demo <http://quepy.machinalis.com/>`_
+    The aim of this tutorial is to show you how to build a custom natural
+    language interface to your own database using an example.
 
-The finished example code can be found here: `Code <https://github.com/machinalis/quepy/tree/master/examples/dbpedia/dbpedia>`_
+To illustrate how to use quepy as a framework for natural language interface
+for databases, we will build (step by step) an example application to access
+`DBpedia <http://dbpedia.org/>`_.
 
-First, we will select some questions to be answered with dbpedia's database and then we will develop the quepy machinery to transform them.
+The finished example application can be tried online here:
+`Online demo <http://quepy.machinalis.com/>`_
+
+The finished example code can be found here:
+`Code <https://github.com/machinalis/quepy/tree/master/examples/dbpedia/dbpedia>`_
+
+The first step is to select the questions that we want to be answered with
+dbpedia's database and then we will develop the quepy machinery to transform
+them into SPARQL queries.
 
 Selected Questions
 ------------------
 
-In our example application, we want to answer questions like:
+In our example application, we'll be seeking to answer questions like:
 
 Who is *<someone>*, for example:
 
@@ -62,25 +72,43 @@ It should look like this:
 
 This is the basic structure of every quepy project.
 
-* main.py: this is a file where you will interact with the installation of your application.
-* dbpedia/regex.py: the file where you will define the regular expressions that will match natural language questions and transform them into an abstract semantic representation.
-* dbpedia/semantics.py: the file where you will define the specific semantics of your database schema.
-* dbpedia/settings.py: the configuration file for some aspects of the installation.
+* dbpedia/regex.py: the file where you will define the regular expressions
+  that willll match natural language questions and transform them into an
+  abstract semantic representation.
+* dbpedia/semantics.py: the file where you will define the specific semantics
+  of your database schema. In the case of SPARQL, here you will be specifing
+  things that usually go in the ontology: relation names and such.
+* dbpedia/settings.py: the configuration file for some aspects of the
+  installation.
+* main.py: this file is a optional kickstart point where you can have all the
+  code you need to interact with your app. If you want, you can safely remove
+  this file.
 
 Configuring the application
 ---------------------------
 
 Fist of all, we'll start by configuring some basic aspects of the application.
-Start by downloading the necesary data for the tagger, you do this by doing:
+Start by downloading the necesary data for the tagger:
 
 ::
 
     $ quepy nltkdata ~/nltk_data/
 
-And the necesary data will be downloaded.
-Then, you have to edit the file *dbpedia/settings.py* to your personal needs.
-In our example, we're have to set up the path of the nltk data and you do that
-setting the value of the NLTK_DATA variable.
+All the necesary data will be downloaded to `~/nltk_data/`, but you can choose
+any other path you like.
+Now edit *dbpedia/settings.py* and add the path to the nltk data to the
+NLTK_DATA variable.
+This file has some other configuration options, but we are not going to need
+them for this example.
+
+.. What's a tagger anyway?::
+    
+    A "tagger" (in this context) is a linguistic tool help analyze natural
+    language. It's composed of:
+        -`A tokenizer <http://en.wikipedia.org/wiki/Tokenization>`_
+        -`A part-of-speech tagger <http://en.wikipedia.org/wiki/Part-of-speech_tagging>`_
+        -`A lemmatizer <http://en.wikipedia.org/wiki/Lemmatisation>`_
+    If this is too much info for you, you can safely treat it like a black box.
 
 Defining the regex
 ------------------
@@ -130,7 +158,8 @@ First of all, note that regex handlers need to be a subclass from
 :class:`quepy.regex.RegexTemplate`. They also need to define a class
 attribute called `regex` with a refo regex.
 
-Then, we describe the structure of the input question as a regular expression, and store it in the *regex* attribute. In our example, this is done in Line 14:
+Then, we describe the structure of the input question as a regular expression,
+and store it in the *regex* attribute. In our example, this is done in Line 14:
 
 .. code-block:: python
 
@@ -211,9 +240,29 @@ rdf:comment. By creating a quepy class, we provide a further level of
 abstraction on this feature which allows to integrate it in regular
 expressions seamlessly.
 
-Because we want to obtain the data from that comment insteed of specifying
-some relation, we set reverse to True and that will change the semantics
-so that the expression resulting obtains that data.
+The `reverse` part of the deal it's not easy to explain, so bear with me.
+When we say `relation = "rdfs:comment"` and `definition = IsDefinedIn(target)`
+we are stating that we want
+
+::
+
+    ?target rdfs:comment ?definition
+
+But how does the framework knows that we are not trying to say this?:
+
+::
+
+    ?definition rdfs:comment ?target
+
+Well, that's where `reverse` kicks in. If you set it to `True` (it's `False`
+by default) you get the first situation, if not you get the second situation.
+
+.. Note::
+
+    If you want to better understand why and how `reverse` works you can read
+    the :ref:`expression-module` documentation. But you are warned: It's way
+    off the scope of a tutorial.
+
 
 Using the application
 ---------------------
@@ -229,7 +278,7 @@ our example there are some lines of code to use the application.
     print query
 
 
-This code should be enought to obtain the following query:
+This code should be enough to obtain the following query:
 
 ::
 

@@ -1,3 +1,5 @@
+.. _expression-module:
+
 Expression
 ==========
 

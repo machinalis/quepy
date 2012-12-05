@@ -37,7 +37,7 @@ Or, you can try the example yourself by doing:
 
 And it will output something like this:
 
-.. code-block:: sparql
+::
 
     SELECT DISTINCT ?x1 WHERE {
         ?x0 rdf:type foaf:Person.
@@ -65,7 +65,7 @@ And then using and a convenient way to express semantic relations:
 The rest of the transformation is handled automatically by the framework to
 finally produce this sparql:
 
-.. code-block:: sparql
+::
 
     SELECT DISTINCT ?x1 WHERE {
         ?x0 rdf:type foaf:Person.
