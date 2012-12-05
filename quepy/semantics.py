@@ -20,9 +20,8 @@ from quepy.encodingpolicy import encoding_flexible_conversion
 
 class FixedRelation(Expression):
     """
-    Expression for a fixed relation. This is
-    A si related to B through this the relation
-    defined in this relation.
+    Expression for a fixed relation. It states that "A is related to B"
+    through the relation defined in `relation`.
     """
 
     relation = None
@@ -43,8 +42,7 @@ class FixedRelation(Expression):
 class FixedType(Expression):
     """
     Expression for a fixed type.
-    This is captures the idea of something
-    having an specific type.
+    This captures the idea of something having an specific type.
     """
 
     fixedtype = None
@@ -72,8 +70,7 @@ class FixedType(Expression):
 class FixedDataRelation(Expression):
     """
     Expression for a fixed relation. This is
-    A si related to a data through this the relation
-    defined in this relation.
+    "A is related to Data" through the relation defined in `relation`.
     """
 
     relation = None
