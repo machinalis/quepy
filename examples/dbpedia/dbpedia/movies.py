@@ -61,7 +61,7 @@ class ListMoviesRegex(RegexTemplate):
 
 class MoviesByDirectorRegex(RegexTemplate):
     """
-    Ex: "List movies by Quentin Tarantino.
+    Ex: "List movies directed by Quentin Tarantino.
         "movies directed by Martin Scorsese"
         "which movies did Mel Gibson directed"
     """
