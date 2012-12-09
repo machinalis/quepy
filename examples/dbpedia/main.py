@@ -139,7 +139,7 @@ if __name__ == "__main__":
         # "List Microsoft software",
         "Name Fiat cars",
         "time in argentina",
-        "what time is on Chile?",
+        "what time is it in Chile?",
         "List movies directed by Martin Scorsese",
         "How long is Pulp Fiction",
         "which movies did Mel Gibson starred?",
