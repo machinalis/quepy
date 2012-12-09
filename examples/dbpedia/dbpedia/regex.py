@@ -71,12 +71,15 @@ class ListEntity(RegexTemplate):
 class WhatTimeIs(RegexTemplate):
     """
     Regex for questions about the time
-    Ex: "What time is in Cordoba"
+    Ex: "What time is it in Cordoba"
     """
 
     nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
     place = Group(nouns, "place")
-    openings = (Lemma("what") + Lemma("time") + Token("is")) | Lemma("time")
+    openings = (Lemma("what") + ((Token("is") + Token("the") + Question(Lemma("current")) +
+                                  Question(Lemma("local")) + Lemma("time")) | \
+                                 (Lemma("time") + Token("is") + Token("it")))) | \
+               Lemma("time")
     regex = openings + Pos("IN") + place + Question(Pos("."))
 
     def semantics(self, match):
