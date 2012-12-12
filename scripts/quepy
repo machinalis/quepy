@@ -13,6 +13,7 @@ from xml.sax.saxutils import escape
 
 import quepy
 from quepy.printout import expression_to_dot, expression_to_sparql
+from quepy.encodingpolicy import encoding_flexible_conversion
 
 
 HTML_TEMPLATE = """
@@ -201,6 +202,59 @@ def nltkdata(path, *args):
     print "Finished"
 
 
+def autotest(app_name, *args):
+    """ Auto tests the application """
+
+    import re
+    import refo
+
+    _EOL = None
+    sys.path.append(os.getcwd())
+    example_re = re.compile('"(.*?)"')
+
+    try:
+        # Install the app to set the settings
+        quepy.install(app_name)
+    except Exception, error:
+        print >> sys.stderr, "Couldn't install app '%s': %s" % \
+                             (app_name, error)
+        sys.exit(1)
+
+    regex_module = __import__("{0}.regex".format(app_name), fromlist=[None])
+
+    errors_found = False
+    regex_list = {}
+    for attr_name in dir(regex_module):
+        attr = getattr(regex_module, attr_name)
+        try:
+            if issubclass(attr, quepy.regex.RegexTemplate):
+                examples = example_re.findall(attr.__doc__)
+                regex_list[attr] = examples
+        except TypeError:
+            pass
+
+    for regex_class in regex_list:
+        regex = regex_class.regex + refo.Literal(_EOL)
+
+        for text in regex_list[regex_class]:
+            text = encoding_flexible_conversion(text)
+            tagger = quepy.tagger.get_tagger()
+            words = tagger(text)
+
+            match = refo.match(regex, words + [_EOL])
+            if not match:
+                if not errors_found:
+                    errors_found = True
+                    print "The following errors have been found:\n"
+
+                print regex_class.__name__
+                print words
+                print
+
+    if not errors_found:
+        print "No errors were found :)"
+
+
 def run_command(command, args):
     if command not in COMMANDS_MAP:
         message = "Command {0!r} does not exists"
@@ -218,6 +272,7 @@ COMMANDS_MAP = {
     "--version": print_version,
     "nltkdata": nltkdata,
     "tag": print_tags,
+    "autotest": autotest,
 }
 
 
