@@ -146,8 +146,13 @@ def graph_query(app_name, question, *args):
         with open(dot_path, "w") as filehandler:
             filehandler.write(dot_string)
 
-        call = subprocess.Popen(cmdline.split(), stdout=subprocess.PIPE)
-        output, _ = call.communicate()
+        try:
+            call = subprocess.Popen(cmdline.split(), stdout=subprocess.PIPE)
+            output, _ = call.communicate()
+        except OSError:
+            msg = "Error running '{}': the program 'dot' was not found."
+            print msg.format(cmdline)
+            sys.exit(1)
 
         image_base64 = base64.b64encode(output)
 
