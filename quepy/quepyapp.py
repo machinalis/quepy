@@ -50,6 +50,12 @@ def install(app_name):
     return QuepyApp(**modules)
 
 
+def question_sanitize(question):
+    question = question.replace("'", "\'")
+    question = question.replace("\"", "\\\"")
+    return question
+
+
 class QuepyApp(object):
     """
     Provides the quepy application API.
@@ -100,6 +106,8 @@ class QuepyApp(object):
         The query returned corresponds to the first regex that matches in
         weight order.
         """
+
+        question = question_sanitize(question)
         for target, sparql_query, userdata in self.get_queries(question):
             return target, sparql_query, userdata
         return None, None, None
