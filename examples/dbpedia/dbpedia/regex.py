@@ -34,7 +34,7 @@ LISTOPEN = Lemma("list") | Lemma("name")
 
 class WhatIs(RegexTemplate):
     """
-    Regex for questions like "What is ..."
+    Regex for questions like "What is a blowtorch
     Ex: "What is a car"
     """
 
@@ -51,8 +51,7 @@ class WhatIs(RegexTemplate):
 
 class ListEntity(RegexTemplate):
     """
-    Regex for questions like "List ..."
-    Ex: "List Microsoft software"
+    Regex for questions like "List Microsoft software"
     """
 
     entity = Group(Pos("NNP"), "entity")

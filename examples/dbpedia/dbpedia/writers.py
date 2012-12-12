@@ -57,7 +57,7 @@ class WhoWroteRegex(RegexTemplate):
 
 class BooksByAuthorRegex(RegexTemplate):
     """
-    Ex: "list books by George R. R. Martin"
+    Ex: "list books by George Orwell"
         "which books did Suzanne Collins wrote?"
     """
 

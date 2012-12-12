@@ -104,7 +104,7 @@ class ActedOnRegex(RegexTemplate):
     """
 
     acted_on = (Lemma("appear") | Lemma("act") | Lemma("star"))
-    movie = (Lemma("movie") | Lemma("film"))
+    movie = (Lemma("movie") | Lemma("movies") | Lemma("film"))
     regex = (Question(Lemma("list")) + movie + Lemma("with") + Actor()) | \
             (Question(Pos("IN")) + (Lemma("what") | Lemma("which")) +
              movie + Lemma("do") + Actor() + acted_on + Question(Pos("."))) | \
@@ -162,7 +162,7 @@ class ActorsOfRegex(RegexTemplate):
     regex = (Lemma("who") + Question(Lemma("be") + Pos("DT")) +
              (Lemma("act") | Lemma("actor") | Lemma("star")) +
              Pos("IN") + Movie() + Question(Pos("."))) | \
-            (Lemma("actor") + Pos("IN") + Movie())
+            ((Lemma("actors") | Lemma("actor")) + Pos("IN") + Movie())
 
     def semantics(self, match):
         actor = NameOf(IsPerson() + StarsIn(match.movie))
