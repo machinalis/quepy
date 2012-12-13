@@ -16,7 +16,7 @@ nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
 
 class TvShow(Particle):
-    regex = nouns
+    regex = Plus(Question(Pos("DT")) + nouns)
 
     def semantics(self, match):
         name = match.words.tokens
@@ -101,7 +101,7 @@ class ShowsWithRegex(RegexTemplate):
     """
 
     regex = (Lemmas("list show") + Pos("IN") + Actor()) | \
-            (Pos("IN") + Lemmas("what show do") +
+            (Pos("IN") + (Lemma("what") | Lemma("which")) + Lemmas("show do") +
              Actor() + (Lemma("appear") | Lemma("work")) +
              Question(Pos("."))) | \
             ((Lemma("show") | Lemma("shows")) + Pos("IN") + Actor())

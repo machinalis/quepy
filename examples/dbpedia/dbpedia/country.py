@@ -20,7 +20,7 @@ from semantics import IsCountry, IncumbentOf, CapitalOf, LabelOf, \
 
 
 class Country(Particle):
-    regex = Plus(Pos("NN") | Pos("NNP"))
+    regex = Plus(Pos("DT") | Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
     def semantics(self, match):
         name = match.words.tokens.title()
@@ -33,8 +33,8 @@ class PresidentOfRegex(RegexTemplate):
     Ex: "Who is the president of Argentina?"
     """
 
-    regex = Lemma("who") + Token("is") + Pos("DT") + Lemma("president") + \
-        Pos("IN") + Country() + Question(Pos("."))
+    regex = Pos("WP") + Token("is") + Question(Pos("DT")) + \
+        Lemma("president") + Pos("IN") + Country() + Question(Pos("."))
 
     def semantics(self, match):
         president = PresidentOf(match.country)

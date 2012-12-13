@@ -14,9 +14,8 @@ Regex for DBpedia quepy.
 
 from refo import Group, Plus, Question
 from quepy.semantics import HasKeyword, IsRelatedTo, HasType
-from quepy.semantic_utils import handle_noun_phrase
 from quepy.regex import Lemma, Pos, RegexTemplate, Token
-from semantics import DefinitionOf, LabelOf, IsPlace, UTCof
+from semantics import DefinitionOf, LabelOf, IsPlace, UTCof, LocationOf
 
 
 # Import all the specific type related regex
@@ -32,19 +31,26 @@ from writers import *
 LISTOPEN = Lemma("list") | Lemma("name")
 
 
+class Thing(Particle):
+    regex = Question(Pos("JJ")) + (Pos("NN") | Pos("NNP") | Pos("NNS")) |\
+            Pos("VBN")
+
+    def semantics(self, match):
+        return HasKeyword(match.words.tokens)
+
+
 class WhatIs(RegexTemplate):
     """
     Regex for questions like "What is a blowtorch
     Ex: "What is a car"
+        "What is Seinfield?"
     """
 
-    target = Group(Question(Pos("JJ")) + Pos("NN"), "target")
     regex = Lemma("what") + Lemma("be") + Question(Pos("DT")) + \
-        target + Question(Pos("."))
+        Thing() + Question(Pos("."))
 
     def semantics(self, match):
-        target = handle_noun_phrase(match.target)
-        label = DefinitionOf(target)
+        label = DefinitionOf(match.thing)
 
         return label, "define"
 
@@ -75,9 +81,10 @@ class WhatTimeIs(RegexTemplate):
 
     nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
     place = Group(nouns, "place")
-    openings = (Lemma("what") + ((Token("is") + Token("the") + Question(Lemma("current")) +
-                                  Question(Lemma("local")) + Lemma("time")) | \
-                                 (Lemma("time") + Token("is") + Token("it")))) | \
+    openings = (Lemma("what") +
+        ((Token("is") + Token("the") + Question(Lemma("current")) +
+        Question(Lemma("local")) + Lemma("time")) |
+        (Lemma("time") + Token("is") + Token("it")))) | \
                Lemma("time")
     regex = openings + Pos("IN") + place + Question(Pos("."))
 
@@ -86,3 +93,21 @@ class WhatTimeIs(RegexTemplate):
         utc_offset = UTCof(place)
 
         return utc_offset, "time"
+
+
+class WhereIsRegex(RegexTemplate):
+    """
+    Ex: "where in the world is the Eiffel Tower"
+    """
+
+    thing = Group(Plus(Pos("IN") | Pos("NP") | Pos("NNP") | Pos("NNPS")),
+                  "thing")
+    regex = Lemma("where") + Question(Lemmas("in the world")) + Lemma("be") + \
+        Question(Pos("DT")) + thing + Question(Pos("."))
+
+    def semantics(self, match):
+        thing = HasKeyword(match.thing.tokens)
+        location = LocationOf(thing)
+        location_name = LabelOf(location)
+
+        return location_name, "enum"

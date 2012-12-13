@@ -175,9 +175,10 @@ class PlotOfRegex(RegexTemplate):
         "plot of Titanic"
     """
 
-    regex = (Lemmas("what be") + Movie() +
-             Lemma("about") + Question(Pos("."))) | \
-            (Lemma("plot") + Pos("IN") + Movie())
+    regex = ((Lemmas("what be") + Movie() + Lemma("about")) | \
+             (Question(Lemmas("what be the")) + Lemma("plot") +
+              Pos("IN") + Movie()) +
+            Question(Pos(".")))
 
     def semantics(self, match):
         definition = DefinitionOf(match.movie)

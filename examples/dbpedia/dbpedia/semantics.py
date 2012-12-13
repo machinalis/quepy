@@ -190,3 +190,8 @@ class AuthorOf(FixedRelation):
 
 class IsBook(FixedType):
     fixedtype = "dbpedia-owl:Book"
+
+
+class LocationOf(FixedRelation):
+    relation = "dbpedia-owl:location"
+    reverse = True
