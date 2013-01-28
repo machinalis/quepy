@@ -35,6 +35,8 @@ An example
 To illustrate what can you do with quepy, we included an example application to
 access `DBpedia <http://dbpedia.org/>`_ contents via their `sparql` endpoint.
 
+You can try the example online here: `Online demo <http://quepy.machinalis.com/>`_
+
 Or, you can try the example yourself by doing:
 
 ::
