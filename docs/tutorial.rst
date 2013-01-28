@@ -10,6 +10,9 @@ To illustrate how to use quepy as a framework for natural language interface
 for databases, we will build (step by step) an example application to access
 `DBpedia <http://dbpedia.org/>`_.
 
+The finished example application can be tried online here:
+`Online demo <http://quepy.machinalis.com/>`_
+
 The finished example code can be found here:
 `Code <https://github.com/machinalis/quepy/tree/master/examples/dbpedia/dbpedia>`_
 
