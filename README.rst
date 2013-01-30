@@ -98,3 +98,6 @@ You can find a tutorial here:
 And the full documentation here:
 
 `<http://quepy.readthedocs.org/>`_
+
+Join our `mailing list <http://groups.google.com/group/quepy>`_
+

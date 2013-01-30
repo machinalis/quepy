@@ -29,6 +29,13 @@ query language, but in future releases we plan to extended it to other database
 query languages.
 
 
+Community
+=========
+
+* Email us to ``quepyproject@machinalis.com``
+* Join our `mailing list <http://groups.google.com/group/quepy>`_
+
+
 An example
 ==========
 
