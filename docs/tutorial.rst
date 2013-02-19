@@ -84,22 +84,37 @@ This is the basic structure of every quepy project.
   code you need to interact with your app. If you want, you can safely remove
   this file.
 
+.. _configuring-application:
+
 Configuring the application
 ---------------------------
 
-Fist of all, we'll start by configuring some basic aspects of the application.
-Start by downloading the necesary data for the tagger:
+The only mandatory configuration to do is to set up the tagger in
+``settings.py``. You have two choices here, either use
+`NLTK <http://nltk.org/>`_ (the default) or
+use `freeling <http://nlp.lsi.upc.edu/freeling/>`_ (supports languages other
+than English).
+
+If you are going to use nltk <http://nltk.org/> you should have already
+downloaded the necesary data for the tagger by doing:
 
 ::
 
     $ quepy nltkdata ~/nltk_data/
 
-All the necesary data will be downloaded to ``~/nltk_data/``, but you can choose
-any other path you like.
+Then, all the necesary data will be downloaded to ``~/nltk_data/``, but you can
+choose any other path you like.
 Now edit *dbpedia/settings.py* and add the path to the nltk data to the
 NLTK_DATA variable.
 This file has some other configuration options, but we are not going to need
 them for this example.
+
+Alternatively, if you have `freeling <http://nlp.lsi.upc.edu/freeling/>`_
+installed and you want to use it instead, you should set the variables
+``USE_FREELING = False`` and ``FREELING_CMD = "/path/to/analyze"`` in
+``settings.py`` of your Quepy application. `/path/to/analyze` should be the
+path to the ``analyze`` binary provided with your freeling distribution.
+
 
 .. Note::
     
@@ -107,10 +122,14 @@ them for this example.
 
     A "tagger" (in this context) is a linguistic tool help analyze natural
     language. It's composed of:
-        -`A tokenizer <http://en.wikipedia.org/wiki/Tokenization>`_
-        -`A part-of-speech tagger <http://en.wikipedia.org/wiki/Part-of-speech_tagging>`_
-        -`A lemmatizer <http://en.wikipedia.org/wiki/Lemmatisation>`_
-    If this is too much info for you, you can safely treat it like a black box.
+
+        - `A tokenizer <http://en.wikipedia.org/wiki/Tokenization>`_
+        - `A part-of-speech tagger <http://en.wikipedia.org/wiki/Part-of-speech_tagging>`_
+        - `A lemmatizer <http://en.wikipedia.org/wiki/Lemmatisation>`_
+
+    If this is too much info for you, you can just treat it like a black box
+    and it will be enough in the Quepy context.
+
 
 Defining the regex
 ------------------

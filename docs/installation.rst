@@ -59,14 +59,14 @@ Set up the POS tagger
 
 After that you need get the backend's POS tagger. It's ok if you don't
 know what that is, it's safe to treat it like a black box.
-By default we use `nltk <http://nltk.org/>`_,
-but you could use `freeling <http://nlp.lsi.upc.edu/freeling/>`_ too.
+By default `nltk <http://nltk.org/>`_ is used,
+but applications can use `freeling <http://nlp.lsi.upc.edu/freeling/>`_ too.
 
-For `nltk <http://nltk.org/>`_ type:
+To set up quepy to be able to use `nltk <http://nltk.org/>`_ type:
 
 ::
 
     $ quepy nltkdata /some/path/you/find/convenient
 
-Everytime you start a new app or use one, like the dbpedia example, you should
-configure `settings.py` to point to this path you choose.
+Also, everytime you start a new app or use one, like the dbpedia example,
+you should configure `settings.py` to point to this path you chose.
