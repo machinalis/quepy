@@ -101,3 +101,11 @@ And the full documentation here:
 
 Join our `mailing list <http://groups.google.com/group/quepy>`_
 
+
+Contribute!
+===========
+
+Want to help develop quepy? Welcome aboard! Find us in
+
+    - #quepy at freenode
+    - quepydev at librelist.com
