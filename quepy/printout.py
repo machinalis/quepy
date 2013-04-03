@@ -13,7 +13,7 @@ Output utilities.
 """
 
 import logging
-from semantics import IsRelatedTo
+from semantics import IsRelatedTo, HasKeyword
 from encodingpolicy import assert_valid_encoding
 from expression import isnode
 
@@ -37,7 +37,7 @@ def adapt(x, sparql=True):
 def expression_to_dot(e):
     from semantic_utils import dot_type, dot_keyword, dot_arc
     d = {u"rdf:type": dot_type,
-         u"quepy:Keyword": dot_keyword,
+         HasKeyword.relation: dot_keyword,
          IsRelatedTo: lambda x, y: dot_arc(x, u"", y)}
     s = u"digraph G {{\n{0} [shape=house];\n{1}\n}}\n"
     xs = []
