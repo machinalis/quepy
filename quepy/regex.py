@@ -56,13 +56,14 @@ class Match(object):
         self._particles = {particle.name: particle for particle in match
                            if isinstance(particle, Particle)}
 
-    def __getattr__(self, attr):
-        if attr == "words":
-            i, j = self._match.span()  # Should be (0, n)
-            if self._i is not None:
-                i, j = self._i, self._j
-            return WordList(self._words[i:j])
+    @property
+    def words(self):
+        i, j = self._match.span()  # Should be (0, n)
+        if self._i is not None:
+            i, j = self._i, self._j
+        return WordList(self._words[i:j])
 
+    def __getattr__(self, attr):
         if attr in self._particles:
             particle = self._particles[attr]
             i, j = self._match[particle]
