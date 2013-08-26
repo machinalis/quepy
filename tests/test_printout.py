@@ -9,7 +9,7 @@
 
 import unittest
 from quepy.semantics import FixedRelation, FixedType, FixedDataRelation
-from quepy.printout import expression_to_dot, expression_to_sparql
+from quepy.generation import expression_to_dot, expression_to_sparql
 
 
 def gen_datarel(rel, data):
@@ -30,7 +30,7 @@ def gen_fixedrelation(rel, e):
     return X(e)
 
 
-class TestPrintout(unittest.TestCase):
+class TestCodeGeneration(unittest.TestCase):
 
     def _standard_check(self, s, e):
         self.assertIsInstance(s, unicode)

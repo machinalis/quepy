@@ -8,15 +8,8 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Quepy converts Natural Language Question to database queries.
+Code generation.
 """
 
-VERSION = 0.1
-
-import logging
-from quepy.quepyapp import install, QuepyApp, QuepyImportError
-
-
-def set_loglevel(level=logging.WARNING):
-    logger = logging.getLogger("quepy")
-    logger.setLevel(level)
+from quepy.dot_generation import expression_to_dot
+from quepy.sparql_generation import expression_to_sparql

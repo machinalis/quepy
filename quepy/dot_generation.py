@@ -1,36 +1,22 @@
-# coding: utf-8
-
-# Copyright (c) 2012, Machinalis S.R.L.
-# This file is part of quepy and is distributed under the Modified BSD License.
-# You should have received a copy of license in the LICENSE file.
-#
-# Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
-#          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
+# -*- coding: utf-8 -*-
 
 """
-Output utilities.
+Dot generation code.
 """
 
 import random
-import logging
-
 from quepy.expression import isnode
 from quepy.semantics import IsRelatedTo, HasKeyword
 from quepy.encodingpolicy import assert_valid_encoding
 
-_indent = u"  "
 
-
-def adapt(x, sparql=True):
+def adapt(x):
     if isnode(x):
         x = u"x{}".format(x)
-        if sparql:
-            x = u"?" + x
         return x
     if isinstance(x, basestring):
         assert_valid_encoding(x)
-        if not sparql:
-            x = x.replace(" ", "_")
+        x = x.replace(" ", "_")
         if x.startswith(u"\""):
             return x
         return u'"{}"'.format(x)
@@ -45,8 +31,8 @@ def expression_to_dot(e):
     xs = []
     for node in e.iter_nodes():
         for relation, other in e.iter_edges(node):
-            node1 = adapt(node, False)
-            node2 = adapt(other, False)
+            node1 = adapt(node)
+            node2 = adapt(other)
 
             if node1.startswith(u'"') or ":" in node1:
                 node1 = u'"' + node1.replace(u'"', u'\\"') + u'"'
@@ -58,43 +44,7 @@ def expression_to_dot(e):
             else:
                 x = dot_arc(node1, relation, node2)
             xs.append(x)
-    return s.format(adapt(e.head, False), u"".join(xs))
-
-
-def expression_to_sparql(e, full=False):
-    import settings
-    template = u"{preamble}\n" +\
-               u"SELECT DISTINCT {select} WHERE {{\n" +\
-               u"    {expression}\n" +\
-               u"}}\n"
-    head = adapt(e.get_head())
-    if full:
-        select = u"*"
-    else:
-        select = head
-    y = 0
-    xs = []
-    for node in e.iter_nodes():
-        for relation, dest in e.iter_edges(node):
-            if relation is IsRelatedTo:
-                relation = u"?y{}".format(y)
-                y += 1
-            xs.append(triple(adapt(node), relation, adapt(dest),
-                      indentation=1))
-    sparql = template.format(preamble=settings.SPARQL_PREAMBLE,
-                             select=select,
-                             expression=u"\n".join(xs))
-    return select, sparql
-
-
-def set_loglevel(level=logging.WARNING):
-    l = logging.getLogger("quepy")
-    l.setLevel(level)
-
-
-def triple(a, p, b, indentation=0):
-    s = _indent * indentation + u"{0} {1} {2}."
-    return s.format(a, p, b)
+    return s.format(adapt(e.head), u"".join(xs))
 
 
 def dot_arc(a, label, b):

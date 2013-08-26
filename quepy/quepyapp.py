@@ -17,7 +17,7 @@ from types import ModuleType
 from quepy import settings
 from quepy.regex import RegexTemplate
 from quepy.tagger import get_tagger, TaggingError
-from quepy.printout import expression_to_sparql
+from quepy.generation import expression_to_sparql
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 logger = logging.getLogger("quepy.quepyapp")
