@@ -9,7 +9,7 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Semantics definitions.
+Intermediate representation definitions.
 """
 
 from copy import copy

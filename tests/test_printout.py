@@ -8,8 +8,9 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 import unittest
-from quepy.semantics import FixedRelation, FixedType, FixedDataRelation
 from quepy.generation import expression_to_dot, expression_to_sparql
+from quepy.intermediate_representation import FixedRelation, FixedType, \
+    FixedDataRelation
 
 
 def gen_datarel(rel, data):

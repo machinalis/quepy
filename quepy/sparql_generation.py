@@ -6,8 +6,8 @@ Sparql generation code.
 
 from quepy import settings
 from quepy.expression import isnode
-from quepy.semantics import IsRelatedTo
 from quepy.encodingpolicy import assert_valid_encoding
+from quepy.intermediate_representation import IsRelatedTo
 
 _indent = u"  "
 

@@ -35,7 +35,7 @@ def install(app_name):
     module_paths = {
         u"settings": u"{0}.settings",
         u"parsing": u"{0}.parsing",
-        u"semantics": u"{0}.semantics",
+        u"intermediate_representation": u"{0}.intermediate_representation",
     }
     modules = {}
 
@@ -61,19 +61,19 @@ class QuepyApp(object):
     Provides the quepy application API.
     """
 
-    def __init__(self, parsing, settings, semantics):
+    def __init__(self, parsing, settings, intermediate_representation):
         """
         Creates the application based on `parsing`, `settings` and
-        `semantics` modules.
+        `intermediate_representation` modules.
         """
 
         assert isinstance(parsing, ModuleType)
         assert isinstance(settings, ModuleType)
-        assert isinstance(semantics, ModuleType)
+        assert isinstance(intermediate_representation, ModuleType)
 
         self._parsing_module = parsing
         self._settings_module = settings
-        self._semantics_module = semantics
+        self._intermediate_representation_module = intermediate_representation
 
         # Save the settings right after loading settings module
         self._save_settings_values()
@@ -127,7 +127,8 @@ class QuepyApp(object):
         question = encoding_flexible_conversion(question)
         for expression, userdata in self._iter_compiled_forms(question):
             target, sparql_query = expression_to_sparql(expression)
-            logger.debug(u"Semantics {1}: {0}".format(str(expression),
+            message = u"Intermediate representation {1}: {0}"
+            logger.debug(message.format(str(expression),
                          expression.rule_used))
             logger.debug(u"Query generated: {0}".format(sparql_query))
             yield target, sparql_query, userdata
@@ -148,7 +149,7 @@ class QuepyApp(object):
                      u"\n".join(u"\t{}".format(w for w in words)))
 
         for rule in self.rules:
-            expression, userdata = rule.get_semantics(words)
+            expression, userdata = rule.get_IR(words)
             if expression:
                 yield expression, userdata
 
