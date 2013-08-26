@@ -13,7 +13,7 @@ Tests for Regex module.
 """
 
 import unittest
-from quepy.regex import RegexTemplate, Particle, Lemma
+from quepy.parsing import RegexTemplate, Particle, Lemma
 from quepy.tagger import Word
 
 

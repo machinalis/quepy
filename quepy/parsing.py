@@ -14,7 +14,7 @@ from refo import Predicate, Literal, Star, Any, Group
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 _EOL = None
-logger = logging.getLogger("quepy.regex")
+logger = logging.getLogger("quepy.parsing")
 
 
 class BadSemantic(Exception):

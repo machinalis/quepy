@@ -12,7 +12,7 @@
 Regex for testapp quepy.
 """
 
-from quepy.regex import RegexTemplate, Token
+from quepy.parsing import RegexTemplate, Token
 from quepy.semantics import HasKeyword
 from refo import Star, Any
 
