@@ -208,27 +208,3 @@ class Expression(object):
         Amount of nodes in the graph.
         """
         return len(self.nodes)
-
-
-def make_canonical_expression(e):
-    i = 0
-    q = [e.get_head()]
-    seen = set()
-    while i != len(q):
-        node = q[i]
-        i += 1
-        assert node not in seen, "Nouuu, expression is cyclic!"
-        for relation, child in e.iter_edges(node):
-            if isnode(child):
-                q.append(child)
-    q.reverse()
-    canon = {}
-    for node in q:
-        childs = []
-        for label, child in e.iter_edges(node):
-            if isnode(child):
-                child = canon[child]
-            childs.append((label, child))
-        childs.sort()
-        canon[node] = tuple(childs)
-    return canon[e.get_head()]
