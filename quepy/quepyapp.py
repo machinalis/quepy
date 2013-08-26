@@ -23,10 +23,6 @@ from quepy.encodingpolicy import encoding_flexible_conversion
 logger = logging.getLogger("quepy.quepyapp")
 
 
-class QuepyImportError(Exception):
-    """ Error importing a quepy file. """
-
-
 def install(app_name):
     """
     Installs the application and gives an QuepyApp object
@@ -45,7 +41,7 @@ def install(app_name):
                                               fromlist=[None])
         except ImportError, error:
             message = u"Error importing {0!r}: {1}"
-            raise QuepyImportError(message.format(module_name, error))
+            raise ImportError(message.format(module_name, error))
 
     return QuepyApp(**modules)
 
