@@ -11,10 +11,14 @@
 Output utilities.
 """
 
+import random
 import logging
+
 from quepy.expression import isnode
 from quepy.semantics import IsRelatedTo, HasKeyword
 from quepy.encodingpolicy import assert_valid_encoding
+
+_indent = u"  "
 
 
 def adapt(x, sparql=True):
@@ -34,7 +38,6 @@ def adapt(x, sparql=True):
 
 
 def expression_to_dot(e):
-    from semantic_utils import dot_type, dot_keyword, dot_arc
     d = {u"rdf:type": dot_type,
          HasKeyword.relation: dot_keyword,
          IsRelatedTo: lambda x, y: dot_arc(x, u"", y)}
@@ -60,7 +63,6 @@ def expression_to_dot(e):
 
 def expression_to_sparql(e, full=False):
     import settings
-    from semantic_utils import triple
     template = u"{preamble}\n" +\
                u"SELECT DISTINCT {select} WHERE {{\n" +\
                u"    {expression}\n" +\
@@ -88,3 +90,38 @@ def expression_to_sparql(e, full=False):
 def set_loglevel(level=logging.WARNING):
     l = logging.getLogger("quepy")
     l.setLevel(level)
+
+
+def triple(a, p, b, indentation=0):
+    s = _indent * indentation + u"{0} {1} {2}."
+    return s.format(a, p, b)
+
+
+def dot_arc(a, label, b):
+    assert u" " not in a and u" " not in b
+    return u"{0} -> {1} [label=\"{2}\"];".format(a, b, label)
+
+
+def dot_type(a, t):
+    s = u"{0} [shape=box];\n".format(t)
+    return s + u"{0} -> {1} [color=red, arrowhead=empty];".format(a, t)
+
+
+def dot_attribute(a, key):
+    blank = id(a)
+    s = u"{0} [shape=none label={1}];\n".format(blank, key)
+    return s + u"{0} -> {1};".format(a, blank)
+
+
+def dot_keyword(a, key):
+    blank = u"{0:.30f}".format(random.random())
+    blank = u"blank" + blank.replace(u".", u"")
+    s = u"{0} [shape=none label={1}];\n".format(blank, key)
+    return s + u"{0} -> {1} [style=dashed];".format(a, blank)
+
+
+def dot_fixed_type(a, fixedtype):
+    blank = u"{0:.30f}".format(random.random())
+    blank = u"blank" + blank.replace(u".", u"")
+    s = u"{0} [shape=box label={1}];\n".format(blank, fixedtype)
+    return s + u"{0} -> {1} [color=red, arrowhead=empty];".format(a, blank)

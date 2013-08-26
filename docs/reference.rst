@@ -9,5 +9,4 @@ Library Reference
    semantic_utils
    regex
    nltktagger
-   handlers
    expression

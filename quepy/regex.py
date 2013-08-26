@@ -11,11 +11,16 @@ import refo
 import logging
 from refo import Predicate, Literal, Star, Any, Group
 
-from quepy.semantic_utils import BadSemantic
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 _EOL = None
 logger = logging.getLogger("quepy.regex")
+
+
+class BadSemantic(Exception):
+    """
+    Problem with the semantic.
+    """
 
 
 class WordList(list):
