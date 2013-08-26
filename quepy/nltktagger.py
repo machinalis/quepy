@@ -81,15 +81,3 @@ def run_nltktagger(string, nltk_data_path=None):
         words.append(word)
 
     return words
-
-
-if __name__ == "__main__":
-    import sys
-
-    tagger_out = run_nltktagger(" ".join(sys.argv[1:]).decode("ascii"))
-
-    attrs = "TOKEN LEMMA POS PROB SENSE".split()
-    print " ".join(["{:13.13}".format(x) for x in attrs])
-
-    for word in tagger_out:
-        print word.fullstr()

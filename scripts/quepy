@@ -180,10 +180,11 @@ def print_tags(app_name, text):
     tagger = quepy.tagger.get_tagger()
     tagger_out = tagger(text)
 
-    attrs = "TOKEN LEMMA POS PROB SENSE".split()
+    attrs = "TOKEN LEMMA POS PROB".split()
     print " ".join(["{:13.13}".format(x) for x in attrs])
     for word in tagger_out:
-        print word.fullstr()
+        attrs = unicode(word).split("|")
+        print " ".join(["{:13.13}".format(x) for x in attrs])
 
 
 def nltkdata(path):

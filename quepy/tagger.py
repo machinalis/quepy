@@ -32,10 +32,8 @@ class Word(object):
     Contains *token*, *lemma*, *pos tag* and optionally a *probability* of
     that tag.
     """
-
     _encoding_attrs = u"token lemma pos".split()
     _attrs = _encoding_attrs + [u"prob"]
-    _fmt = u" ".join(u"{:13.13}" for _ in _attrs)
 
     def __init__(self, token, lemma=None, pos=None, prob=None):
         self.pos = pos
@@ -48,18 +46,12 @@ class Word(object):
             assert_valid_encoding(value)
         object.__setattr__(self, name, value)
 
-    def fullstr(self):
-        """
-        Returns a full string representation of the Word object
-        """
-        attrs_rep = (repr(getattr(self, name, u"-")) for name in self._attrs)
-        return self._fmt.format(*attrs_rep)
-
     def __unicode__(self):
-        return u"{}".format(self.token)
+        attrs = (getattr(self, name, u"-") for name in self._attrs)
+        return u"|".join(str(x) for x in attrs)
 
     def __repr__(self):
-        return u"{}|{}|{}".format(self.token, self.lemma, self.pos)
+        return unicode(self)
 
 
 def get_tagger():

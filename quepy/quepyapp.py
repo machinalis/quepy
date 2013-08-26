@@ -145,7 +145,7 @@ class QuepyApp(object):
             return
 
         logger.debug(u"Tagged question:\n" +
-                     u"\n".join(u"\t{}".format(w.fullstr()) for w in words))
+                     u"\n".join(u"\t{}".format(w for w in words)))
 
         for rule in self.rules:
             expression, userdata = rule.get_semantics(words)
