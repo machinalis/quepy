@@ -6,11 +6,11 @@ Tv Shows related regex.
 """
 
 from refo import Plus, Question
-from quepy.semantics import HasKeyword
-from quepy.regex import Lemma, Lemmas, Pos, RegexTemplate, Particle
-from semantics import IsTvShow, ReleaseDateOf, IsPerson, StarsIn, LabelOf, \
-                      HasShowName, NumberOfEpisodesIn, HasActor, ShowNameOf, \
-                      CreatorOf
+from quepy.intermediate_representation import HasKeyword
+from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from intermediate_representation import IsTvShow, ReleaseDateOf, IsPerson, \
+    StarsIn, LabelOf, HasShowName, NumberOfEpisodesIn, HasActor, \
+    ShowNameOf, CreatorOf
 
 nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
@@ -18,7 +18,7 @@ nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 class TvShow(Particle):
     regex = Plus(Question(Pos("DT")) + nouns)
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens
         return IsTvShow() + HasShowName(name)
 
@@ -26,7 +26,7 @@ class TvShow(Particle):
 class Actor(Particle):
     regex = nouns
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens
         return IsPerson() + HasKeyword(name)
 
@@ -40,7 +40,7 @@ class ReleaseDateRegex(RegexTemplate):
     regex = Lemmas("when be") + TvShow() + Lemma("release") + \
         Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         release_date = ReleaseDateOf(match.tvshow)
         return release_date, "literal"
 
@@ -58,7 +58,7 @@ class CastOfRegex(RegexTemplate):
              Question(Pos("."))) | \
             (Lemmas("list actor") + Pos("IN") + TvShow())
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         actor = IsPerson() + StarsIn(match.tvshow)
         name = LabelOf(actor)
         return name, "enum"
@@ -71,7 +71,7 @@ class ListTvShows(RegexTemplate):
 
     regex = Lemmas("list tv show")
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         show = IsTvShow()
         label = LabelOf(show)
         return label, "enum"
@@ -88,7 +88,7 @@ class EpisodeCountRegex(RegexTemplate):
               Pos("IN") + TvShow())) + \
             Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         number_of_episodes = NumberOfEpisodesIn(match.tvshow)
         return number_of_episodes, "literal"
 
@@ -106,7 +106,7 @@ class ShowsWithRegex(RegexTemplate):
              Question(Pos("."))) | \
             ((Lemma("show") | Lemma("shows")) + Pos("IN") + Actor())
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         show = IsTvShow() + HasActor(match.actor)
         show_name = ShowNameOf(show)
         return show_name, "enum"
@@ -120,7 +120,7 @@ class CreatorOfRegex(RegexTemplate):
     regex = Question(Lemmas("who be") + Pos("DT")) + \
         Lemma("creator") + Pos("IN") + TvShow() + Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         creator = CreatorOf(match.tvshow)
         label = LabelOf(creator)
         return label, "enum"

@@ -14,16 +14,16 @@ People related regex
 
 
 from refo import Plus, Question
-from quepy.regex import Lemma, Lemmas, Pos, RegexTemplate, Particle
-from quepy.semantics import HasKeyword
-from semantics import IsPerson, LabelOf, DefinitionOf, \
-                      BirthDateOf, BirthPlaceOf
+from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from quepy.intermediate_representation import HasKeyword
+from intermediate_representation import IsPerson, LabelOf, DefinitionOf, \
+    BirthDateOf, BirthPlaceOf
 
 
 class Person(Particle):
     regex = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens
         return IsPerson() + HasKeyword(name)
 
@@ -36,7 +36,7 @@ class WhoIs(RegexTemplate):
     regex = Lemma("who") + Lemma("be") + Person() + \
         Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         definition = DefinitionOf(match.person)
         return definition, "define"
 
@@ -49,7 +49,7 @@ class HowOldIsRegex(RegexTemplate):
     regex = Pos("WRB") + Lemma("old") + Lemma("be") + Person() + \
         Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         birth_date = BirthDateOf(match.person)
         return birth_date, "age"
 
@@ -62,7 +62,7 @@ class WhereIsFromRegex(RegexTemplate):
     regex = Lemmas("where be") + Person() + Lemma("from") + \
         Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         birth_place = BirthPlaceOf(match.person)
         label = LabelOf(birth_place)
 

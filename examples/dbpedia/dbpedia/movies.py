@@ -13,11 +13,11 @@ Movie related regex.
 """
 
 from refo import Plus, Question
-from quepy.semantics import HasKeyword
-from quepy.regex import Lemma, Lemmas, Pos, RegexTemplate, Particle
-from semantics import IsMovie, NameOf, IsPerson, DirectedBy, LabelOf, \
-                      DurationOf, HasActor, HasName, ReleaseDateOf, \
-                      DirectorOf, StarsIn, DefinitionOf
+from quepy.intermediate_representation import HasKeyword
+from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from intermediate_representation import IsMovie, NameOf, IsPerson, \
+    DirectedBy, LabelOf, DurationOf, HasActor, HasName, ReleaseDateOf, \
+    DirectorOf, StarsIn, DefinitionOf
 
 nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
@@ -25,7 +25,7 @@ nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 class Movie(Particle):
     regex = Question(Pos("DT")) + nouns
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens
         return IsMovie() + HasName(name)
 
@@ -33,7 +33,7 @@ class Movie(Particle):
 class Actor(Particle):
     regex = nouns
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens
         return IsPerson() + HasKeyword(name)
 
@@ -41,7 +41,7 @@ class Actor(Particle):
 class Director(Particle):
     regex = nouns
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens
         return IsPerson() + HasKeyword(name)
 
@@ -53,7 +53,7 @@ class ListMoviesRegex(RegexTemplate):
 
     regex = Lemma("list") + (Lemma("movie") | Lemma("film"))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         movie = IsMovie()
         name = NameOf(movie)
         return name, "enum"
@@ -71,7 +71,7 @@ class MoviesByDirectorRegex(RegexTemplate):
             (Lemma("which") + (Lemma("movie") | Lemma("film")) + Lemma("do") +
              Director() + Lemma("direct") + Question(Pos(".")))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         movie = IsMovie() + DirectedBy(match.director)
         movie_name = LabelOf(movie)
 
@@ -89,7 +89,7 @@ class MovieDurationRegex(RegexTemplate):
              Pos("IN") + Movie())) + \
             Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         duration = DurationOf(match.movie)
         return duration, ("literal", "{} minutes long")
 
@@ -112,7 +112,7 @@ class ActedOnRegex(RegexTemplate):
              Actor() + acted_on) | \
             (Question(Lemma("list")) + movie + Lemma("star") + Actor())
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         movie = IsMovie() + HasActor(match.actor)
         movie_name = NameOf(movie)
         return movie_name, "enum"
@@ -129,7 +129,7 @@ class MovieReleaseDateRegex(RegexTemplate):
              Pos("IN") + Movie())) + \
             Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         release_date = ReleaseDateOf(match.movie)
         return release_date, "literal"
 
@@ -145,7 +145,7 @@ class DirectorOfRegex(RegexTemplate):
              (Lemma("who") + Lemma("direct") + Movie())) + \
             Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         director = IsPerson() + DirectorOf(match.movie)
         director_name = NameOf(director)
         return director_name, "literal"
@@ -164,7 +164,7 @@ class ActorsOfRegex(RegexTemplate):
              Pos("IN") + Movie() + Question(Pos("."))) | \
             ((Lemma("actors") | Lemma("actor")) + Pos("IN") + Movie())
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         actor = NameOf(IsPerson() + StarsIn(match.movie))
         return actor, "enum"
 
@@ -180,6 +180,6 @@ class PlotOfRegex(RegexTemplate):
               Pos("IN") + Movie()) +
             Question(Pos(".")))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         definition = DefinitionOf(match.movie)
         return definition, "define"
