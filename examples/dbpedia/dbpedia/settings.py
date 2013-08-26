@@ -12,10 +12,6 @@
 Settings.
 """
 
-# Freeling config
-USE_FREELING = False
-FREELING_CMD = ""  # Only set if USE_FREELING it's True
-
 # NLTK config
 NLTK_DATA_PATH = []  # List of paths with NLTK data
 

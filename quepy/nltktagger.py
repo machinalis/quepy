@@ -35,7 +35,7 @@ def penn_to_morphy_tag(tag):
 def run_nltktagger(string, nltk_data_path=None):
     """
     Runs nltk tagger on `string` and returns a list of
-    :class:`quepy.freeling.Word` objects.
+    :class:`quepy.tagger.Word` objects.
     """
     assert_valid_encoding(string)
 

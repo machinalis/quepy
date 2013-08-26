@@ -8,7 +8,6 @@ Library Reference
    semantics
    semantic_utils
    regex
-   freeling
    nltktagger
    handlers
    expression

@@ -89,32 +89,14 @@ This is the basic structure of every quepy project.
 Configuring the application
 ---------------------------
 
-The only mandatory configuration to do is to set up the tagger in
-``settings.py``. You have two choices here, either use
-`NLTK <http://nltk.org/>`_ (the default) or
-use `freeling <http://nlp.lsi.upc.edu/freeling/>`_ (supports languages other
-than English).
+First make sure you have already downloaded the necesary
+data for the `nltk tagger <http://nltk.org/>`_. If not check the
+:doc:`installation section. <installation>`
 
-If you are going to use nltk <http://nltk.org/> you should have already
-downloaded the necesary data for the tagger by doing:
-
-::
-
-    $ quepy nltkdata ~/nltk_data/
-
-Then, all the necesary data will be downloaded to ``~/nltk_data/``, but you can
-choose any other path you like.
 Now edit *dbpedia/settings.py* and add the path to the nltk data to the
 NLTK_DATA variable.
 This file has some other configuration options, but we are not going to need
 them for this example.
-
-Alternatively, if you have `freeling <http://nlp.lsi.upc.edu/freeling/>`_
-installed and you want to use it instead, you should set the variables
-``USE_FREELING = False`` and ``FREELING_CMD = "/path/to/analyze"`` in
-``settings.py`` of your Quepy application. `/path/to/analyze` should be the
-path to the ``analyze`` binary provided with your freeling distribution.
-
 
 .. Note::
     
@@ -204,9 +186,7 @@ that we want to match optionally a determiner (DT) followed by a noun
 Note that quepy can access different levels of linguistic information
 associated to the words in a question, namely their lemma and part of
 speech tag. This information needs to be associated to questions by
-analyzing them with a tagger. Quepy integrates two automatic tagger to
-analyze questions: Freeling and NLTK Tagger. See the Library Reference
-for details as how to use this analyzers within quepy.
+analyzing them with a tagger.
 
 Finally, if a regex has a successful match with an input question, the
 ``semantics`` method will be called with the match. In Lines 16 to 22,

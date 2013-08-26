@@ -9,6 +9,7 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 import logging
+
 from quepy import settings
 from quepy.encodingpolicy import assert_valid_encoding
 
@@ -68,12 +69,8 @@ def get_tagger():
     The returned value is a function that receives a unicode string and returns
     a list of `Word` instances.
     """
-    if settings.USE_FREELING:
-        from quepy.freeling import run_freeling
-        tagger_function = lambda x: run_freeling(x, settings.FREELING_CMD)
-    else:
-        from quepy.nltktagger import run_nltktagger
-        tagger_function = lambda x: run_nltktagger(x, settings.NLTK_DATA_PATH)
+    from quepy.nltktagger import run_nltktagger
+    tagger_function = lambda x: run_nltktagger(x, settings.NLTK_DATA_PATH)
 
     def wrapper(string):
         assert_valid_encoding(string)
