@@ -27,7 +27,7 @@ def adapt(x):
 def expression_to_sparql(e, full=False):
     template = u"{preamble}\n" +\
                u"SELECT DISTINCT {select} WHERE {{\n" +\
-               u"    {expression}\n" +\
+               u"{expression}\n" +\
                u"}}\n"
     head = adapt(e.get_head())
     if full:
