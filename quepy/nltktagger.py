@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -38,7 +37,6 @@ def run_nltktagger(string, nltk_data_path=None):
     :class:`quepy.tagger.Word` objects.
     """
     assert_valid_encoding(string)
-
     global _penn_to_morphy_tag
 
     if nltk_data_path:

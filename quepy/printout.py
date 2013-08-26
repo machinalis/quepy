@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -13,9 +12,9 @@ Output utilities.
 """
 
 import logging
-from semantics import IsRelatedTo, HasKeyword
-from encodingpolicy import assert_valid_encoding
-from expression import isnode
+from quepy.expression import isnode
+from quepy.semantics import IsRelatedTo, HasKeyword
+from quepy.encodingpolicy import assert_valid_encoding
 
 
 def adapt(x, sparql=True):
@@ -64,7 +63,7 @@ def expression_to_sparql(e, full=False):
     from semantic_utils import triple
     template = u"{preamble}\n" +\
                u"SELECT DISTINCT {select} WHERE {{\n" +\
-                   u"{expression}\n" +\
+               u"    {expression}\n" +\
                u"}}\n"
     head = adapt(e.get_head())
     if full:
@@ -89,10 +88,3 @@ def expression_to_sparql(e, full=False):
 def set_loglevel(level=logging.WARNING):
     l = logging.getLogger("quepy")
     l.setLevel(level)
-
-
-_LOGFORMAT = u"[%(levelname)s] %(name)s: %(message)s"
-logging.basicConfig(format=_LOGFORMAT)
-
-
-set_loglevel(logging.INFO)

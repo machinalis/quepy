@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -27,7 +26,6 @@ class Handler(Predicate):
         """
         It creates the handler.
         """
-
         super(Handler, self).__init__(self.check)
 
     def check(self, word):
@@ -35,7 +33,6 @@ class Handler(Predicate):
         A boolean method that returns if the word must be
         handled by this class or not.
         """
-
         message = u"{0}.check not implemented".format(self.__class__.__name__)
         raise NotImplementedError(message)
 
@@ -43,16 +40,14 @@ class Handler(Predicate):
         """
         Returns the semantics of the word treated by this class
         """
-
-        message = u"{0}.handler not implemented".format(self.__class__.__name__)
-        raise NotImplementedError(message)
+        message = u"{0}.handler not implemented"
+        raise NotImplementedError(message.format(self.__class__.__name__))
 
 
 def register(handlerclass):
     """
     Adds a custom handler.
     """
-
     if not issubclass(handlerclass, Handler):
         message = u"parameter it's not a Handler class"
         raise TypeError(message)
@@ -65,7 +60,6 @@ def get_handler(word):
     Given a :class:`quepy.tagger.Word` returns the first handler
     found that the check function it's True.
     """
-
     for handlerclass in __HANDLERS:
         handlerobj = handlerclass()
         if handlerobj.check(word):

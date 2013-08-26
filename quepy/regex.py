@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -26,7 +25,6 @@ class WordList(list):
 
     def __init__(self, words):
         super(WordList, self).__init__(self)
-
         # Add the words to the list
         self.extend(words)
 
@@ -100,7 +98,6 @@ class RegexTemplate(object):
 
         When implementing a regex one must fill this method.
         """
-
         raise NotImplementedError()
 
     def get_semantics(self, words):
@@ -211,7 +208,6 @@ def Lemmas(string):
     Returns a Predicate that catches strings
     with the lemmas mentioned on `string`.
     """
-
     return _predicate_sum_from_string(string, Lemma)
 
 
@@ -220,7 +216,6 @@ def Tokens(string):
     Returns a Predicate that catches strings
     with the tokens mentioned on `string`.
     """
-
     return _predicate_sum_from_string(string, Token)
 
 
@@ -229,5 +224,4 @@ def Poss(string):
     Returns a Predicate that catches strings
     with the POS mentioned on `string`.
     """
-
     return _predicate_sum_from_string(string, Pos)
