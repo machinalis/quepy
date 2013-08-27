@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
+
 from collections import defaultdict
 from quepy.expression import isnode
 from quepy.intermediate_representation import IsRelatedTo
 import json
-
-
-class MQLJSON(json.JSONEncoder):
-    def default(self, o):
-        return unicode(o)
 
 
 def choose_start_node(e):
@@ -62,12 +58,16 @@ def generate_mql(e):
             d[relation] = other
         generated[node] = d
     s = json.dumps([generated[start]], sort_keys=True,
-                    indent=4, separators=(',', ': '), cls=MQLJSON)
+                    indent=4, separators=(',', ': '))
     return s, None
 
 
 if __name__ == "__main__":
-    from semantics import *
+    from intermediate_representation import *
+
+    class NameOf(FixedRelation):
+        relation = "/type/object/name"
+        reverse = True
 
     class HasName(FixedDataRelation):
         relation = "/type/object/name"
@@ -89,5 +89,5 @@ if __name__ == "__main__":
     france = IsCountry() + HasName("France")
     president = GovernmentPosition("President") + \
                 GovernmentPositionJusridiction(france)
-    person = HasName({}) + HoldsGovernmentPosition(president)
+    person = NameOf(HoldsGovernmentPosition(president))
     print generate_mql(person)[0]
