@@ -44,7 +44,7 @@ def expression_to_dot(e):
             else:
                 x = dot_arc(node1, relation, node2)
             xs.append(x)
-    return s.format(adapt(e.head), u"".join(xs))
+    return None, s.format(adapt(e.head), u"".join(xs))
 
 
 def dot_arc(a, label, b):

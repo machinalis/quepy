@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -11,6 +10,9 @@
 """
 Settings.
 """
+
+# Generated query language
+LANGUAGE = "sparql"
 
 # NLTK config
 NLTK_DATA_PATH = []  # List of paths with NLTK data

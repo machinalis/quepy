@@ -12,6 +12,7 @@
 Settings for testapp quepy.
 """
 
+LANGUAGE = "sparql"
 NLTK_DATA_PATH = []
 SPARQL_PREAMBLE = '''
 PREFIX owl: <http://www.w3.org/2002/07/owl#>

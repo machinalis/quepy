@@ -11,6 +11,9 @@
 Settings.
 """
 
+# Generated query language
+LANGUAGE = "sparql"
+
 # NLTK config
 NLTK_DATA_PATH = []  # List of paths with NLTK data
 

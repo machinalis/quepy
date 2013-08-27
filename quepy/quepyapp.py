@@ -15,9 +15,9 @@ import logging
 from types import ModuleType
 
 from quepy import settings
+from quepy import generation
 from quepy.parsing import RegexTemplate
 from quepy.tagger import get_tagger, TaggingError
-from quepy.generation import expression_to_sparql
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 logger = logging.getLogger("quepy.quepyapp")
@@ -75,6 +75,9 @@ class QuepyApp(object):
         self._save_settings_values()
 
         self.tagger = get_tagger()
+        self.language = getattr(self._settings_module, "LANGUAGE", None)
+        if not self.language:
+            raise ValueError("Missing configuration for language")
 
         self.rules = []
         for element in dir(self._parsing_module):
@@ -104,8 +107,8 @@ class QuepyApp(object):
         """
 
         question = question_sanitize(question)
-        for target, sparql_query, userdata in self.get_queries(question):
-            return target, sparql_query, userdata
+        for target, query, userdata in self.get_queries(question):
+            return target, query, userdata
         return None, None, None
 
     def get_queries(self, question):
@@ -122,12 +125,12 @@ class QuepyApp(object):
         """
         question = encoding_flexible_conversion(question)
         for expression, userdata in self._iter_compiled_forms(question):
-            target, sparql_query = expression_to_sparql(expression)
+            target, query = generation.get_code(expression, self.language)
             message = u"Intermediate representation {1}: {0}"
             logger.debug(message.format(str(expression),
                          expression.rule_used))
-            logger.debug(u"Query generated: {0}".format(sparql_query))
-            yield target, sparql_query, userdata
+            logger.debug(u"Query generated: {0}".format(query))
+            yield target, query, userdata
 
     def _iter_compiled_forms(self, question):
         """

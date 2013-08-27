@@ -8,7 +8,7 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 import unittest
-from quepy.generation import expression_to_dot, expression_to_sparql
+from quepy.generation import get_code
 from quepy.intermediate_representation import FixedRelation, FixedType, \
     FixedDataRelation
 
@@ -42,36 +42,36 @@ class TestCodeGeneration(unittest.TestCase):
     def test_dot_takes_unicode(self):
         e = gen_fixedtype(u"·̣─@łæßð~¶½")
         e += gen_datarel(u"tµŧurułej€", u"←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        s = expression_to_dot(e)
+        _, s = get_code(e, "dot")
         self._standard_check(s, e)
 
     def test_dot_takes_fails_ascii1(self):
         e = gen_fixedtype("a")
         e += gen_datarel("b", "c")
         e = gen_fixedrelation("d", e)
-        self.assertRaises(ValueError, expression_to_dot, e)
+        self.assertRaises(ValueError, get_code, e, "dot")
 
     def test_dot_takes_fails_ascii2(self):
         e = gen_fixedtype("·̣─@łæßð~¶½")
         e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        self.assertRaises(ValueError, expression_to_dot, e)
+        self.assertRaises(ValueError, get_code, e, "dot")
 
     def test_sparql_takes_unicode(self):
         e = gen_fixedtype(u"·̣─@łæßð~¶½")
         e += gen_datarel(u"tµŧurułej€", u"←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        _, s = expression_to_sparql(e)
+        _, s = get_code(e, "sparql")
         self._standard_check(s, e)
 
     def test_sparql_takes_fails_ascii1(self):
         e = gen_fixedtype("a")
         e += gen_datarel("b", "c")
         e = gen_fixedrelation("d", e)
-        self.assertRaises(ValueError, expression_to_sparql, e)
+        self.assertRaises(ValueError, get_code, e, "sparql")
 
     def test_sparql_takes_fails_ascii2(self):
         e = gen_fixedtype("·̣─@łæßð~¶½")
         e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        self.assertRaises(ValueError, expression_to_sparql, e)
+        self.assertRaises(ValueError, get_code, e, "sparql")
 
 
 if __name__ == "__main__":
