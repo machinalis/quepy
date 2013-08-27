@@ -47,8 +47,8 @@ class TestIntermendiateRepresentation(unittest.TestCase):
         self.assertEqual(len(edges), 1)
         self.assertIsInstance(edges[0][0], unicode)
         self.assertEqual(edges[0][0], u"rdf:type")
-        self.assertIsInstance(edges[0][1].node, unicode)
-        self.assertEqual(edges[0][1].node, u"uranium:blowtorch")
+        self.assertIsInstance(edges[0][1], unicode)
+        self.assertEqual(edges[0][1], u"uranium:blowtorch")
 
     def test_fixed_data_relation(self):
 
