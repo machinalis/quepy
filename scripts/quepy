@@ -28,7 +28,7 @@ from docopt import docopt
 from xml.sax.saxutils import escape
 
 import quepy
-from quepy.printout import expression_to_dot, expression_to_sparql
+from quepy import generation
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 
@@ -80,9 +80,9 @@ def startapp(name):
     os.mkdir(os.path.join(folder, folder))
 
     main_filename = os.path.join(folder, "main.py")
-    regex_filename = os.path.join(folder, folder, "regex.py")
+    parsing_filename = os.path.join(folder, folder, "parsing.py")
     init_filename = os.path.join(folder, folder, "__init__.py")
-    semantics_filename = os.path.join(folder, folder, "semantics.py")
+    ir_filename = os.path.join(folder, folder, "intermediate_representation.py")
 
     # We'll copy the content of the settings on quepy to the app
     quepy_folder = os.path.dirname(quepy.__file__)
@@ -95,13 +95,13 @@ def startapp(name):
                                              name=name))
         fh.write(main_template .format(san_name=san_name, name=name))
 
-    with open(regex_filename, "w") as fh:
+    with open(parsing_filename, "w") as fh:
         fh.write(header_template)
-        fh.write(description_template.format(module="Regex", name=name))
+        fh.write(description_template.format(module="Prasing", name=name))
 
-    with open(semantics_filename, "w") as fh:
+    with open(ir_filename, "w") as fh:
         fh.write(header_template)
-        fh.write(description_template.format(module="Semantics",
+        fh.write(description_template.format(module="Intermediate representation",
                                              name=name))
 
     with open(init_filename, "w") as fh:
@@ -136,8 +136,8 @@ def graph_query(app_name, question):
 
     rows = ""
     for expression, userdata in app._iter_compiled_forms(question):
-        dot_string = expression_to_dot(expression)
-        target, query = expression_to_sparql(expression)
+        _, dot_string = generation.get_code(expression, "dot")
+        target, query = generation.get_code(expression, "sparql")
 
         dot_path = "/tmp/quepy_graph.dot"
         cmdline = "dot -Tpng %s" % dot_path
