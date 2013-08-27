@@ -5,8 +5,7 @@ Library Reference
    :maxdepth: 1
 
    quepy
-   semantics
-   semantic_utils
-   regex
+   intermediate_representation
+   parsing
    nltktagger
    expression
