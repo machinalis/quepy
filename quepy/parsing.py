@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -12,11 +11,16 @@ import refo
 import logging
 from refo import Predicate, Literal, Star, Any, Group
 
-from quepy.semantic_utils import BadSemantic
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 _EOL = None
-logger = logging.getLogger("quepy.regex")
+logger = logging.getLogger("quepy.parsing")
+
+
+class BadSemantic(Exception):
+    """
+    Problem with the semantic.
+    """
 
 
 class WordList(list):
@@ -26,7 +30,6 @@ class WordList(list):
 
     def __init__(self, words):
         super(WordList, self).__init__(self)
-
         # Add the words to the list
         self.extend(words)
 
@@ -53,19 +56,20 @@ class Match(object):
         self._particles = {particle.name: particle for particle in match
                            if isinstance(particle, Particle)}
 
-    def __getattr__(self, attr):
-        if attr == "words":
-            i, j = self._match.span()  # Should be (0, n)
-            if self._i is not None:
-                i, j = self._i, self._j
-            return WordList(self._words[i:j])
+    @property
+    def words(self):
+        i, j = self._match.span()  # Should be (0, n)
+        if self._i is not None:
+            i, j = self._i, self._j
+        return WordList(self._words[i:j])
 
+    def __getattr__(self, attr):
         if attr in self._particles:
             particle = self._particles[attr]
             i, j = self._match[particle]
             self._check_valid_indexes(i, j, attr)
             match = Match(self._match, self._words, i, j)
-            return particle.semantics(match)
+            return particle.intermediate_representation(match)
 
         try:
             i, j = self._match[attr]
@@ -92,18 +96,17 @@ class RegexTemplate(object):
     regex = Star(Any())  # Must define when subclassing
     weight = 1  # Redefine this to give different priorities to your regexes.
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         """
-        Returns the semantics of the regex.
+        Returns the intermediate representation of the regex.
         `match` is of type `quepy.regex.Match` and is analogous to a python re
         match. It contains matched groups in the regular expression.
 
         When implementing a regex one must fill this method.
         """
-
         raise NotImplementedError()
 
-    def get_semantics(self, words):
+    def get_IR(self, words):
         rulename = self.__class__.__name__
         logger.debug("Trying to match with regex: {}".format(rulename))
 
@@ -115,7 +118,7 @@ class RegexTemplate(object):
 
         try:
             match = Match(match, words)
-            result = self.semantics(match)
+            result = self.intermediate_representation(match)
         except BadSemantic as error:
             logger.debug(str(error))
             return None, None
@@ -176,8 +179,8 @@ class Particle(Group):
         self.name = name
         super(Particle, self).__init__(self.regex, self)
 
-    def semantics(self, match):
-        message = "A semantic must be defined for {}"
+    def intermediate_representation(self, match):
+        message = "A intermediate representation must be defined for {}"
         raise NotImplementedError(message.format(self.__class__.__name__))
 
     def __str__(self):
@@ -211,7 +214,6 @@ def Lemmas(string):
     Returns a Predicate that catches strings
     with the lemmas mentioned on `string`.
     """
-
     return _predicate_sum_from_string(string, Lemma)
 
 
@@ -220,7 +222,6 @@ def Tokens(string):
     Returns a Predicate that catches strings
     with the tokens mentioned on `string`.
     """
-
     return _predicate_sum_from_string(string, Token)
 
 
@@ -229,5 +230,4 @@ def Poss(string):
     Returns a Predicate that catches strings
     with the POS mentioned on `string`.
     """
-
     return _predicate_sum_from_string(string, Pos)

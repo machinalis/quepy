@@ -13,16 +13,16 @@ Coutry related regex
 """
 
 from refo import Plus, Question
-from quepy.semantics import HasKeyword
-from quepy.regex import Lemma, Pos, RegexTemplate, Token, Particle
-from semantics import IsCountry, IncumbentOf, CapitalOf, LabelOf, \
-                      LanguageOf, PopulationOf, PresidentOf
+from quepy.intermediate_representation import HasKeyword
+from quepy.parsing import Lemma, Pos, RegexTemplate, Token, Particle
+from intermediate_representation import IsCountry, IncumbentOf, CapitalOf, \
+    LabelOf, LanguageOf, PopulationOf, PresidentOf
 
 
 class Country(Particle):
     regex = Plus(Pos("DT") | Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens.title()
         return IsCountry() + HasKeyword(name)
 
@@ -36,7 +36,7 @@ class PresidentOfRegex(RegexTemplate):
     regex = Pos("WP") + Token("is") + Question(Pos("DT")) + \
         Lemma("president") + Pos("IN") + Country() + Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         president = PresidentOf(match.country)
         incumbent = IncumbentOf(president)
         label = LabelOf(incumbent)
@@ -54,7 +54,7 @@ class CapitalOfRegex(RegexTemplate):
     regex = opening + Pos("DT") + Lemma("capital") + Pos("IN") + \
         Question(Pos("DT")) + Country() + Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         capital = CapitalOf(match.country)
         label = LabelOf(capital)
         return label, "enum"
@@ -77,7 +77,7 @@ class LanguageOfRegex(RegexTemplate):
     regex = openings + Pos("IN") + Question(Pos("DT")) + Country() + \
         Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         language = LanguageOf(match.country)
         return language, "enum"
 
@@ -95,6 +95,6 @@ class PopulationOfRegex(RegexTemplate):
                 Token("live") + Pos("IN"))
     regex = openings + Question(Pos("DT")) + Country() + Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         population = PopulationOf(match.country)
         return population, "literal"

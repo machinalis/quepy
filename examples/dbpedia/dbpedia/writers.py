@@ -14,9 +14,10 @@ Writers related regex.
 
 
 from refo import Plus, Question
-from quepy.semantics import HasKeyword
-from quepy.regex import Lemma, Lemmas, Pos, RegexTemplate, Particle
-from semantics import IsBook, HasAuthor, AuthorOf, IsPerson, NameOf
+from quepy.intermediate_representation import HasKeyword
+from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from intermediate_representation import IsBook, HasAuthor, AuthorOf, \
+    IsPerson, NameOf
 
 
 nouns = Plus(Pos("DT") | Pos("IN") | Pos("NN") | Pos("NNS") |
@@ -26,7 +27,7 @@ nouns = Plus(Pos("DT") | Pos("IN") | Pos("NN") | Pos("NNS") |
 class Book(Particle):
     regex = nouns
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens
         return IsBook() + HasKeyword(name)
 
@@ -34,7 +35,7 @@ class Book(Particle):
 class Author(Particle):
     regex = nouns
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens
         return IsPerson() + HasKeyword(name)
 
@@ -50,7 +51,7 @@ class WhoWroteRegex(RegexTemplate):
               Lemma("author") + Pos("IN") + Book())) + \
             Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         author = NameOf(IsPerson() + AuthorOf(match.book))
         return author, "literal"
 
@@ -65,7 +66,7 @@ class BooksByAuthorRegex(RegexTemplate):
             ((Lemma("which") | Lemma("what")) + Lemmas("book do") +
              Author() + Lemma("write") + Question(Pos(".")))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         book = IsBook() + HasAuthor(match.author)
         book_name = NameOf(book)
         return book_name, "enum"

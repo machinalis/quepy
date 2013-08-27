@@ -59,8 +59,7 @@ Set up the POS tagger
 
 After that you need get the backend's POS tagger. It's ok if you don't
 know what that is, it's safe to treat it like a black box.
-By default `nltk <http://nltk.org/>`_ is used,
-but applications can use `freeling <http://nlp.lsi.upc.edu/freeling/>`_ too.
+Quepy uses `nltk <http://nltk.org/>`_.
 
 To set up quepy to be able to use `nltk <http://nltk.org/>`_ type:
 

@@ -9,16 +9,17 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Tests for Semantics Module.
+Tests for Intermediate representation module.
 """
 
 import unittest
 from quepy.expression import Expression
-from quepy.semantics import HasKeyword
-from quepy.semantics import FixedRelation, FixedType, FixedDataRelation
+from quepy.intermediate_representation import HasKeyword
+from quepy.intermediate_representation import FixedRelation, FixedType, \
+    FixedDataRelation
 
 
-class TestSemantics(unittest.TestCase):
+class TestIntermendiateRepresentation(unittest.TestCase):
     def test_fixed_relation(self):
 
         class MyFixedRelation(FixedRelation):

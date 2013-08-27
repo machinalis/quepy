@@ -12,8 +12,7 @@
 Settings for testapp quepy.
 """
 
-USE_FREELING = False
-FREELING_CMD = ''
+LANGUAGE = "sparql"
 NLTK_DATA_PATH = []
 SPARQL_PREAMBLE = '''
 PREFIX owl: <http://www.w3.org/2002/07/owl#>

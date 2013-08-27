@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 # pylint: disable=C0111
 
@@ -10,11 +9,11 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Semantics definitions.
+Intermediate representation definitions.
 """
 
 from copy import copy
-from expression import Expression
+from quepy.expression import Expression
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 
@@ -113,20 +112,3 @@ class IsRelatedTo(FixedRelation):
     pass
 # Looks weird, yes, here I am using `IsRelatedTo` as a unique identifier.
 IsRelatedTo.relation = IsRelatedTo
-
-
-if __name__ == "__main__":
-    from expression import expression_to_sparql
-
-    class WasBornIn(FixedRelation):
-        relation = u"example:WasBornIn"
-
-    class IsCountry(FixedType):
-        fixedtype = u"example:Country"
-
-    HasKeyword.language = u"en"
-    poet = HasKeyword(u"poet") + HasKeyword(u"famous")
-    germany = HasKeyword(u"germany") + IsCountry()
-    e = poet + WasBornIn(germany)
-
-    print expression_to_sparql(e)[1]

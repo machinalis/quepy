@@ -9,11 +9,11 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Semantics for DBpedia quepy.
+Intermediate representation for DBpedia quepy.
 """
 
-from quepy.semantics import FixedType, HasKeyword, FixedRelation, \
-                            FixedDataRelation
+from quepy.intermediate_representation import FixedType, HasKeyword, \
+    FixedRelation, FixedDataRelation
 
 # Setup the Keywords for this application
 HasKeyword.relation = "rdfs:label"

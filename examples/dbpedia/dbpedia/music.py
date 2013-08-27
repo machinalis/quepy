@@ -13,16 +13,16 @@ Music related regex
 """
 
 from refo import Plus, Question
-from quepy.semantics import HasKeyword
-from quepy.regex import Lemma, Lemmas, Pos, RegexTemplate, Particle
-from semantics import IsBand, LabelOf, IsMemberOf, ActiveYears, \
-                      MusicGenereOf, NameOf, IsAlbum, ProducedBy
+from quepy.intermediate_representation import HasKeyword
+from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from intermediate_representation import IsBand, LabelOf, IsMemberOf, \
+    ActiveYears, MusicGenereOf, NameOf, IsAlbum, ProducedBy
 
 
 class Band(Particle):
     regex = Question(Pos("DT")) + Plus(Pos("NN") | Pos("NNP"))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         name = match.words.tokens.title()
         return IsBand() + HasKeyword(name)
 
@@ -41,7 +41,7 @@ class BandMembersRegex(RegexTemplate):
 
     regex = (regex1 | regex2 | regex3) + Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         member = IsMemberOf(match.band)
         label = LabelOf(member)
         return label, "enum"
@@ -57,7 +57,7 @@ class FoundationRegex(RegexTemplate):
     regex = Pos("WRB") + Lemma("be") + Band() + \
         (Lemma("form") | Lemma("found")) + Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         active_years = ActiveYears(match.band)
         return active_years, "literal"
 
@@ -73,7 +73,7 @@ class GenreRegex(RegexTemplate):
     regex = optional_opening + Question(Lemma("music")) + Lemma("genre") + \
         Pos("IN") + Band() + Question(Pos("."))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         genere = MusicGenereOf(match.band)
         label = LabelOf(genere)
         return label, "enum"
@@ -92,7 +92,7 @@ class AlbumsOfRegex(RegexTemplate):
              (Lemma("record") | Lemma("make")) + Question(Pos("."))) | \
             (Lemma("list") + Band() + Lemma("album"))
 
-    def semantics(self, match):
+    def intermediate_representation(self, match):
         album = IsAlbum() + ProducedBy(match.band)
         name = NameOf(album)
         return name, "enum"

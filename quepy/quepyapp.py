@@ -15,16 +15,12 @@ import logging
 from types import ModuleType
 
 from quepy import settings
-from quepy.regex import RegexTemplate
+from quepy import generation
+from quepy.parsing import RegexTemplate
 from quepy.tagger import get_tagger, TaggingError
-from quepy.printout import expression_to_sparql
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 logger = logging.getLogger("quepy.quepyapp")
-
-
-class QuepyImportError(Exception):
-    """ Error importing a quepy file. """
 
 
 def install(app_name):
@@ -34,8 +30,8 @@ def install(app_name):
 
     module_paths = {
         u"settings": u"{0}.settings",
-        u"regex": u"{0}.regex",
-        u"semantics": u"{0}.semantics",
+        u"parsing": u"{0}.parsing",
+        u"intermediate_representation": u"{0}.intermediate_representation",
     }
     modules = {}
 
@@ -45,7 +41,7 @@ def install(app_name):
                                               fromlist=[None])
         except ImportError, error:
             message = u"Error importing {0!r}: {1}"
-            raise QuepyImportError(message.format(module_name, error))
+            raise ImportError(message.format(module_name, error))
 
     return QuepyApp(**modules)
 
@@ -61,28 +57,31 @@ class QuepyApp(object):
     Provides the quepy application API.
     """
 
-    def __init__(self, regex, settings, semantics):
+    def __init__(self, parsing, settings, intermediate_representation):
         """
-        Creates the application based on `regex`, `settings` and
-        `semantics` modules.
+        Creates the application based on `parsing`, `settings` and
+        `intermediate_representation` modules.
         """
 
-        assert isinstance(regex, ModuleType)
+        assert isinstance(parsing, ModuleType)
         assert isinstance(settings, ModuleType)
-        assert isinstance(semantics, ModuleType)
+        assert isinstance(intermediate_representation, ModuleType)
 
-        self._regex_module = regex
+        self._parsing_module = parsing
         self._settings_module = settings
-        self._semantics_module = semantics
+        self._intermediate_representation_module = intermediate_representation
 
         # Save the settings right after loading settings module
         self._save_settings_values()
 
         self.tagger = get_tagger()
+        self.language = getattr(self._settings_module, "LANGUAGE", None)
+        if not self.language:
+            raise ValueError("Missing configuration for language")
 
         self.rules = []
-        for element in dir(self._regex_module):
-            element = getattr(self._regex_module, element)
+        for element in dir(self._parsing_module):
+            element = getattr(self._parsing_module, element)
 
             try:
                 if issubclass(element, RegexTemplate) and \
@@ -108,8 +107,8 @@ class QuepyApp(object):
         """
 
         question = question_sanitize(question)
-        for target, sparql_query, userdata in self.get_queries(question):
-            return target, sparql_query, userdata
+        for target, query, userdata in self.get_queries(question):
+            return target, query, userdata
         return None, None, None
 
     def get_queries(self, question):
@@ -126,11 +125,12 @@ class QuepyApp(object):
         """
         question = encoding_flexible_conversion(question)
         for expression, userdata in self._iter_compiled_forms(question):
-            target, sparql_query = expression_to_sparql(expression)
-            logger.debug(u"Semantics {1}: {0}".format(str(expression),
+            target, query = generation.get_code(expression, self.language)
+            message = u"Intermediate representation {1}: {0}"
+            logger.debug(message.format(str(expression),
                          expression.rule_used))
-            logger.debug(u"Query generated: {0}".format(sparql_query))
-            yield target, sparql_query, userdata
+            logger.debug(u"Query generated: {0}".format(query))
+            yield target, query, userdata
 
     def _iter_compiled_forms(self, question):
         """
@@ -145,10 +145,10 @@ class QuepyApp(object):
             return
 
         logger.debug(u"Tagged question:\n" +
-                     u"\n".join(u"\t{}".format(w.fullstr()) for w in words))
+                     u"\n".join(u"\t{}".format(w for w in words)))
 
         for rule in self.rules:
-            expression, userdata = rule.get_semantics(words)
+            expression, userdata = rule.get_IR(words)
             if expression:
                 yield expression, userdata
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -9,6 +8,7 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 import logging
+
 from quepy import settings
 from quepy.encodingpolicy import assert_valid_encoding
 
@@ -31,10 +31,8 @@ class Word(object):
     Contains *token*, *lemma*, *pos tag* and optionally a *probability* of
     that tag.
     """
-
     _encoding_attrs = u"token lemma pos".split()
     _attrs = _encoding_attrs + [u"prob"]
-    _fmt = u" ".join(u"{:13.13}" for _ in _attrs)
 
     def __init__(self, token, lemma=None, pos=None, prob=None):
         self.pos = pos
@@ -47,18 +45,12 @@ class Word(object):
             assert_valid_encoding(value)
         object.__setattr__(self, name, value)
 
-    def fullstr(self):
-        """
-        Returns a full string representation of the Word object
-        """
-        attrs_rep = (repr(getattr(self, name, u"-")) for name in self._attrs)
-        return self._fmt.format(*attrs_rep)
-
     def __unicode__(self):
-        return u"{}".format(self.token)
+        attrs = (getattr(self, name, u"-") for name in self._attrs)
+        return u"|".join(str(x) for x in attrs)
 
     def __repr__(self):
-        return u"{}|{}|{}".format(self.token, self.lemma, self.pos)
+        return unicode(self)
 
 
 def get_tagger():
@@ -68,12 +60,8 @@ def get_tagger():
     The returned value is a function that receives a unicode string and returns
     a list of `Word` instances.
     """
-    if settings.USE_FREELING:
-        from quepy.freeling import run_freeling
-        tagger_function = lambda x: run_freeling(x, settings.FREELING_CMD)
-    else:
-        from quepy.nltktagger import run_nltktagger
-        tagger_function = lambda x: run_nltktagger(x, settings.NLTK_DATA_PATH)
+    from quepy.nltktagger import run_nltktagger
+    tagger_function = lambda x: run_nltktagger(x, settings.NLTK_DATA_PATH)
 
     def wrapper(string):
         assert_valid_encoding(string)
