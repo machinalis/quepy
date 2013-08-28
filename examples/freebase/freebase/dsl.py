@@ -1,0 +1,160 @@
+# coding: utf-8
+
+# Copyright (c) 2012, Machinalis S.R.L.
+# This file is part of quepy and is distributed under the Modified BSD License.
+# You should have received a copy of license in the LICENSE file.
+#
+# Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
+#          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
+
+"""
+Domain specific language of freebase app.
+"""
+
+from quepy.dsl import FixedType, FixedRelation, FixedDataRelation, HasKeyword
+
+# Setup the Keywords for this application
+HasKeyword.relation = "/type/object/name"
+
+# Setup Fixed Type
+FixedType.fixedtyperelation = "/type/object/type"
+
+
+class NameOf(FixedRelation):
+    relation = "/type/object/name"
+    reverse = True
+
+
+class HasName(FixedDataRelation):
+    relation = "/type/object/name"
+
+
+class GovernmentPosition(FixedDataRelation):
+    relation = "/government/government_position_held/basic_title"
+
+
+class GovernmentPositionJusridiction(FixedRelation):
+    relation = "/government/government_position_held/jurisdiction_of_office"
+
+
+class IsCountry(FixedType):
+    fixedtype = "/location/country"
+
+
+class HoldsGovernmentPosition(FixedRelation):
+    relation = "/government/government_position_held/office_holder"
+    reverse = True
+
+
+class DefinitionOf(FixedRelation):
+    relation = "/common/topic/description"
+    reverse = True
+
+
+class IsPerson(FixedType):
+    fixedtype = "/people/person"
+    fixedtyperelation = "/type/object/type"
+
+
+class BirthDateOf(FixedRelation):
+    relation = "/people/person/date_of_birth"
+    reverse = True
+
+
+class BirthPlaceOf(FixedRelation):
+    relation = "/people/person/place_of_birth"
+    reverse = True
+
+
+class IsMovie(FixedType):
+    fixedtype = "/film/film"
+
+
+class DurationOf(FixedRelation):
+    relation = "/film/film/runtime"
+    reverse = True
+
+
+class IsActor(FixedType):
+    fixedtype = "Actor"
+    fixedtyperelation = "/people/person/profession"
+
+
+class IsDirector(FixedType):
+    fixedtype = "Film Director"
+    fixedtyperelation = "/people/person/profession"
+
+
+class HasPerformance(FixedRelation):
+    relation = "/film/film/starring"
+
+
+class PerformsIn(FixedRelation):
+    relation = "/film/performance/actor"
+    reverse = True
+
+
+class IsPerformance(FixedType):
+    fixedtype = "/film/performance"
+
+
+class PerformanceOfActor(FixedRelation):
+    relation = "/film/performance/actor"
+
+
+class PerformanceOfMovie(FixedRelation):
+    relation = "/film/film/starring"
+    reverse = True
+
+
+class DirectorOf(FixedRelation):
+    relation = "/film/film/directed_by"
+    reverse = True
+
+
+class DirectedBy(FixedRelation):
+    relation = "/film/film/directed_by"
+
+
+class ReleaseDateOf(FixedRelation):
+    relation = "/film/film/initial_release_date"
+    reverse = True
+
+
+class IsBand(FixedType):
+    fixedtype = "/music/musical_group"
+
+
+class IsMusicArtist(FixedType):
+    fixedtype = "/music/artist"
+
+
+class IsMemberOf(FixedRelation):
+    relation = "/music/group_member/membership"
+
+
+class GroupOf(FixedRelation):
+    relation = "/music/group_membership/group"
+
+
+class ActiveYearsOf(FixedRelation):
+    relation = "/music/artist/active_start"
+    reverse = True
+
+
+class IsMusicGenre(FixedType):
+    fixedtype = "/music/genre"
+
+
+class MusicGenreOf(FixedRelation):
+    relation = "/music/artist/genre"
+    reverse = True
+
+
+class IsAlbum(FixedType):
+    fixedtype = "/music/album"
+
+
+class ProducedBy(FixedRelation):
+    relation = "/music/artist/album"
+    reverse = True
