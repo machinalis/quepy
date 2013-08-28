@@ -5,7 +5,7 @@ Library Reference
    :maxdepth: 1
 
    quepy
-   intermediate_representation
+   dsl
    parsing
    nltktagger
    expression

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -14,10 +13,9 @@ Writers related regex.
 
 
 from refo import Plus, Question
-from quepy.intermediate_representation import HasKeyword
+from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
-from intermediate_representation import IsBook, HasAuthor, AuthorOf, \
-    IsPerson, NameOf
+from dsl import IsBook, HasAuthor, AuthorOf, IsPerson, NameOf
 
 
 nouns = Plus(Pos("DT") | Pos("IN") | Pos("NN") | Pos("NNS") |
@@ -27,7 +25,7 @@ nouns = Plus(Pos("DT") | Pos("IN") | Pos("NN") | Pos("NNS") |
 class Book(Particle):
     regex = nouns
 
-    def intermediate_representation(self, match):
+    def interpret(self, match):
         name = match.words.tokens
         return IsBook() + HasKeyword(name)
 
@@ -35,7 +33,7 @@ class Book(Particle):
 class Author(Particle):
     regex = nouns
 
-    def intermediate_representation(self, match):
+    def interpret(self, match):
         name = match.words.tokens
         return IsPerson() + HasKeyword(name)
 
@@ -51,7 +49,7 @@ class WhoWroteRegex(RegexTemplate):
               Lemma("author") + Pos("IN") + Book())) + \
             Question(Pos("."))
 
-    def intermediate_representation(self, match):
+    def interpret(self, match):
         author = NameOf(IsPerson() + AuthorOf(match.book))
         return author, "literal"
 
@@ -66,7 +64,7 @@ class BooksByAuthorRegex(RegexTemplate):
             ((Lemma("which") | Lemma("what")) + Lemmas("book do") +
              Author() + Lemma("write") + Question(Pos(".")))
 
-    def intermediate_representation(self, match):
+    def interpret(self, match):
         book = IsBook() + HasAuthor(match.author)
         book_name = NameOf(book)
         return book_name, "enum"

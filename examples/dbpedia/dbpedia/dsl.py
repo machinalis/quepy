@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -9,11 +8,10 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Intermediate representation for DBpedia quepy.
+Domain specific language for DBpedia quepy.
 """
 
-from quepy.intermediate_representation import FixedType, HasKeyword, \
-    FixedRelation, FixedDataRelation
+from quepy.dsl import FixedType, HasKeyword, FixedRelation, FixedDataRelation
 
 # Setup the Keywords for this application
 HasKeyword.relation = "rdfs:label"

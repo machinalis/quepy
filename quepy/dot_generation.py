@@ -6,8 +6,8 @@ Dot generation code.
 
 import random
 from quepy.expression import isnode
+from quepy.dsl import IsRelatedTo, HasKeyword
 from quepy.encodingpolicy import assert_valid_encoding
-from quepy.intermediate_representation import IsRelatedTo, HasKeyword
 
 
 def adapt(x):

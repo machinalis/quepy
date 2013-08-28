@@ -9,7 +9,7 @@
 
 import unittest
 from quepy.generation import get_code
-from quepy.intermediate_representation import FixedRelation, FixedType, \
+from quepy.dsl import FixedRelation, FixedType, \
     FixedDataRelation
 
 
