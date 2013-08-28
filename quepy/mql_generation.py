@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import json
+from quepy.dsl import IsRelatedTo
 from collections import defaultdict
 from quepy.expression import isnode
-from quepy.intermediate_representation import IsRelatedTo
-import json
 
 
 def choose_start_node(e):
@@ -92,36 +92,3 @@ def generate_mql(e):
                             indent=4, separators=(',', ': '))
     target = paths_from_root(graph, start)[e.get_head()]
     return target, mql_query
-
-
-if __name__ == "__main__":
-    from intermediate_representation import *
-
-    class NameOf(FixedRelation):
-        relation = "/type/object/name"
-        reverse = True
-
-    class HasName(FixedDataRelation):
-        relation = "/type/object/name"
-
-    class GovernmentPosition(FixedDataRelation):
-        relation = "/government/government_position_held/basic_title"
-
-    class GovernmentPositionJusridiction(FixedRelation):
-        relation = "/government/government_position_held/jurisdiction_of_office"
-
-    class IsCountry(FixedType):
-        fixedtype = "/location/country"
-        fixedtyperelation = "/type/object/type"
-
-    class HoldsGovernmentPosition(FixedRelation):
-        relation = "/government/government_position_held/office_holder"
-        reverse = True
-
-    france = IsCountry() + HasName("France")
-    president = GovernmentPosition("President") + \
-                GovernmentPositionJusridiction(france)
-    person = NameOf(HoldsGovernmentPosition(president))
-    target, mql_query = generate_mql(person)
-    print mql_query
-    print "Target:", target
