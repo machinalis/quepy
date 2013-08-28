@@ -176,8 +176,8 @@ class PlotOfRegex(RegexTemplate):
 
     regex = ((Lemmas("what be") + Movie() + Lemma("about")) | \
              (Question(Lemmas("what be the")) + Lemma("plot") +
-              Pos("IN") + Movie()) +
-            Question(Pos(".")))
+              Pos("IN") + Movie())) + \
+            Question(Pos("."))
 
     def interpret(self, match):
         definition = DefinitionOf(match.movie)

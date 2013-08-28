@@ -11,7 +11,6 @@
 People related regex
 """
 
-
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
