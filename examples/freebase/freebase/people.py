@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 # Copyright (c) 2012, Machinalis S.R.L.
 # This file is part of quepy and is distributed under the Modified BSD License.
@@ -13,8 +13,8 @@ People related regex
 
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
+from dsl import IsPerson, DefinitionOf, BirthDateOf, BirthPlaceOf
 from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
-from dsl import IsPerson, LabelOf, DefinitionOf, BirthDateOf, BirthPlaceOf
 
 
 class Person(Particle):
@@ -61,6 +61,5 @@ class WhereIsFromRegex(RegexTemplate):
 
     def interpret(self, match):
         birth_place = BirthPlaceOf(match.person)
-        label = LabelOf(birth_place)
-
-        return label, "enum"
+        name = NameOf(birth_place)
+        return name, "enum"
