@@ -9,7 +9,7 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Intermediate representation definitions.
+Domain specific language definitions.
 """
 
 from copy import copy

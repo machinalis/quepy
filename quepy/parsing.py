@@ -69,7 +69,7 @@ class Match(object):
             i, j = self._match[particle]
             self._check_valid_indexes(i, j, attr)
             match = Match(self._match, self._words, i, j)
-            return particle.intermediate_representation(match)
+            return particle.interpret(match)
 
         try:
             i, j = self._match[attr]
@@ -96,7 +96,7 @@ class RegexTemplate(object):
     regex = Star(Any())  # Must define when subclassing
     weight = 1  # Redefine this to give different priorities to your regexes.
 
-    def intermediate_representation(self, match):
+    def interpret(self, match):
         """
         Returns the intermediate representation of the regex.
         `match` is of type `quepy.regex.Match` and is analogous to a python re
@@ -106,7 +106,7 @@ class RegexTemplate(object):
         """
         raise NotImplementedError()
 
-    def get_IR(self, words):
+    def get_interpretation(self, words):
         rulename = self.__class__.__name__
         logger.debug("Trying to match with regex: {}".format(rulename))
 
@@ -118,7 +118,7 @@ class RegexTemplate(object):
 
         try:
             match = Match(match, words)
-            result = self.intermediate_representation(match)
+            result = self.interpret(match)
         except BadSemantic as error:
             logger.debug(str(error))
             return None, None
@@ -179,8 +179,8 @@ class Particle(Group):
         self.name = name
         super(Particle, self).__init__(self.regex, self)
 
-    def intermediate_representation(self, match):
-        message = "A intermediate representation must be defined for {}"
+    def interpret(self, match):
+        message = "A interpretation must be defined for {}"
         raise NotImplementedError(message.format(self.__class__.__name__))
 
     def __str__(self):
