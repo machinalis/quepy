@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -8,18 +7,13 @@
 # Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
-"""
-Tests for Intermediate representation module.
-"""
-
 import unittest
 from quepy.expression import Expression
-from quepy.intermediate_representation import HasKeyword
-from quepy.intermediate_representation import FixedRelation, FixedType, \
+from quepy.dsl import HasKeyword, FixedRelation, FixedType, \
     FixedDataRelation
 
 
-class TestIntermendiateRepresentation(unittest.TestCase):
+class TestDSL(unittest.TestCase):
     def test_fixed_relation(self):
 
         class MyFixedRelation(FixedRelation):

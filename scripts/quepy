@@ -63,8 +63,7 @@ class CommandNotFound(Exception):
 
 def startapp(name):
     san_name = name.decode("ascii", "ignore").lower().replace(" ", "_")
-    header_template = "#!/usr/bin/env python\n" \
-                      "# coding: utf-8\n\n"
+    header_template = "# coding: utf-8\n\n"
     main_template = "import quepy\n" \
                     "{san_name} = quepy.install(\"{name}\")\n"
     description_template = "\"\"\"\n" \
@@ -82,7 +81,7 @@ def startapp(name):
     main_filename = os.path.join(folder, "main.py")
     parsing_filename = os.path.join(folder, folder, "parsing.py")
     init_filename = os.path.join(folder, folder, "__init__.py")
-    ir_filename = os.path.join(folder, folder, "intermediate_representation.py")
+    dsl_filename = os.path.join(folder, folder, "dsl.py")
 
     # We'll copy the content of the settings on quepy to the app
     quepy_folder = os.path.dirname(quepy.__file__)
@@ -99,9 +98,9 @@ def startapp(name):
         fh.write(header_template)
         fh.write(description_template.format(module="Prasing", name=name))
 
-    with open(ir_filename, "w") as fh:
+    with open(dsl_filename, "w") as fh:
         fh.write(header_template)
-        fh.write(description_template.format(module="Intermediate representation",
+        fh.write(description_template.format(module="Domain specific language",
                                              name=name))
 
     with open(init_filename, "w") as fh:

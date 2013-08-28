@@ -31,7 +31,7 @@ def install(app_name):
     module_paths = {
         u"settings": u"{0}.settings",
         u"parsing": u"{0}.parsing",
-        u"intermediate_representation": u"{0}.intermediate_representation",
+        u"dsl": u"{0}.dsl",
     }
     modules = {}
 
@@ -57,19 +57,19 @@ class QuepyApp(object):
     Provides the quepy application API.
     """
 
-    def __init__(self, parsing, settings, intermediate_representation):
+    def __init__(self, parsing, settings, dsl):
         """
         Creates the application based on `parsing`, `settings` and
-        `intermediate_representation` modules.
+        `dsl` modules.
         """
 
         assert isinstance(parsing, ModuleType)
         assert isinstance(settings, ModuleType)
-        assert isinstance(intermediate_representation, ModuleType)
+        assert isinstance(dsl, ModuleType)
 
         self._parsing_module = parsing
         self._settings_module = settings
-        self._intermediate_representation_module = intermediate_representation
+        self._dsl = dsl
 
         # Save the settings right after loading settings module
         self._save_settings_values()
@@ -126,7 +126,7 @@ class QuepyApp(object):
         question = encoding_flexible_conversion(question)
         for expression, userdata in self._iter_compiled_forms(question):
             target, query = generation.get_code(expression, self.language)
-            message = u"Intermediate representation {1}: {0}"
+            message = u"Interpretation {1}: {0}"
             logger.debug(message.format(str(expression),
                          expression.rule_used))
             logger.debug(u"Query generated: {0}".format(query))
@@ -148,7 +148,7 @@ class QuepyApp(object):
                      u"\n".join(u"\t{}".format(w for w in words)))
 
         for rule in self.rules:
-            expression, userdata = rule.get_IR(words)
+            expression, userdata = rule.get_interpretation(words)
             if expression:
                 yield expression, userdata
 
