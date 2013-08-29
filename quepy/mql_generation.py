@@ -8,9 +8,11 @@ from quepy.expression import isnode
 
 def choose_start_node(e):
     """
-    Choose a node of the graph such that no property leading to a data has
-    to be reversed (with !).
+    Choose a node of the `Expression` such that no property leading to a data
+    has to be reversed (with !).
     """
+    # Since data "nodes" have no outgoing edges it sufices to find any node
+    # with an outgoing edge.
     for node in e.iter_nodes():
         if list(e.iter_edges(node)):
             return node
@@ -59,6 +61,12 @@ def post_order_depth_first(graph, start):
 
 
 def paths_from_root(graph, start):
+    """
+    Generates paths from `start` to every other node in `graph` and puts it in
+    the returned dictionary `paths`.
+    ie.: `paths_from_node(graph, start)[node]` is a list of the edge names used
+    to get to `node` form `start`.
+    """
     paths = {start: []}
     q = [start]
     seen = set()
@@ -73,6 +81,9 @@ def paths_from_root(graph, start):
 
 
 def generate_mql(e):
+    """
+    Generates a MQL query for the `Expression` `e`.
+    """
     start = choose_start_node(e)
     graph = to_bidirected_graph(e)
     generated = {}
