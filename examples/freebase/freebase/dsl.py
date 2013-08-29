@@ -158,3 +158,41 @@ class IsAlbum(FixedType):
 class ProducedBy(FixedRelation):
     relation = "/music/artist/album"
     reverse = True
+
+
+class IsCountry(FixedType):
+    fixedtype = "/location/country"
+
+
+class IsPresident(FixedType):
+    fixedtype = "President"
+    fixedtyperelation = "/government/government_position_held/basic_title"
+
+
+class OfficeHolderOf(FixedRelation):
+    relation = "/government/government_position_held/office_holder"
+    reverse = True
+
+
+class PresidentOf(FixedRelation):
+    relation = "/government/government_position_held/jurisdiction_of_office"
+
+
+class CapitalOf(FixedRelation):
+    relation = "/location/country/capital"
+    reverse = True
+
+
+class LanguageOf(FixedRelation):
+    relation = "/location/country/official_language"
+    reverse = True
+
+
+class PopulationOf(FixedRelation):
+    relation = "/location/statistical_region/population"
+    reverse = True
+
+
+class NumberOf(FixedRelation):
+    relation = "/measurement_unit/dated_integer/number"
+    reverse = True

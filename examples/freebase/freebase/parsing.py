@@ -19,6 +19,7 @@ from quepy.parsing import RegexTemplate, Particle, Lemma, Pos
 from music import *
 from people import *
 from movies import *
+from country import *
 
 
 class Thing(Particle):

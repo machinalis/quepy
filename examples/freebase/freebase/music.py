@@ -74,7 +74,7 @@ class GenreRegex(RegexTemplate):
         Pos("IN") + Band() + Question(Pos("."))
 
     def interpret(self, match):
-        genre = IsMusicGenre() + MusicGenreOf(match.band)
+        genre = MusicGenreOf(match.band)
         name = NameOf(genre)
         return name, "enum"
 

@@ -41,7 +41,10 @@ def result_from_responses(responses, target):
         result = []
         for elem in to_explore:
             if isinstance(elem, dict):
-                if "lang" in elem and elem["lang"] == "/lang/en":
+                if "lang" in elem:
+                    if elem["lang"] == "/lang/en":
+                        result.append(elem.get("value", elem))
+                else:
                     result.append(elem.get("value", elem))
             else:
                 result.append(elem)
@@ -61,4 +64,5 @@ if __name__ == "__main__":
             print responses
             exit()
         else:
-            print "\n".join(result_from_responses(responses, target))
+            for response in result_from_responses(responses, target):
+                print response
