@@ -86,9 +86,9 @@ def generate_mql(e):
                     # Then other is backwards in the tree, and in wrong order
                     continue
             d[relation] = other
-        generated[node] = d
+        generated[node] = [d]
 
-    mql_query = json.dumps([generated[start]], sort_keys=True,
-                            indent=4, separators=(',', ': '))
+    mql_query = json.dumps(generated[start], sort_keys=True,
+                            indent=2, separators=(',', ': '))
     target = paths_from_root(graph, start)[e.get_head()]
     return target, mql_query

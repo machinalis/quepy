@@ -21,6 +21,33 @@ service_url = 'https://www.googleapis.com/freebase/v1/mqlread'
 freebase = quepy.install("freebase")
 
 
+def request(query):
+    params = {'query': query, 'key': api_key}
+    url = service_url + '?' + urllib.urlencode(params)
+    responses = json.loads(urllib.urlopen(url).read())
+    return responses
+
+
+def result_from_responses(responses, target):
+    if responses:
+        to_explore = responses["result"]
+        for key in target:
+            _to_explore = []
+            for elem in to_explore:
+                for response in elem[key]:
+                    _to_explore.append(response)
+            to_explore = _to_explore
+
+        result = []
+        for elem in to_explore:
+            if isinstance(elem, dict):
+                if "lang" in elem and elem["lang"] == "/lang/en":
+                    result.append(elem.get("value", elem))
+            else:
+                result.append(elem)
+        return result
+
+
 if __name__ == "__main__":
     args = docopt(__doc__)
     question = " ".join(args["<question>"])
@@ -29,20 +56,9 @@ if __name__ == "__main__":
 
     if args["--request"]:
         print
-        params = {'query': query, 'key': api_key}
-        url = service_url + '?' + urllib.urlencode(params)
-        responses = json.loads(urllib.urlopen(url).read())
+        responses = request(query)
         if "error" in responses:
             print responses
             exit()
-
-        if responses:
-            for response in responses["result"]:
-                result = response
-                for key in target:
-                    result = response[key]
-
-                if result is not None:
-                    print result["value"]
-                else:
-                    print "<No value avaliable>"
+        else:
+            print "\n".join(result_from_responses(responses, target))
