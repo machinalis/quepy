@@ -2,8 +2,8 @@
 
 import json
 from quepy.dsl import IsRelatedTo
-from collections import defaultdict
 from quepy.expression import isnode
+from quepy.encodingpolicy import encoding_flexible_conversion
 
 
 def choose_start_node(e):
@@ -19,21 +19,32 @@ def choose_start_node(e):
     return node
 
 
+def safely_to_unicode(x):
+    if isinstance(x, unicode):
+        return x
+    if isinstance(x, str):
+        return encoding_flexible_conversion(x)
+    if isinstance(x, IsRelatedTo):
+        return u"/type/reflect/any_master"
+    return unicode(x)  # FIXME: Any object is unicode-able, this is error prone
+
+
 def to_bidirected_graph(e):
     """
     Rewrite the graph such that there are reversed edges for every forward
     edge.
     If an edge goes into a data, it should not be reversed.
     """
-    graph = defaultdict(list)
+    graph = {node:[] for node in e.iter_nodes()}
     for node in e.iter_nodes():
         for relation, other in e.iter_edges(node):
-            # Add IsRelatedTo handling here
-            if relation is IsRelatedTo:
-                relation = "/type/reflect/any_master"
-            graph[node].append((relation, other))
+            relation = safely_to_unicode(relation)
             if isnode(other):
-                graph[other].append(("!" + relation, node))
+                graph[other].append((u"!" + relation, node))
+            else:
+                other = safely_to_unicode(other)
+            graph[node].append((relation, other))
+    assert all(isnode(x) for x in graph) and len(e) == len(graph)
     return graph
 
 
