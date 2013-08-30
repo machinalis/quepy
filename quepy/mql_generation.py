@@ -16,7 +16,7 @@ def choose_start_node(e):
     for node in e.iter_nodes():
         if list(e.iter_edges(node)):
             return node
-    raise node
+    return node
 
 
 def to_bidirected_graph(e):
