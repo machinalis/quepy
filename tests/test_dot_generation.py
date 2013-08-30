@@ -12,7 +12,7 @@ import tempfile
 import subprocess
 from random_expression import random_expression
 from random import seed
-from quepy.generation import get_code
+from quepy.dot_generation import expression_to_dot
 from quepy.dsl import FixedRelation, FixedType, \
     FixedDataRelation
 
@@ -35,7 +35,7 @@ def gen_fixedrelation(rel, e):
     return X(e)
 
 
-class TestSparqlGeneration(unittest.TestCase):
+class TestDotGeneration(unittest.TestCase):
 
     def _standard_check(self, s, e):
         self.assertIsInstance(s, unicode)
@@ -46,19 +46,19 @@ class TestSparqlGeneration(unittest.TestCase):
     def test_dot_takes_unicode(self):
         e = gen_fixedtype(u"·̣─@łæßð~¶½")
         e += gen_datarel(u"tµŧurułej€", u"←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        _, s = get_code(e, "dot")
+        _, s = expression_to_dot(e)
         self._standard_check(s, e)
 
     def test_dot_takes_fails_ascii1(self):
         e = gen_fixedtype("a")
         e += gen_datarel("b", "c")
         e = gen_fixedrelation("d", e)
-        self.assertRaises(ValueError, get_code, e, "dot")
+        self.assertRaises(ValueError, expression_to_dot, e)
 
     def test_dot_takes_fails_ascii2(self):
         e = gen_fixedtype("·̣─@łæßð~¶½")
         e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        self.assertRaises(ValueError, get_code, e, "dot")
+        self.assertRaises(ValueError, expression_to_dot, e)
 
     def test_dot_stress(self):
         seed("I have come here to chew bubblegum and kick ass... "
@@ -68,7 +68,7 @@ class TestSparqlGeneration(unittest.TestCase):
         msg = "dot returned error code {}, check {} input file."
         for _ in xrange(100):
             expression = random_expression()
-            _, dot_string = get_code(expression, "dot")
+            _, dot_string = expression_to_dot(expression)
             with open(dot_file.name, "w") as filehandler:
                 filehandler.write(dot_string.encode("utf-8"))
 
