@@ -22,10 +22,10 @@ def random_relation():
     data = data.replace(" ", "")
     if random.random() > 0.05:
         return data
-    class X(object):
+    class UnicodeableDummy(object):
         def __unicode__(self):
             return data
-    return X()
+    return UnicodeableDummy()
 
 
 def random_expression():
