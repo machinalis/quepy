@@ -37,8 +37,12 @@ def random_expression():
     xs = [x * (1.0 - random.random()) for x in xs]
     assert all(x != 0 for x in xs)
     new_node, add_data, decapitate, _ = [x / sum(xs) for x in xs]
-    expressions = [Expression()]
-    while (1.0 / mean_size) < random.random():
+    expressions = [Expression(), Expression(), Expression(), Expression()]
+    while len(expressions) != 1:
+        if (1.0 / mean_size) < random.random():
+            # Will start to merge more and will not create new nodes
+            new_node = 0.0
+        # Choose action
         r = random.random()
         if r < new_node:
             # New expression
@@ -57,7 +61,4 @@ def random_expression():
             e2 = expressions.pop()
             e1 = expressions[-1]
             e1 += e2
-    result = Expression()
-    for e in expressions:
-        result += e
-    return result
+    return expressions[0]
