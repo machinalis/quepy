@@ -63,8 +63,8 @@ It should look like this:
     .
     ├── dbpedia
     │   ├── __init__.py
-    │   ├── regex.py
-    │   ├── semantics.py
+    │   ├── parsing.py
+    │   ├── dsl.py
     │   └── settings.py
     └── main.py
 
@@ -72,10 +72,10 @@ It should look like this:
 
 This is the basic structure of every quepy project.
 
-* dbpedia/regex.py: the file where you will define the regular expressions
-  that willll match natural language questions and transform them into an
+* dbpedia/parsing.py: the file where you will define the regular expressions
+  that will match natural language questions and transform them into an
   abstract semantic representation.
-* dbpedia/semantics.py: the file where you will define the specific semantics
+* dbpedia/dsl.py: the file where you will define the domain specific language
   of your database schema. In the case of SPARQL, here you will be specifing
   things that usually go in the ontology: relation names and such.
 * dbpedia/settings.py: the configuration file for some aspects of the
@@ -126,7 +126,7 @@ language questions and transform them into an abstract semantic
 representation. This will define especifically which questions the
 system will be able to handle and *what* to do with them.
 
-In our example, we'll be editing the file *dbpedia/regex.py*. Let's
+In our example, we'll be editing the file *dbpedia/parsing.py*. Let's
 look at an example of regular expression to handle *"What is ..."*
 questions. The whole definition would look like this:
 
@@ -135,11 +135,11 @@ questions. The whole definition would look like this:
 
     from refo import Group, Question
     from quepy.semantics import HasKeyword
-    from quepy.regex import Lemma, Pos, RegexTemplate
+    from quepy.regex import Lemma, Pos, QuestionTemplate
 
     from semantics import IsDefinedIn
 
-    class WhatIs(RegexTemplate):
+    class WhatIs(QuestionTemplate):
         """
         Regex for questions like "What is ..."
         Ex: "What is a car"
@@ -158,7 +158,7 @@ questions. The whole definition would look like this:
 Now let's discuss this procedure step by step.
 
 First of all, note that regex handlers need to be a subclass from
-:class:`quepy.regex.RegexTemplate`. They also need to define a class
+:class:`quepy.regex.QuestionTemplate`. They also need to define a class
 attribute called ``regex`` with a refo regex.
 
 Then, we describe the structure of the input question as a regular expression,
@@ -217,7 +217,7 @@ your questions to be mapped to different query languages in a
 transparent manner.
 
 In our example, the semantics is defined in the file
-*dbpedia/semantics.py*.
+*dbpedia/dsl.py*.
 
 Let's see an example of semantic definition. The predicate IsDefinedIn
 was used in Line 21 of the previous example:
