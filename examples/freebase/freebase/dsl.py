@@ -196,3 +196,53 @@ class PopulationOf(FixedRelation):
 class NumberOf(FixedRelation):
     relation = "/measurement_unit/dated_integer/number"
     reverse = True
+
+
+class IsTvShow(FixedType):
+    fixedtype = "/tv/tv_program"
+
+
+class CastOf(FixedRelation):
+    relation = "/tv/tv_program/regular_cast"
+    reverse = True
+
+
+class IsActorOf(FixedRelation):
+    relation = "/tv/regular_tv_appearance/actor"
+    reverse = True
+
+
+class HasActor(FixedRelation):
+    relation = "/tv/regular_tv_appearance/actor"
+
+
+class HasCast(FixedRelation):
+    relation = "/tv/tv_program/regular_cast"
+
+
+class NumberOfEpisodesIn(FixedRelation):
+    relation = "/tv/tv_program/number_of_episodes"
+    reverse = True
+
+
+class CreatorOf(FixedRelation):
+    relation = "/tv/tv_program/program_creator"
+    reverse = True
+
+
+class IsBook(FixedType):
+    fixedtype = "/book/book"
+
+
+class AuthorOf(FixedRelation):
+    relation = "/book/written_work/author"
+    reverse = True
+
+
+class HasAuthor(FixedRelation):
+    relation = "/book/written_work/author"
+
+
+class LocationOf(FixedRelation):
+    relation = "/location/location/containedby"
+    reverse = True

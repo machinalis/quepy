@@ -20,11 +20,13 @@ from music import *
 from people import *
 from movies import *
 from country import *
+from tvshows import *
+from writers import *
 
 
 class Thing(Particle):
-    regex = Question(Pos("JJ")) + (Pos("NN") | Pos("NNP") | Pos("NNS")) |\
-            Pos("VBN")
+    regex = Plus(Question(Pos("JJ")) + (Pos("NN") | Pos("NNP") | Pos("NNS")) |\
+            Pos("VBN"))
 
     def interpret(self, match):
         return HasKeyword(match.words.tokens)
@@ -43,3 +45,17 @@ class WhatIs(RegexTemplate):
     def interpret(self, match):
         label = DefinitionOf(match.thing)
         return label, "define"
+
+
+class WhereIsRegex(RegexTemplate):
+    """
+    Ex: "where in the world is the Eiffel Tower"
+    """
+
+    regex = Lemma("where") + Question(Lemmas("in the world")) + Lemma("be") + \
+        Question(Pos("DT")) + Thing() + Question(Pos("."))
+
+    def interpret(self, match):
+        location = LocationOf(match.thing)
+        location_name = NameOf(location)
+        return location_name, "enum"
