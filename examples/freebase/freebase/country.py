@@ -11,11 +11,10 @@
 Coutry related regex
 """
 
+from dsl import *
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Pos, QuestionTemplate, Token, Particle
-from dsl import IsCountry, IncumbentOf, CapitalOf, \
-    LabelOf, LanguageOf, PopulationOf, PresidentOf
 
 
 class Country(Particle):
@@ -28,19 +27,16 @@ class Country(Particle):
 
 class PresidentOfRegex(QuestionTemplate):
     """
-    Regex for questions about the president of a country.
-    Ex: "Who is the president of Argentina?"
+    Ex: "list presidents of Argentina?"
     """
 
-    regex = Pos("WP") + Token("is") + Question(Pos("DT")) + \
-        Lemma("president") + Pos("IN") + Country() + Question(Pos("."))
+    regex = Question(Lemma("list")) + Lemma("president") + Pos("IN") + \
+            Country() + Question(Pos("."))
 
     def interpret(self, match):
-        president = PresidentOf(match.country)
-        incumbent = IncumbentOf(president)
-        label = LabelOf(incumbent)
-
-        return label, "enum"
+        president = IsPresident() + PresidentOf(match.country)
+        name = NameOf(OfficeHolderOf(president))
+        return name, "enum"
 
 
 class CapitalOfRegex(QuestionTemplate):
@@ -55,12 +51,10 @@ class CapitalOfRegex(QuestionTemplate):
 
     def interpret(self, match):
         capital = CapitalOf(match.country)
-        label = LabelOf(capital)
+        label = NameOf(capital)
         return label, "enum"
 
 
-# FIXME: the generated query needs FILTER isLiteral() to the head
-# because dbpedia sometimes returns different things
 class LanguageOfRegex(QuestionTemplate):
     """
     Regex for questions about the language spoken in a country.
@@ -78,7 +72,8 @@ class LanguageOfRegex(QuestionTemplate):
 
     def interpret(self, match):
         language = LanguageOf(match.country)
-        return language, "enum"
+        name = NameOf(language)
+        return name, "enum"
 
 
 class PopulationOfRegex(QuestionTemplate):
@@ -95,5 +90,5 @@ class PopulationOfRegex(QuestionTemplate):
     regex = openings + Question(Pos("DT")) + Country() + Question(Pos("."))
 
     def interpret(self, match):
-        population = PopulationOf(match.country)
+        population = NumberOf(PopulationOf(match.country))
         return population, "literal"

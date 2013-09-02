@@ -7,8 +7,11 @@
 # Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
+import re
 import unittest
-from quepy.generation import get_code
+from random_expression import random_expression
+from random import seed
+from quepy.sparql_generation import expression_to_sparql
 from quepy.dsl import FixedRelation, FixedType, \
     FixedDataRelation
 
@@ -31,47 +34,53 @@ def gen_fixedrelation(rel, e):
     return X(e)
 
 
-class TestCodeGeneration(unittest.TestCase):
+class TestSparqlGeneration(unittest.TestCase):
 
+    _sparql_line = re.compile("\?x\d+ \S+ (?:\?x\d+|\".*\")(?:@\w+)?.",
+                              re.DOTALL)
+    _sparql_query_start = re.compile("SELECT DISTINCT .+ WHERE {(.+)}",
+                                     re.DOTALL)
     def _standard_check(self, s, e):
         self.assertIsInstance(s, unicode)
         vs = [u"x{}".format(i) for i in xrange(len(e))]
         for var in vs:
             self.assertIn(var, s)
 
-    def test_dot_takes_unicode(self):
-        e = gen_fixedtype(u"·̣─@łæßð~¶½")
-        e += gen_datarel(u"tµŧurułej€", u"←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        _, s = get_code(e, "dot")
-        self._standard_check(s, e)
-
-    def test_dot_takes_fails_ascii1(self):
-        e = gen_fixedtype("a")
-        e += gen_datarel("b", "c")
-        e = gen_fixedrelation("d", e)
-        self.assertRaises(ValueError, get_code, e, "dot")
-
-    def test_dot_takes_fails_ascii2(self):
-        e = gen_fixedtype("·̣─@łæßð~¶½")
-        e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        self.assertRaises(ValueError, get_code, e, "dot")
+    def _sparql_check(self, s):
+        m = self._sparql_query_start.search(s)
+        self.assertNotEqual(m, None, "Could not find query start ")
+        lines = m.group(1).split("\n")
+        for line in lines:
+            line = line.strip()
+            if line:
+                s = "Line out of format: {!r}\n".format(line)
+                self.assertNotEqual(self._sparql_line.match(line), None, s)
 
     def test_sparql_takes_unicode(self):
         e = gen_fixedtype(u"·̣─@łæßð~¶½")
         e += gen_datarel(u"tµŧurułej€", u"←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        _, s = get_code(e, "sparql")
+        _, s = expression_to_sparql(e)
         self._standard_check(s, e)
+        self._sparql_check(s)
+
+    def test_sparql_stress(self):
+        seed("sacala dunga dunga dunga")
+        for _ in xrange(100):
+            expression = random_expression()
+            _, s = expression_to_sparql(expression)
+            self._standard_check(s, expression)
+            self._sparql_check(s)
 
     def test_sparql_takes_fails_ascii1(self):
         e = gen_fixedtype("a")
         e += gen_datarel("b", "c")
         e = gen_fixedrelation("d", e)
-        self.assertRaises(ValueError, get_code, e, "sparql")
+        self.assertRaises(ValueError, expression_to_sparql, e)
 
     def test_sparql_takes_fails_ascii2(self):
         e = gen_fixedtype("·̣─@łæßð~¶½")
         e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
-        self.assertRaises(ValueError, get_code, e, "sparql")
+        self.assertRaises(ValueError, expression_to_sparql, e)
 
 
 if __name__ == "__main__":

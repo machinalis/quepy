@@ -12,10 +12,10 @@ Writers related regex.
 """
 
 
+from dsl import *
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
-from dsl import IsBook, HasAuthor, AuthorOf, IsPerson, NameOf
 
 
 nouns = Plus(Pos("DT") | Pos("IN") | Pos("NN") | Pos("NNS") |

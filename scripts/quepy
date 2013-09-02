@@ -214,13 +214,13 @@ def autotest(app_name):
                              (app_name, error)
         sys.exit(1)
 
-    regex_module = __import__("{0}.regex".format(app_name), fromlist=[None])
+    parsing_module = __import__("{0}.parsing".format(app_name), fromlist=[None])
     errors_found = False
     regex_list = {}
-    for attr_name in dir(regex_module):
-        attr = getattr(regex_module, attr_name)
+    for attr_name in dir(parsing_module):
+        attr = getattr(parsing_module, attr_name)
         try:
-            if issubclass(attr, quepy.regex.RegexTemplate):
+            if issubclass(attr, quepy.parsing.QuestionTemplate):
                 examples = example_re.findall(attr.__doc__)
                 regex_list[attr] = examples
         except TypeError:
@@ -230,12 +230,14 @@ def autotest(app_name):
         regex = regex_class.regex + refo.Literal(_EOL)
 
         for text in regex_list[regex_class]:
+            print "Testing {}...".format(text),
             text = encoding_flexible_conversion(text)
             tagger = quepy.tagger.get_tagger()
             words = tagger(text)
 
             match = refo.match(regex, words + [_EOL])
             if not match:
+                print "ERROR"
                 if not errors_found:
                     errors_found = True
                     print "The following errors have been found:\n"
@@ -243,6 +245,8 @@ def autotest(app_name):
                 print regex_class.__name__
                 print words
                 print
+            else:
+                print "OK"
 
     if not errors_found:
         print "No errors were found :)"

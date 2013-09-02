@@ -14,9 +14,7 @@ Movie related regex.
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
-from dsl import IsMovie, NameOf, IsPerson, \
-    DirectedBy, LabelOf, DurationOf, HasActor, HasName, ReleaseDateOf, \
-    DirectorOf, StarsIn, DefinitionOf
+from dsl import *
 
 nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
@@ -34,7 +32,7 @@ class Actor(Particle):
 
     def interpret(self, match):
         name = match.words.tokens
-        return IsPerson() + HasKeyword(name)
+        return IsPerson() + IsActor() + HasKeyword(name)
 
 
 class Director(Particle):
@@ -42,7 +40,7 @@ class Director(Particle):
 
     def interpret(self, match):
         name = match.words.tokens
-        return IsPerson() + HasKeyword(name)
+        return IsPerson() + IsDirector() + HasKeyword(name)
 
 
 class ListMoviesRegex(QuestionTemplate):
@@ -72,8 +70,7 @@ class MoviesByDirectorRegex(QuestionTemplate):
 
     def interpret(self, match):
         movie = IsMovie() + DirectedBy(match.director)
-        movie_name = LabelOf(movie)
-
+        movie_name = NameOf(movie)
         return movie_name, "enum"
 
 
@@ -112,7 +109,8 @@ class ActedOnRegex(QuestionTemplate):
             (Question(Lemma("list")) + movie + Lemma("star") + Actor())
 
     def interpret(self, match):
-        movie = IsMovie() + HasActor(match.actor)
+        performance = IsPerformance() + PerformanceOfActor(match.actor)
+        movie = IsMovie() + HasPerformance(performance)
         movie_name = NameOf(movie)
         return movie_name, "enum"
 
@@ -164,7 +162,10 @@ class ActorsOfRegex(QuestionTemplate):
             ((Lemma("actors") | Lemma("actor")) + Pos("IN") + Movie())
 
     def interpret(self, match):
-        actor = NameOf(IsPerson() + StarsIn(match.movie))
+        performance = IsPerformance() + PerformanceOfMovie(match.movie)
+        actor = IsActor() + PerformsIn(performance)
+        name = NameOf(actor)
+        return name, "enum"
         return actor, "enum"
 
 

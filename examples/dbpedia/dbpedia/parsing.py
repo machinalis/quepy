@@ -6,14 +6,13 @@
 #
 # Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
-# coding: utf-8
 
 """
 Regex for DBpedia quepy.
 """
 
 from refo import Group, Plus, Question
-from quepy.parsing import Lemma, Pos, RegexTemplate, Token
+from quepy.parsing import Lemma, Pos, QuestionTemplate, Token
 from quepy.dsl import HasKeyword, IsRelatedTo, HasType
 from dsl import DefinitionOf, LabelOf, IsPlace, \
     UTCof, LocationOf
@@ -40,7 +39,7 @@ class Thing(Particle):
         return HasKeyword(match.words.tokens)
 
 
-class WhatIs(RegexTemplate):
+class WhatIs(QuestionTemplate):
     """
     Regex for questions like "What is a blowtorch
     Ex: "What is a car"
@@ -56,7 +55,7 @@ class WhatIs(RegexTemplate):
         return label, "define"
 
 
-class ListEntity(RegexTemplate):
+class ListEntity(QuestionTemplate):
     """
     Regex for questions like "List Microsoft software"
     """
@@ -74,7 +73,7 @@ class ListEntity(RegexTemplate):
         return label, "enum"
 
 
-class WhatTimeIs(RegexTemplate):
+class WhatTimeIs(QuestionTemplate):
     """
     Regex for questions about the time
     Ex: "What time is it in Cordoba"
@@ -96,7 +95,7 @@ class WhatTimeIs(RegexTemplate):
         return utc_offset, "time"
 
 
-class WhereIsRegex(RegexTemplate):
+class WhereIsRegex(QuestionTemplate):
     """
     Ex: "where in the world is the Eiffel Tower"
     """

@@ -87,10 +87,9 @@ class Match(object):
             raise AttributeError(message.format(self.__class__.__name__, attr))
 
 
-class RegexTemplate(object):
+class QuestionTemplate(object):
     """
-    Regex base.
-    Subclass from this to implement a regex handler.
+    Subclass from this to implement a question handler.
     """
 
     regex = Star(Any())  # Must define when subclassing
