@@ -10,13 +10,28 @@ from quepy.dsl import IsRelatedTo, HasKeyword
 from quepy.encodingpolicy import assert_valid_encoding
 
 
+def escape(x, add_quotes=True):
+    x = unicode(x)
+    x = x.replace(u" ", u"_")
+    x = x.replace(u"\n", u"")
+    x = x.replace(u"\00", u"")
+    x = x.replace(u"[", u"")
+    x = x.replace(u"]", u"")
+    x = x.replace(u"\\", u"")
+    if x.count("\""):
+        x = x.replace(u"\"", u"\\\"")
+        if add_quotes:
+            x = u'"' + x + u'"'
+    return x
+
+
 def adapt(x):
     if isnode(x):
         x = u"x{}".format(x)
         return x
     if isinstance(x, basestring):
         assert_valid_encoding(x)
-        x = x.replace(" ", "_")
+        x = escape(x)
         if x.startswith(u"\""):
             return x
         return u'"{}"'.format(x)
@@ -33,11 +48,7 @@ def expression_to_dot(e):
         for relation, other in e.iter_edges(node):
             node1 = adapt(node)
             node2 = adapt(other)
-
-            if node1.startswith(u'"') or ":" in node1:
-                node1 = u'"' + node1.replace(u'"', u'\\"') + u'"'
-            if node2.startswith('"') or ":" in node2:
-                node2 = u'"' + node2.replace(u'"', u'\\"') + u'"'
+            relation = escape(relation, add_quotes=False)
 
             if relation in d:
                 x = d[relation](node1, node2)
@@ -49,7 +60,8 @@ def expression_to_dot(e):
 
 def dot_arc(a, label, b):
     assert u" " not in a and u" " not in b
-    return u"{0} -> {1} [label=\"{2}\"];".format(a, b, label)
+    assert u"\n" not in a + label + b
+    return u"{0} -> {1} [label=\"{2}\"];\n".format(a, b, label)
 
 
 def dot_type(a, t):
