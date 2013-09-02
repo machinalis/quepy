@@ -43,8 +43,7 @@ class BandMembersRegex(QuestionTemplate):
         group = GroupOf(match.band)
         member = IsPerson() + IsMusicArtist() + IsMemberOf(group)
         name = NameOf(member)
-        return name, "enum"
-
+        return name
 
 
 class FoundationRegex(QuestionTemplate):
@@ -59,7 +58,7 @@ class FoundationRegex(QuestionTemplate):
 
     def interpret(self, match):
         active_years = ActiveYearsOf(match.band)
-        return active_years, "literal"
+        return active_years
 
 
 class GenreRegex(QuestionTemplate):
@@ -76,7 +75,7 @@ class GenreRegex(QuestionTemplate):
     def interpret(self, match):
         genre = MusicGenreOf(match.band)
         name = NameOf(genre)
-        return name, "enum"
+        return name
 
 
 class AlbumsOfRegex(QuestionTemplate):
@@ -95,4 +94,4 @@ class AlbumsOfRegex(QuestionTemplate):
     def interpret(self, match):
         album = IsAlbum() + ProducedBy(match.band)
         name = NameOf(album)
-        return name, "enum"
+        return name

@@ -45,7 +45,7 @@ class CastOfRegex(QuestionTemplate):
         cast = CastOf(match.tvshow)
         actor = IsPerson() + IsActorOf(cast)
         name = NameOf(actor)
-        return name, "enum"
+        return name
 
 
 class ListTvShows(QuestionTemplate):
@@ -58,7 +58,7 @@ class ListTvShows(QuestionTemplate):
     def interpret(self, match):
         show = IsTvShow()
         label = NameOf(show)
-        return label, "enum"
+        return label
 
 
 class EpisodeCountRegex(QuestionTemplate):
@@ -74,7 +74,7 @@ class EpisodeCountRegex(QuestionTemplate):
 
     def interpret(self, match):
         number_of_episodes = NumberOfEpisodesIn(match.tvshow)
-        return number_of_episodes, "literal"
+        return number_of_episodes
 
 
 class ShowsWithRegex(QuestionTemplate):
@@ -94,7 +94,7 @@ class ShowsWithRegex(QuestionTemplate):
         cast = HasActor(match.actor)
         show = IsTvShow() + HasCast(cast)
         show_name = NameOf(show)
-        return show_name, "enum"
+        return show_name
 
 
 class CreatorOfRegex(QuestionTemplate):
@@ -109,4 +109,4 @@ class CreatorOfRegex(QuestionTemplate):
     def interpret(self, match):
         creator = CreatorOf(match.tvshow)
         name = NameOf(creator)
-        return name, "enum"
+        return name

@@ -53,7 +53,7 @@ class ListMoviesRegex(QuestionTemplate):
     def interpret(self, match):
         movie = IsMovie()
         name = NameOf(movie)
-        return name, "enum"
+        return name
 
 
 class MoviesByDirectorRegex(QuestionTemplate):
@@ -71,7 +71,7 @@ class MoviesByDirectorRegex(QuestionTemplate):
     def interpret(self, match):
         movie = IsMovie() + DirectedBy(match.director)
         movie_name = NameOf(movie)
-        return movie_name, "enum"
+        return movie_name
 
 
 class MovieDurationRegex(QuestionTemplate):
@@ -87,7 +87,7 @@ class MovieDurationRegex(QuestionTemplate):
 
     def interpret(self, match):
         duration = DurationOf(match.movie)
-        return duration, ("literal", "{} minutes long")
+        return duration
 
 
 class ActedOnRegex(QuestionTemplate):
@@ -112,7 +112,7 @@ class ActedOnRegex(QuestionTemplate):
         performance = IsPerformance() + PerformanceOfActor(match.actor)
         movie = IsMovie() + HasPerformance(performance)
         movie_name = NameOf(movie)
-        return movie_name, "enum"
+        return movie_name
 
 
 class MovieReleaseDateRegex(QuestionTemplate):
@@ -128,7 +128,7 @@ class MovieReleaseDateRegex(QuestionTemplate):
 
     def interpret(self, match):
         release_date = ReleaseDateOf(match.movie)
-        return release_date, "literal"
+        return release_date
 
 
 class DirectorOfRegex(QuestionTemplate):
@@ -145,7 +145,7 @@ class DirectorOfRegex(QuestionTemplate):
     def interpret(self, match):
         director = IsPerson() + DirectorOf(match.movie)
         director_name = NameOf(director)
-        return director_name, "literal"
+        return director_name
 
 
 class ActorsOfRegex(QuestionTemplate):
@@ -165,8 +165,7 @@ class ActorsOfRegex(QuestionTemplate):
         performance = IsPerformance() + PerformanceOfMovie(match.movie)
         actor = IsActor() + PerformsIn(performance)
         name = NameOf(actor)
-        return name, "enum"
-        return actor, "enum"
+        return name
 
 
 class PlotOfRegex(QuestionTemplate):
@@ -182,4 +181,4 @@ class PlotOfRegex(QuestionTemplate):
 
     def interpret(self, match):
         definition = DefinitionOf(match.movie)
-        return definition, "define"
+        return definition

@@ -11,9 +11,9 @@
 People related regex
 """
 
+from dsl import *
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
-from dsl import IsPerson, DefinitionOf, BirthDateOf, BirthPlaceOf
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
 
 
@@ -35,7 +35,7 @@ class WhoIs(QuestionTemplate):
 
     def interpret(self, match):
         definition = DefinitionOf(match.person)
-        return definition, "define"
+        return definition
 
 
 class HowOldIsRegex(QuestionTemplate):
@@ -48,7 +48,7 @@ class HowOldIsRegex(QuestionTemplate):
 
     def interpret(self, match):
         birth_date = BirthDateOf(match.person)
-        return birth_date, "age"
+        return birth_date
 
 
 class WhereIsFromRegex(QuestionTemplate):
@@ -62,4 +62,4 @@ class WhereIsFromRegex(QuestionTemplate):
     def interpret(self, match):
         birth_place = BirthPlaceOf(match.person)
         name = NameOf(birth_place)
-        return name, "enum"
+        return name

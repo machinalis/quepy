@@ -44,7 +44,7 @@ class WhatIs(QuestionTemplate):
 
     def interpret(self, match):
         label = DefinitionOf(match.thing)
-        return label, "define"
+        return label
 
 
 class WhereIsRegex(QuestionTemplate):
@@ -58,4 +58,4 @@ class WhereIsRegex(QuestionTemplate):
     def interpret(self, match):
         location = LocationOf(match.thing)
         location_name = NameOf(location)
-        return location_name, "enum"
+        return location_name

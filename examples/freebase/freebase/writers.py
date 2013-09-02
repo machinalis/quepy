@@ -51,7 +51,7 @@ class WhoWroteRegex(QuestionTemplate):
 
     def interpret(self, match):
         author = NameOf(IsPerson() + AuthorOf(match.book))
-        return author, "literal"
+        return author
 
 
 class BooksByAuthorRegex(QuestionTemplate):
@@ -67,4 +67,4 @@ class BooksByAuthorRegex(QuestionTemplate):
     def interpret(self, match):
         book = IsBook() + HasAuthor(match.author)
         book_name = NameOf(book)
-        return book_name, "enum"
+        return book_name

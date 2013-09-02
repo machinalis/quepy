@@ -36,7 +36,7 @@ class PresidentOfRegex(QuestionTemplate):
     def interpret(self, match):
         president = IsPresident() + PresidentOf(match.country)
         name = NameOf(OfficeHolderOf(president))
-        return name, "enum"
+        return name
 
 
 class CapitalOfRegex(QuestionTemplate):
@@ -52,7 +52,7 @@ class CapitalOfRegex(QuestionTemplate):
     def interpret(self, match):
         capital = CapitalOf(match.country)
         label = NameOf(capital)
-        return label, "enum"
+        return label
 
 
 class LanguageOfRegex(QuestionTemplate):
@@ -73,7 +73,7 @@ class LanguageOfRegex(QuestionTemplate):
     def interpret(self, match):
         language = LanguageOf(match.country)
         name = NameOf(language)
-        return name, "enum"
+        return name
 
 
 class PopulationOfRegex(QuestionTemplate):
@@ -91,4 +91,4 @@ class PopulationOfRegex(QuestionTemplate):
 
     def interpret(self, match):
         population = NumberOf(PopulationOf(match.country))
-        return population, "literal"
+        return population
