@@ -12,13 +12,17 @@ from quepy.encodingpolicy import assert_valid_encoding
 _indent = u"  "
 
 
-def escape(x):
-    x = unicode(x)
-    x = x.replace("\n", "")
-    x = x.replace(" ", "")
-    x = x.replace("\r", "")
-    x = x.replace("\t", "")
-    return x
+def escape(string):
+    string = unicode(string)
+    string = string.replace("\n", "")
+    string = string.replace(" ", "")
+    string = string.replace("\r", "")
+    string = string.replace("\t", "")
+    string = string.replace("\x0b", "")
+    if not string or any([x for x in string if 0 < ord(x) < 31]):
+        message = "Unable to generate sparql: invalid nodes or relation"
+        raise ValueError(message)
+    return string
 
 
 def adapt(x):
@@ -62,7 +66,5 @@ def triple(a, p, b, indentation=0):
     a = escape(a)
     b = escape(b)
     p = escape(p)
-    assert "\n" not in a+b+p
-    assert a and b and p
     s = _indent * indentation + u"{0} {1} {2}."
     return s.format(a, p, b)

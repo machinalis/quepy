@@ -71,6 +71,19 @@ class TestSparqlGeneration(unittest.TestCase):
             self._standard_check(s, expression)
             self._sparql_check(s)
 
+    def test_sparql_stress(self):
+        seed("sacala dunga dunga dunga")
+        for _ in xrange(100):
+            expression = random_expression()
+            try:
+                _, s = expression_to_sparql(expression)
+            except ValueError as error:
+                if "Unable to generate sparql" in str(error):
+                    continue
+
+            self._standard_check(s, expression)
+            self._sparql_check(s)
+
     def test_sparql_takes_fails_ascii1(self):
         e = gen_fixedtype("a")
         e += gen_datarel("b", "c")
