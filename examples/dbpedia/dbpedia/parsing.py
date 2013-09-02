@@ -6,7 +6,6 @@
 #
 # Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
-# coding: utf-8
 
 """
 Regex for DBpedia quepy.
