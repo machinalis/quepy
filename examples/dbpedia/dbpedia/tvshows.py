@@ -6,7 +6,7 @@ Tv Shows related regex.
 
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
-from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
 from dsl import IsTvShow, ReleaseDateOf, IsPerson, StarsIn, LabelOf, \
     HasShowName, NumberOfEpisodesIn, HasActor, ShowNameOf, CreatorOf
 
@@ -30,7 +30,7 @@ class Actor(Particle):
 
 
 # FIXME: clash with movies release regex
-class ReleaseDateRegex(RegexTemplate):
+class ReleaseDateRegex(QuestionTemplate):
     """
     Ex: when was Friends release?
     """
@@ -43,7 +43,7 @@ class ReleaseDateRegex(RegexTemplate):
         return release_date, "literal"
 
 
-class CastOfRegex(RegexTemplate):
+class CastOfRegex(QuestionTemplate):
     """
     Ex: "What is the cast of Friends?"
         "Who works in Breaking Bad?"
@@ -62,7 +62,7 @@ class CastOfRegex(RegexTemplate):
         return name, "enum"
 
 
-class ListTvShows(RegexTemplate):
+class ListTvShows(QuestionTemplate):
     """
     Ex: "List TV shows"
     """
@@ -75,7 +75,7 @@ class ListTvShows(RegexTemplate):
         return label, "enum"
 
 
-class EpisodeCountRegex(RegexTemplate):
+class EpisodeCountRegex(QuestionTemplate):
     """
     Ex: "How many episodes does Seinfeld have?"
         "Number of episodes of Seinfeld"
@@ -91,7 +91,7 @@ class EpisodeCountRegex(RegexTemplate):
         return number_of_episodes, "literal"
 
 
-class ShowsWithRegex(RegexTemplate):
+class ShowsWithRegex(QuestionTemplate):
     """
     Ex: "List shows with Hugh Laurie"
         "In what shows does Jennifer Aniston appears?"
@@ -110,7 +110,7 @@ class ShowsWithRegex(RegexTemplate):
         return show_name, "enum"
 
 
-class CreatorOfRegex(RegexTemplate):
+class CreatorOfRegex(QuestionTemplate):
     """
     Ex: "Who is the creator of Breaking Bad?"
     """

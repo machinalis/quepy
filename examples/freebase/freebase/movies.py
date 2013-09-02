@@ -13,7 +13,7 @@ Movie related regex.
 
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
-from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
 from dsl import *
 
 nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
@@ -43,7 +43,7 @@ class Director(Particle):
         return IsPerson() + IsDirector() + HasKeyword(name)
 
 
-class ListMoviesRegex(RegexTemplate):
+class ListMoviesRegex(QuestionTemplate):
     """
     Ex: "list movies"
     """
@@ -56,7 +56,7 @@ class ListMoviesRegex(RegexTemplate):
         return name, "enum"
 
 
-class MoviesByDirectorRegex(RegexTemplate):
+class MoviesByDirectorRegex(QuestionTemplate):
     """
     Ex: "List movies directed by Quentin Tarantino.
         "movies directed by Martin Scorsese"
@@ -74,7 +74,7 @@ class MoviesByDirectorRegex(RegexTemplate):
         return movie_name, "enum"
 
 
-class MovieDurationRegex(RegexTemplate):
+class MovieDurationRegex(QuestionTemplate):
     """
     Ex: "How long is Pulp Fiction"
         "What is the duration of The Thin Red Line?"
@@ -90,7 +90,7 @@ class MovieDurationRegex(RegexTemplate):
         return duration, ("literal", "{} minutes long")
 
 
-class ActedOnRegex(RegexTemplate):
+class ActedOnRegex(QuestionTemplate):
     """
     Ex: "List movies with Hugh Laurie"
         "Movies with Matt LeBlanc"
@@ -115,7 +115,7 @@ class ActedOnRegex(RegexTemplate):
         return movie_name, "enum"
 
 
-class MovieReleaseDateRegex(RegexTemplate):
+class MovieReleaseDateRegex(QuestionTemplate):
     """
     Ex: "When was The Red Thin Line released?"
         "Release date of The Empire Strikes Back"
@@ -131,7 +131,7 @@ class MovieReleaseDateRegex(RegexTemplate):
         return release_date, "literal"
 
 
-class DirectorOfRegex(RegexTemplate):
+class DirectorOfRegex(QuestionTemplate):
     """
     Ex: "Who is the director of Big Fish?"
         "who directed Pocahontas?"
@@ -148,7 +148,7 @@ class DirectorOfRegex(RegexTemplate):
         return director_name, "literal"
 
 
-class ActorsOfRegex(RegexTemplate):
+class ActorsOfRegex(QuestionTemplate):
     """
     Ex: "who are the actors of Titanic?"
         "who acted in Alien?"
@@ -169,7 +169,7 @@ class ActorsOfRegex(RegexTemplate):
         return actor, "enum"
 
 
-class PlotOfRegex(RegexTemplate):
+class PlotOfRegex(QuestionTemplate):
     """
     Ex: "what is Shame about?"
         "plot of Titanic"

@@ -14,7 +14,7 @@ Music related regex
 from dsl import *
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
-from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
 
 
 class Band(Particle):
@@ -25,7 +25,7 @@ class Band(Particle):
         return IsBand() + HasKeyword(name)
 
 
-class BandMembersRegex(RegexTemplate):
+class BandMembersRegex(QuestionTemplate):
     """
     Regex for questions about band member.
     Ex: "Radiohead members"
@@ -47,7 +47,7 @@ class BandMembersRegex(RegexTemplate):
 
 
 
-class FoundationRegex(RegexTemplate):
+class FoundationRegex(QuestionTemplate):
     """
     Regex for questions about the creation of a band.
     Ex: "When was Pink Floyd founded?"
@@ -62,7 +62,7 @@ class FoundationRegex(RegexTemplate):
         return active_years, "literal"
 
 
-class GenreRegex(RegexTemplate):
+class GenreRegex(QuestionTemplate):
     """
     Regex for questions about the genre of a band.
     Ex: "What is the music genre of Gorillaz?"
@@ -79,7 +79,7 @@ class GenreRegex(RegexTemplate):
         return name, "enum"
 
 
-class AlbumsOfRegex(RegexTemplate):
+class AlbumsOfRegex(QuestionTemplate):
     """
     Ex: "List albums of Pink Floyd"
         "What albums did Pearl Jam record?"

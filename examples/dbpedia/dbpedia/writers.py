@@ -14,7 +14,7 @@ Writers related regex.
 
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
-from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
 from dsl import IsBook, HasAuthor, AuthorOf, IsPerson, NameOf
 
 
@@ -38,7 +38,7 @@ class Author(Particle):
         return IsPerson() + HasKeyword(name)
 
 
-class WhoWroteRegex(RegexTemplate):
+class WhoWroteRegex(QuestionTemplate):
     """
     Ex: "who wrote The Little Prince?"
         "who is the author of A Game Of Thrones?"
@@ -54,7 +54,7 @@ class WhoWroteRegex(RegexTemplate):
         return author, "literal"
 
 
-class BooksByAuthorRegex(RegexTemplate):
+class BooksByAuthorRegex(QuestionTemplate):
     """
     Ex: "list books by George Orwell"
         "which books did Suzanne Collins wrote?"

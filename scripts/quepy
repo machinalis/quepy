@@ -220,7 +220,7 @@ def autotest(app_name):
     for attr_name in dir(parsing_module):
         attr = getattr(parsing_module, attr_name)
         try:
-            if issubclass(attr, quepy.parsing.RegexTemplate):
+            if issubclass(attr, quepy.parsing.QuestionTemplate):
                 examples = example_re.findall(attr.__doc__)
                 regex_list[attr] = examples
         except TypeError:

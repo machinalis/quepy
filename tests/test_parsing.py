@@ -13,7 +13,7 @@ Tests for Regex module.
 """
 
 import unittest
-from quepy.parsing import RegexTemplate, Particle, Lemma
+from quepy.parsing import QuestionTemplate, Particle, Lemma
 from quepy.tagger import Word
 
 
@@ -21,17 +21,17 @@ class Mockrule(object):
     rulename = "Mock"
 
 
-class TestRegexTemplate(unittest.TestCase):
+class TestQuestionTemplate(unittest.TestCase):
     def setUp(self):
         self.mockrule = Mockrule
 
-        class SomeRegex(RegexTemplate):
+        class SomeRegex(QuestionTemplate):
             regex = Lemma(u"hello")
 
             def interpret(self, match):
                 return Mockrule
 
-        class SomeRegexWithData(RegexTemplate):
+        class SomeRegexWithData(QuestionTemplate):
             regex = Lemma(u"hello")
 
             def interpret(self, match):
@@ -58,7 +58,7 @@ class TestRegexTemplate(unittest.TestCase):
         self.assertEqual(userdata, 42)
 
     def test_no_ir(self):
-        class SomeRegex(RegexTemplate):
+        class SomeRegex(QuestionTemplate):
             regex = Lemma(u"hello")
 
         regexinstance = SomeRegex()
@@ -67,7 +67,7 @@ class TestRegexTemplate(unittest.TestCase):
                           regexinstance.get_interpretation, words)
 
     def test_regex_empty(self):
-        class SomeRegex(RegexTemplate):
+        class SomeRegex(QuestionTemplate):
             def interpret(self, match):
                 return Mockrule, "YES!"
 
@@ -78,7 +78,7 @@ class TestRegexTemplate(unittest.TestCase):
         self.assertEqual(userdata, "YES!")
 
     def test_match_words(self):
-        class SomeRegex(RegexTemplate):
+        class SomeRegex(QuestionTemplate):
             def interpret(self, match):
                 return match
 
@@ -95,7 +95,7 @@ class TestParticle(unittest.TestCase):
             def interpret(self, match):
                 return match
 
-        class PersonRegex(RegexTemplate):
+        class PersonRegex(QuestionTemplate):
             regex = Person() + Lemma(u"be") + Person(u"another")
 
             def interpret(self, match):

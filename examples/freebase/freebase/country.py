@@ -14,7 +14,7 @@ Coutry related regex
 from dsl import *
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
-from quepy.parsing import Lemma, Pos, RegexTemplate, Token, Particle
+from quepy.parsing import Lemma, Pos, QuestionTemplate, Token, Particle
 
 
 class Country(Particle):
@@ -25,7 +25,7 @@ class Country(Particle):
         return IsCountry() + HasKeyword(name)
 
 
-class PresidentOfRegex(RegexTemplate):
+class PresidentOfRegex(QuestionTemplate):
     """
     Ex: "list presidents of Argentina?"
     """
@@ -39,7 +39,7 @@ class PresidentOfRegex(RegexTemplate):
         return name, "enum"
 
 
-class CapitalOfRegex(RegexTemplate):
+class CapitalOfRegex(QuestionTemplate):
     """
     Regex for questions about the capital of a country.
     Ex: "What is the capital of Bolivia?"
@@ -55,7 +55,7 @@ class CapitalOfRegex(RegexTemplate):
         return label, "enum"
 
 
-class LanguageOfRegex(RegexTemplate):
+class LanguageOfRegex(QuestionTemplate):
     """
     Regex for questions about the language spoken in a country.
     Ex: "What is the language of Argentina?"
@@ -76,7 +76,7 @@ class LanguageOfRegex(RegexTemplate):
         return name, "enum"
 
 
-class PopulationOfRegex(RegexTemplate):
+class PopulationOfRegex(QuestionTemplate):
     """
     Regex for questions about the population of a country.
     Ex: "What is the population of China?"

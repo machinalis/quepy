@@ -14,7 +14,7 @@ People related regex
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from dsl import IsPerson, DefinitionOf, BirthDateOf, BirthPlaceOf
-from quepy.parsing import Lemma, Lemmas, Pos, RegexTemplate, Particle
+from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
 
 
 class Person(Particle):
@@ -25,7 +25,7 @@ class Person(Particle):
         return IsPerson() + HasKeyword(name)
 
 
-class WhoIs(RegexTemplate):
+class WhoIs(QuestionTemplate):
     """
     Ex: "Who is Tom Cruise?"
     """
@@ -38,7 +38,7 @@ class WhoIs(RegexTemplate):
         return definition, "define"
 
 
-class HowOldIsRegex(RegexTemplate):
+class HowOldIsRegex(QuestionTemplate):
     """
     Ex: "How old is Bob Dylan".
     """
@@ -51,7 +51,7 @@ class HowOldIsRegex(RegexTemplate):
         return birth_date, "age"
 
 
-class WhereIsFromRegex(RegexTemplate):
+class WhereIsFromRegex(QuestionTemplate):
     """
     Ex: "Where is Bill Gates from?"
     """

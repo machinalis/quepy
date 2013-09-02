@@ -14,7 +14,7 @@ Prasing for freebase app.
 from refo import Question
 from dsl import DefinitionOf
 from quepy.dsl import HasKeyword
-from quepy.parsing import RegexTemplate, Particle, Lemma, Pos
+from quepy.parsing import QuestionTemplate, Particle, Lemma, Pos
 
 from music import *
 from people import *
@@ -32,7 +32,7 @@ class Thing(Particle):
         return HasKeyword(match.words.tokens)
 
 
-class WhatIs(RegexTemplate):
+class WhatIs(QuestionTemplate):
     """
     Regex for questions like "What is a blowtorch
     Ex: "What is a car"
@@ -47,7 +47,7 @@ class WhatIs(RegexTemplate):
         return label, "define"
 
 
-class WhereIsRegex(RegexTemplate):
+class WhereIsRegex(QuestionTemplate):
     """
     Ex: "where in the world is the Eiffel Tower"
     """

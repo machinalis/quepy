@@ -16,7 +16,7 @@ from types import ModuleType
 
 from quepy import settings
 from quepy import generation
-from quepy.parsing import RegexTemplate
+from quepy.parsing import QuestionTemplate
 from quepy.tagger import get_tagger, TaggingError
 from quepy.encodingpolicy import encoding_flexible_conversion
 
@@ -84,8 +84,8 @@ class QuepyApp(object):
             element = getattr(self._parsing_module, element)
 
             try:
-                if issubclass(element, RegexTemplate) and \
-                        element is not RegexTemplate:
+                if issubclass(element, QuestionTemplate) and \
+                        element is not QuestionTemplate:
 
                     self.rules.append(element())
             except TypeError:

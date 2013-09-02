@@ -14,10 +14,10 @@ Regex for testapp quepy.
 
 from refo import Star, Any
 from quepy.dsl import HasKeyword
-from quepy.parsing import RegexTemplate, Token
+from quepy.parsing import QuestionTemplate, Token
 
 
-class LowMatchAny(RegexTemplate):
+class LowMatchAny(QuestionTemplate):
     weight = 0.5
     regex = Star(Any())
 
@@ -41,7 +41,7 @@ class MatchAny(LowMatchAny):
         return expr, 42
 
 
-class UserData(RegexTemplate):
+class UserData(QuestionTemplate):
     weight = 1.0
     regex = Token("user") + Token("data")
 
