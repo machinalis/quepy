@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
-
 import random
 from quepy.expression import Expression
 
-def random_data():
+def random_data(only_ascii=False):
     data = []
-    while 1/20.0 < random.random():
+    first = True
+    while first or 1/20.0 < random.random():
+        first = False
+        if only_ascii:
+            c = unichr(random.randint(33, 126))
+            data.append(c)
+            continue
         x = random.random()
         if 0.1 > x:
             c = random.choice(u" ./\n")
@@ -19,8 +24,8 @@ def random_data():
     return u"".join(data)
 
 
-def random_relation():
-    data = random_data()
+def random_relation(only_ascii=False):
+    data = random_data(only_ascii)
     data = data.replace(" ", "")
     if random.random() > 0.05:
         return data
@@ -30,7 +35,7 @@ def random_relation():
     return UnicodeableDummy()
 
 
-def random_expression():
+def random_expression(only_ascii=False):
     """
     operations: new node, add data, decapitate, merge
     """
@@ -52,11 +57,11 @@ def random_expression():
         elif r < add_data + new_node:
             # Add data
             e = random.choice(expressions)
-            e.add_data(random_relation(), random_data())
+            e.add_data(random_relation(only_ascii), random_data(only_ascii))
         elif r < decapitate + add_data + new_node:
             # Decapitate
             e = random.choice(expressions)
-            e.decapitate(random_relation(), reverse=(0.25 < random.random()))
+            e.decapitate(random_relation(only_ascii), reverse=(0.25 < random.random()))
         elif len(expressions) != 1:
             # Merge
             random.shuffle(expressions)

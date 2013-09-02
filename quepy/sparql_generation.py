@@ -12,6 +12,15 @@ from quepy.encodingpolicy import assert_valid_encoding
 _indent = u"  "
 
 
+def escape(x):
+    x = unicode(x)
+    x = x.replace("\n", "")
+    x = x.replace(" ", "")
+    x = x.replace("\r", "")
+    x = x.replace("\t", "")
+    return x
+
+
 def adapt(x):
     if isnode(x):
         x = u"?x{}".format(x)
@@ -50,5 +59,10 @@ def expression_to_sparql(e, full=False):
 
 
 def triple(a, p, b, indentation=0):
+    a = escape(a)
+    b = escape(b)
+    p = escape(p)
+    assert "\n" not in a+b+p
+    assert a and b and p
     s = _indent * indentation + u"{0} {1} {2}."
     return s.format(a, p, b)

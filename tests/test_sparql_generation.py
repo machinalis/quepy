@@ -63,10 +63,10 @@ class TestSparqlGeneration(unittest.TestCase):
         self._standard_check(s, e)
         self._sparql_check(s)
 
-    def test_sparql_stress(self):
+    def test_sparql_ascii_stress(self):
         seed("sacala dunga dunga dunga")
         for _ in xrange(100):
-            expression = random_expression()
+            expression = random_expression(only_ascii=True)
             _, s = expression_to_sparql(expression)
             self._standard_check(s, expression)
             self._sparql_check(s)
