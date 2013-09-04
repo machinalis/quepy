@@ -60,9 +60,7 @@ class TestMqlGeneration(unittest.TestCase):
         seed("playadito vs amanda... 3 focas")
         for _ in xrange(100):
             expression = random_expression()
-            print len(expression)
             target, mql = generate_mql(expression)
-
             self._valid_mql_query(mql)
             self._valid_target_for_query(target, mql)
 
