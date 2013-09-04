@@ -15,11 +15,11 @@ _indent = u"  "
 def escape(string):
     string = unicode(string)
     string = string.replace("\n", "")
-    string = string.replace(" ", "")
     string = string.replace("\r", "")
     string = string.replace("\t", "")
     string = string.replace("\x0b", "")
-    if not string or any([x for x in string if 0 < ord(x) < 31]):
+    if not string or any([x for x in string if 0 < ord(x) < 31]) or \
+            string.startswith(":") or string.endswith(":"):
         message = "Unable to generate sparql: invalid nodes or relation"
         raise ValueError(message)
     return string
@@ -31,7 +31,7 @@ def adapt(x):
         return x
     if isinstance(x, basestring):
         assert_valid_encoding(x)
-        if x.startswith(u"\""):
+        if x.startswith(u"\"") or ":" in x:
             return x
         return u'"{}"'.format(x)
     return unicode(x)
