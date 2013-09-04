@@ -64,7 +64,7 @@ class TestDotGeneration(unittest.TestCase):
         seed("I have come here to chew bubblegum and kick ass... "
              "and I'm all out of bubblegum.")
         dot_file = tempfile.NamedTemporaryFile()
-        cmdline = "dot -Tpng %s" % dot_file.name
+        cmdline = "dot %s" % dot_file.name
         msg = "dot returned error code {}, check {} input file."
         for _ in xrange(100):
             expression = random_expression()
