@@ -36,10 +36,11 @@ def gen_fixedrelation(rel, e):
 
 class TestSparqlGeneration(unittest.TestCase):
 
-    _sparql_line = re.compile("\?x\d+ \S+ (?:\?x\d+|\".*\"|\S+?:\S+?)(?:@\w+)?.",
-                              re.DOTALL)
+    _sparql_line = re.compile("\?x\d+ \S+ (?:\?x\d+|\".*\"|\S+?:\S+?)"
+                              "(?:@\w+)?.", re.DOTALL)
     _sparql_query_start = re.compile("SELECT DISTINCT .+ WHERE {(.+)}",
                                      re.DOTALL)
+
     def _standard_check(self, s, e):
         self.assertIsInstance(s, unicode)
         vs = [u"x{}".format(i) for i in xrange(len(e))]

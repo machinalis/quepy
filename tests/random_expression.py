@@ -2,10 +2,11 @@
 import random
 from quepy.expression import Expression
 
+
 def random_data(only_ascii=False):
     data = []
     first = True
-    while first or 1/20.0 < random.random():
+    while first or 1 / 20.0 < random.random():
         first = False
         if only_ascii:
             c = unichr(random.randint(33, 126))
@@ -29,6 +30,7 @@ def random_relation(only_ascii=False):
     data = data.replace(" ", "")
     if random.random() > 0.05:
         return data
+
     class UnicodeableDummy(object):
         def __unicode__(self):
             return data
@@ -61,7 +63,8 @@ def random_expression(only_ascii=False):
         elif r < decapitate + add_data + new_node:
             # Decapitate
             e = random.choice(expressions)
-            e.decapitate(random_relation(only_ascii), reverse=(0.25 < random.random()))
+            e.decapitate(random_relation(only_ascii),
+                         reverse=(0.25 < random.random()))
         elif len(expressions) != 1:
             # Merge
             random.shuffle(expressions)

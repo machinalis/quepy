@@ -35,7 +35,7 @@ def to_bidirected_graph(e):
     edge.
     If an edge goes into a data, it should not be reversed.
     """
-    graph = {node:[] for node in e.iter_nodes()}
+    graph = {node: [] for node in e.iter_nodes()}
     for node in e.iter_nodes():
         for relation, other in e.iter_edges(node):
             relation = safely_to_unicode(relation)
