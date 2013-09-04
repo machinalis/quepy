@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 import json
 from quepy.dsl import IsRelatedTo
 from quepy.expression import isnode
@@ -112,5 +113,22 @@ def generate_mql(e):
 
     mql_query = json.dumps(generated[start], sort_keys=True,
                             indent=2, separators=(',', ': '))
+    mql_query = _tidy(mql_query)
     target = paths_from_root(graph, start)[e.get_head()]
     return target, mql_query
+
+
+def _tidy(mql):
+    def replacement_function(match):
+        text = match.group(0)
+        if text.startswith("[") and text.endswith("]"):
+            return "[{}]"
+        elif text.startswith("["):
+            return "[{"
+        indent = 0
+        match = re.search("}[ \t]*\n(\s*?)\]", text)
+        if match:
+            indent = len(match.group(1))
+        return " " * indent + "}]"
+    return re.sub("\[\s*{\s*}\s*\]|\[\s+{|[ \t]*}\s+\]",
+                  replacement_function, mql)
