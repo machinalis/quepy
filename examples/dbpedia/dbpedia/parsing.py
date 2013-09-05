@@ -8,7 +8,7 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Regex for DBpedia quepy.
+Basic questions for DBpedia.
 """
 
 from refo import Group, Plus, Question

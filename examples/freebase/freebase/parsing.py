@@ -8,7 +8,7 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Prasing for freebase app.
+Basic questions for Freebase.
 """
 
 from refo import Question
@@ -25,7 +25,7 @@ from writers import *
 
 
 class Thing(Particle):
-    regex = Plus(Question(Pos("JJ")) + (Pos("NN") | Pos("NNP") | Pos("NNS")) |\
+    regex = Plus(Question(Pos("JJ")) + (Pos("NN") | Pos("NNP") | Pos("NNS")) |
             Pos("VBN"))
 
     def interpret(self, match):
