@@ -21,6 +21,10 @@ def choose_start_node(e):
 
 
 def safely_to_unicode(x):
+    """
+    Given an "edge" (a relation) or "a data" from an `Expression` graph
+    transform it into a unicode string fitted for insertion into a MQL query.
+    """
     if isinstance(x, unicode):
         return x
     if isinstance(x, str):
@@ -106,8 +110,7 @@ def generate_mql(e):
                 try:
                     other = generated[other]
                 except KeyError:
-                    # Then other is backwards in the tree, and in wrong order
-                    continue
+                    continue  # other is not in post_order_depth_first order
             d[relation] = other
         generated[node] = [d]
 
@@ -119,6 +122,10 @@ def generate_mql(e):
 
 
 def _tidy(mql):
+    """
+    Given a json representing a MQL query it collapses spaces between
+    braces and curly braces to make it look tidy.
+    """
     def replacement_function(match):
         text = match.group(0)
         if text.startswith("[") and text.endswith("]"):
