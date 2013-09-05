@@ -71,6 +71,10 @@ class IsMovie(FixedType):
 
 
 class DurationOf(FixedRelation):
+    relation = "/film/film_cut/runtime"
+    reverse = True
+
+class RuntimeOf(FixedRelation):
     relation = "/film/film/runtime"
     reverse = True
 

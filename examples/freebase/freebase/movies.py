@@ -86,7 +86,7 @@ class MovieDurationQuestion(QuestionTemplate):
             Question(Pos("."))
 
     def interpret(self, match):
-        duration = DurationOf(match.movie)
+        duration = DurationOf(RuntimeOf(match.movie))
         return duration
 
 
