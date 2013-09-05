@@ -16,13 +16,12 @@ import quepy
 import urllib
 from docopt import docopt
 
-api_key = ""
 service_url = 'https://www.googleapis.com/freebase/v1/mqlread'
 freebase = quepy.install("freebase")
 
 
 def request(query):
-    params = {'query': query, 'key': api_key}
+    params = {'query': query}
     url = service_url + '?' + urllib.urlencode(params)
     responses = json.loads(urllib.urlopen(url).read())
     return responses
