@@ -12,6 +12,7 @@ Implements the Quepy Application API
 """
 
 import logging
+from importlib import import_module
 from types import ModuleType
 
 from quepy import settings
@@ -30,15 +31,13 @@ def install(app_name):
 
     module_paths = {
         u"settings": u"{0}.settings",
-        u"parsing": u"{0}.parsing",
-        u"dsl": u"{0}.dsl",
+        u"parsing": u"{0}",
     }
     modules = {}
 
     for module_name, module_path in module_paths.iteritems():
         try:
-            modules[module_name] = __import__(module_path.format(app_name),
-                                              fromlist=[None])
+            modules[module_name] = import_module(module_path.format(app_name))
         except ImportError, error:
             message = u"Error importing {0!r}: {1}"
             raise ImportError(message.format(module_name, error))
@@ -57,19 +56,16 @@ class QuepyApp(object):
     Provides the quepy application API.
     """
 
-    def __init__(self, parsing, settings, dsl):
+    def __init__(self, parsing, settings):
         """
-        Creates the application based on `parsing`, `settings` and
-        `dsl` modules.
+        Creates the application based on `parsing`, `settings` modules.
         """
 
         assert isinstance(parsing, ModuleType)
         assert isinstance(settings, ModuleType)
-        assert isinstance(dsl, ModuleType)
 
         self._parsing_module = parsing
         self._settings_module = settings
-        self._dsl = dsl
 
         # Save the settings right after loading settings module
         self._save_settings_values()

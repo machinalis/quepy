@@ -11,17 +11,10 @@
 Basic questions for Freebase.
 """
 
-from refo import Question
-from dsl import DefinitionOf
+from refo import Question, Plus
+from dsl import DefinitionOf, NameOf, LocationOf
 from quepy.dsl import HasKeyword
-from quepy.parsing import QuestionTemplate, Particle, Lemma, Pos
-
-from music import *
-from people import *
-from movies import *
-from country import *
-from tvshows import *
-from writers import *
+from quepy.parsing import QuestionTemplate, Particle, Lemma, Pos, Lemmas
 
 
 class Thing(Particle):
