@@ -12,19 +12,11 @@ Basic questions for DBpedia.
 """
 
 from refo import Group, Plus, Question
-from quepy.parsing import Lemma, Pos, QuestionTemplate, Token
+from quepy.parsing import Lemma, Pos, QuestionTemplate, Token, Particle, \
+                          Lemmas
 from quepy.dsl import HasKeyword, IsRelatedTo, HasType
 from dsl import DefinitionOf, LabelOf, IsPlace, \
     UTCof, LocationOf
-
-
-# Import all the specific type related regex
-from music import *
-from movies import *
-from people import *
-from country import *
-from tvshows import *
-from writers import *
 
 
 # Openings
