@@ -47,7 +47,7 @@ class WhatIs(QuestionTemplate):
         return label
 
 
-class WhereIsRegex(QuestionTemplate):
+class WhereIsQuestion(QuestionTemplate):
     """
     Ex: "where in the world is the Eiffel Tower"
     """

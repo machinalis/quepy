@@ -95,7 +95,7 @@ class WhatTimeIs(QuestionTemplate):
         return utc_offset, "time"
 
 
-class WhereIsRegex(QuestionTemplate):
+class WhereIsQuestion(QuestionTemplate):
     """
     Ex: "where in the world is the Eiffel Tower"
     """

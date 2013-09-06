@@ -26,7 +26,7 @@ class Band(Particle):
         return IsBand() + HasKeyword(name)
 
 
-class BandMembersRegex(QuestionTemplate):
+class BandMembersQuestion(QuestionTemplate):
     """
     Regex for questions about band member.
     Ex: "Radiohead members"
@@ -46,7 +46,7 @@ class BandMembersRegex(QuestionTemplate):
         return label, "enum"
 
 
-class FoundationRegex(QuestionTemplate):
+class FoundationQuestion(QuestionTemplate):
     """
     Regex for questions about the creation of a band.
     Ex: "When was Pink Floyd founded?"
@@ -61,7 +61,7 @@ class FoundationRegex(QuestionTemplate):
         return active_years, "literal"
 
 
-class GenreRegex(QuestionTemplate):
+class GenreQuestion(QuestionTemplate):
     """
     Regex for questions about the genre of a band.
     Ex: "What is the music genre of Gorillaz?"
@@ -78,7 +78,7 @@ class GenreRegex(QuestionTemplate):
         return label, "enum"
 
 
-class AlbumsOfRegex(QuestionTemplate):
+class AlbumsOfQuestion(QuestionTemplate):
     """
     Ex: "List albums of Pink Floyd"
         "What albums did Pearl Jam record?"

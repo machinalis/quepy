@@ -28,7 +28,7 @@ class Actor(Particle):
         return IsPerson() + HasName(name)
 
 
-class CastOfRegex(QuestionTemplate):
+class CastOfQuestion(QuestionTemplate):
     """
     Ex: "What is the cast of Friends?"
         "Who works in Breaking Bad?"
@@ -61,7 +61,7 @@ class ListTvShows(QuestionTemplate):
         return label
 
 
-class EpisodeCountRegex(QuestionTemplate):
+class EpisodeCountQuestion(QuestionTemplate):
     """
     Ex: "How many episodes does Seinfeld have?"
         "Number of episodes of Seinfeld"
@@ -77,7 +77,7 @@ class EpisodeCountRegex(QuestionTemplate):
         return number_of_episodes
 
 
-class ShowsWithRegex(QuestionTemplate):
+class ShowsWithQuestion(QuestionTemplate):
     """
     Ex: "List shows with Hugh Laurie"
         "In what shows does Jennifer Aniston appears?"
@@ -97,7 +97,7 @@ class ShowsWithRegex(QuestionTemplate):
         return show_name
 
 
-class CreatorOfRegex(QuestionTemplate):
+class CreatorOfQuestion(QuestionTemplate):
     """
     Ex: "Who is the creator of Breaking Bad?"
         "Who are the creators of Friends?"

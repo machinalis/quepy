@@ -26,7 +26,7 @@ class Country(Particle):
         return IsCountry() + HasKeyword(name)
 
 
-class PresidentOfRegex(QuestionTemplate):
+class PresidentOfQuestion(QuestionTemplate):
     """
     Regex for questions about the president of a country.
     Ex: "Who is the president of Argentina?"
@@ -43,7 +43,7 @@ class PresidentOfRegex(QuestionTemplate):
         return label, "enum"
 
 
-class CapitalOfRegex(QuestionTemplate):
+class CapitalOfQuestion(QuestionTemplate):
     """
     Regex for questions about the capital of a country.
     Ex: "What is the capital of Bolivia?"
@@ -61,7 +61,7 @@ class CapitalOfRegex(QuestionTemplate):
 
 # FIXME: the generated query needs FILTER isLiteral() to the head
 # because dbpedia sometimes returns different things
-class LanguageOfRegex(QuestionTemplate):
+class LanguageOfQuestion(QuestionTemplate):
     """
     Regex for questions about the language spoken in a country.
     Ex: "What is the language of Argentina?"
@@ -81,7 +81,7 @@ class LanguageOfRegex(QuestionTemplate):
         return language, "enum"
 
 
-class PopulationOfRegex(QuestionTemplate):
+class PopulationOfQuestion(QuestionTemplate):
     """
     Regex for questions about the population of a country.
     Ex: "What is the population of China?"

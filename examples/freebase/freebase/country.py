@@ -25,7 +25,7 @@ class Country(Particle):
         return IsCountry() + HasKeyword(name)
 
 
-class PresidentOfRegex(QuestionTemplate):
+class PresidentOfQuestion(QuestionTemplate):
     """
     Ex: "list presidents of Argentina?"
     """
@@ -39,7 +39,7 @@ class PresidentOfRegex(QuestionTemplate):
         return name
 
 
-class CapitalOfRegex(QuestionTemplate):
+class CapitalOfQuestion(QuestionTemplate):
     """
     Regex for questions about the capital of a country.
     Ex: "What is the capital of Bolivia?"
@@ -55,7 +55,7 @@ class CapitalOfRegex(QuestionTemplate):
         return label
 
 
-class LanguageOfRegex(QuestionTemplate):
+class LanguageOfQuestion(QuestionTemplate):
     """
     Regex for questions about the language spoken in a country.
     Ex: "What is the language of Argentina?"
@@ -76,7 +76,7 @@ class LanguageOfRegex(QuestionTemplate):
         return name
 
 
-class PopulationOfRegex(QuestionTemplate):
+class PopulationOfQuestion(QuestionTemplate):
     """
     Regex for questions about the population of a country.
     Ex: "What is the population of China?"

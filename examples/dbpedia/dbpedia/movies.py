@@ -45,7 +45,7 @@ class Director(Particle):
         return IsPerson() + HasKeyword(name)
 
 
-class ListMoviesRegex(QuestionTemplate):
+class ListMoviesQuestion(QuestionTemplate):
     """
     Ex: "list movies"
     """
@@ -58,7 +58,7 @@ class ListMoviesRegex(QuestionTemplate):
         return name, "enum"
 
 
-class MoviesByDirectorRegex(QuestionTemplate):
+class MoviesByDirectorQuestion(QuestionTemplate):
     """
     Ex: "List movies directed by Quentin Tarantino.
         "movies directed by Martin Scorsese"
@@ -77,7 +77,7 @@ class MoviesByDirectorRegex(QuestionTemplate):
         return movie_name, "enum"
 
 
-class MovieDurationRegex(QuestionTemplate):
+class MovieDurationQuestion(QuestionTemplate):
     """
     Ex: "How long is Pulp Fiction"
         "What is the duration of The Thin Red Line?"
@@ -93,7 +93,7 @@ class MovieDurationRegex(QuestionTemplate):
         return duration, ("literal", "{} minutes long")
 
 
-class ActedOnRegex(QuestionTemplate):
+class ActedOnQuestion(QuestionTemplate):
     """
     Ex: "List movies with Hugh Laurie"
         "Movies with Matt LeBlanc"
@@ -117,7 +117,7 @@ class ActedOnRegex(QuestionTemplate):
         return movie_name, "enum"
 
 
-class MovieReleaseDateRegex(QuestionTemplate):
+class MovieReleaseDateQuestion(QuestionTemplate):
     """
     Ex: "When was The Red Thin Line released?"
         "Release date of The Empire Strikes Back"
@@ -133,7 +133,7 @@ class MovieReleaseDateRegex(QuestionTemplate):
         return release_date, "literal"
 
 
-class DirectorOfRegex(QuestionTemplate):
+class DirectorOfQuestion(QuestionTemplate):
     """
     Ex: "Who is the director of Big Fish?"
         "who directed Pocahontas?"
@@ -150,7 +150,7 @@ class DirectorOfRegex(QuestionTemplate):
         return director_name, "literal"
 
 
-class ActorsOfRegex(QuestionTemplate):
+class ActorsOfQuestion(QuestionTemplate):
     """
     Ex: "who are the actors of Titanic?"
         "who acted in Alien?"
@@ -168,7 +168,7 @@ class ActorsOfRegex(QuestionTemplate):
         return actor, "enum"
 
 
-class PlotOfRegex(QuestionTemplate):
+class PlotOfQuestion(QuestionTemplate):
     """
     Ex: "what is Shame about?"
         "plot of Titanic"

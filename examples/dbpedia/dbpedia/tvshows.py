@@ -30,7 +30,7 @@ class Actor(Particle):
 
 
 # FIXME: clash with movies release regex
-class ReleaseDateRegex(QuestionTemplate):
+class ReleaseDateQuestion(QuestionTemplate):
     """
     Ex: when was Friends release?
     """
@@ -43,7 +43,7 @@ class ReleaseDateRegex(QuestionTemplate):
         return release_date, "literal"
 
 
-class CastOfRegex(QuestionTemplate):
+class CastOfQuestion(QuestionTemplate):
     """
     Ex: "What is the cast of Friends?"
         "Who works in Breaking Bad?"
@@ -75,7 +75,7 @@ class ListTvShows(QuestionTemplate):
         return label, "enum"
 
 
-class EpisodeCountRegex(QuestionTemplate):
+class EpisodeCountQuestion(QuestionTemplate):
     """
     Ex: "How many episodes does Seinfeld have?"
         "Number of episodes of Seinfeld"
@@ -91,7 +91,7 @@ class EpisodeCountRegex(QuestionTemplate):
         return number_of_episodes, "literal"
 
 
-class ShowsWithRegex(QuestionTemplate):
+class ShowsWithQuestion(QuestionTemplate):
     """
     Ex: "List shows with Hugh Laurie"
         "In what shows does Jennifer Aniston appears?"
@@ -110,7 +110,7 @@ class ShowsWithRegex(QuestionTemplate):
         return show_name, "enum"
 
 
-class CreatorOfRegex(QuestionTemplate):
+class CreatorOfQuestion(QuestionTemplate):
     """
     Ex: "Who is the creator of Breaking Bad?"
     """

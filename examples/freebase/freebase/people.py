@@ -38,7 +38,7 @@ class WhoIs(QuestionTemplate):
         return definition
 
 
-class HowOldIsRegex(QuestionTemplate):
+class HowOldIsQuestion(QuestionTemplate):
     """
     Ex: "How old is Bob Dylan".
     """
@@ -51,7 +51,7 @@ class HowOldIsRegex(QuestionTemplate):
         return birth_date
 
 
-class WhereIsFromRegex(QuestionTemplate):
+class WhereIsFromQuestion(QuestionTemplate):
     """
     Ex: "Where is Bill Gates from?"
     """

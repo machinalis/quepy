@@ -38,7 +38,7 @@ class Author(Particle):
         return IsPerson() + HasKeyword(name)
 
 
-class WhoWroteRegex(QuestionTemplate):
+class WhoWroteQuestion(QuestionTemplate):
     """
     Ex: "who wrote The Little Prince?"
         "who is the author of A Game Of Thrones?"
@@ -54,7 +54,7 @@ class WhoWroteRegex(QuestionTemplate):
         return author
 
 
-class BooksByAuthorRegex(QuestionTemplate):
+class BooksByAuthorQuestion(QuestionTemplate):
     """
     Ex: "list books by George Orwell"
         "which books did Suzanne Collins wrote?"
