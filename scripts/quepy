@@ -79,7 +79,7 @@ def startapp(name):
     os.mkdir(os.path.join(folder, folder))
 
     main_filename = os.path.join(folder, "main.py")
-    parsing_filename = os.path.join(folder, folder, "parsing.py")
+    parsing_filename = os.path.join(folder, folder, "basic.py")
     init_filename = os.path.join(folder, folder, "__init__.py")
     dsl_filename = os.path.join(folder, folder, "dsl.py")
 
@@ -96,7 +96,9 @@ def startapp(name):
 
     with open(parsing_filename, "w") as fh:
         fh.write(header_template)
-        fh.write(description_template.format(module="Prasing", name=name))
+        fh.write(description_template.format(module="Basic queries",
+                                             name=name))
+        fh.write("from dsl import *\n")
 
     with open(dsl_filename, "w") as fh:
         fh.write(header_template)
@@ -107,6 +109,7 @@ def startapp(name):
         fh.write(header_template)
         fh.write(description_template.format(module="Init",
                                              name=name))
+        fh.write("from basic import *\n")
 
     # Copy the content of settings
     with open(settings_real_file, "r") as fh:
