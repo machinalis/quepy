@@ -98,6 +98,8 @@ NLTK_DATA variable.
 This file has some other configuration options, but we are not going to need
 them for this example.
 
+Also configure the **LANGUAGE**, in this example we'll use ``sparql``.
+
 .. Note::
     
     What's a tagger anyway?
@@ -134,10 +136,10 @@ questions. The whole definition would look like this:
     :linenos:
 
     from refo import Group, Question
-    from quepy.semantics import HasKeyword
-    from quepy.regex import Lemma, Pos, QuestionTemplate
+    from quepy.dsl import HasKeyword
+    from quepy.parsing import Lemma, Pos, QuestionTemplate
 
-    from semantics import IsDefinedIn
+    from dsl import IsDefinedIn
 
     class WhatIs(QuestionTemplate):
         """
@@ -148,7 +150,7 @@ questions. The whole definition would look like this:
         target = Question(Pos("DT")) + Group(Pos("NN"), "target")
         regex = Lemma("what") + Lemma("be") + target + Question(Pos("."))
 
-        def semantics(self, match):
+        def interpret(self, match):
             thing = match.target.tokens
             target = HasKeyword(thing)
             definition = IsDefinedIn(target)
@@ -158,7 +160,7 @@ questions. The whole definition would look like this:
 Now let's discuss this procedure step by step.
 
 First of all, note that regex handlers need to be a subclass from
-:class:`quepy.regex.QuestionTemplate`. They also need to define a class
+:class:`quepy.parsing.QuestionTemplate`. They also need to define a class
 attribute called ``regex`` with a refo regex.
 
 Then, we describe the structure of the input question as a regular expression,
@@ -189,13 +191,13 @@ speech tag. This information needs to be associated to questions by
 analyzing them with a tagger.
 
 Finally, if a regex has a successful match with an input question, the
-``semantics`` method will be called with the match. In Lines 16 to 22,
-we define the *semantics* method, which specifies the semantics of a
+``interpret`` method will be called with the match. In Lines 16 to 22,
+we define the *interpret* method, which specifies the semantics of a
 matched question:
 
 .. code-block:: python
 
-    def semantics(self, match):
+    def interpret(self, match):
         thing = match.target.tokens
         target = HasKeyword(thing)
         definition = IsDefinedIn(target)
@@ -208,29 +210,29 @@ predicate is part of the abstract semantics component that is
 described in the next section.
 
 
-Defining the semantics
-----------------------
+Defining the domain specific language
+-------------------------------------
 
 Quepy uses an abstract semantics as a language-independent
 representation that is then mapped to a query language. This allows
 your questions to be mapped to different query languages in a
 transparent manner.
 
-In our example, the semantics is defined in the file
+In our example, the domain specific language is defined in the file
 *dbpedia/dsl.py*.
 
-Let's see an example of semantic definition. The predicate IsDefinedIn
+Let's see an example of the dsl definition. The predicate IsDefinedIn
 was used in Line 21 of the previous example:
 
 .. code-block:: python
 
     definition = IsDefinedIn(target)
 
-IsDefinedIn is defined in the semantics file as follows:
+IsDefinedIn is defined in the dsl file as follows:
 
 .. code-block:: python
 
-    from quepy.semantics import FixedRelation
+    from quepy.dsl import FixedRelation
 
     class IsDefinedIn(FixedRelation):
         relation = "rdfs:comment"
