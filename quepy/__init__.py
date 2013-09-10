@@ -11,7 +11,7 @@
 Quepy converts Natural Language Question to database queries.
 """
 
-VERSION = 0.1
+VERSION = 0.2
 
 import logging
 from quepy.quepyapp import install, QuepyApp
