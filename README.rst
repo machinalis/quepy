@@ -16,9 +16,10 @@ questions in natural language and database queries. So, with little coding you
 can build your own system for natural language access to your database.
 
 Currently **Quepy** provides support for
-`sparql <http://www.w3.org/TR/rdf-sparql-query/>`_
-query language, but in future releases we plan to extended it to other database
-query languages.
+`Sparql <http://www.w3.org/TR/rdf-sparql-query/>`_ and
+`MQL <http://www.freebase.com/>`_
+query languages. 
+We plan to extended it to other database query languages.
 
 
 An example
@@ -37,7 +38,7 @@ Or, you can try the example yourself by doing:
 
 And it will output something like this:
 
-::
+.. code-block:: sparql
 
     SELECT DISTINCT ?x1 WHERE {
         ?x0 rdf:type foaf:Person.
@@ -65,13 +66,25 @@ And then using and a convenient way to express semantic relations:
 The rest of the transformation is handled automatically by the framework to
 finally produce this sparql:
 
-::
+.. code-block:: sparql
 
     SELECT DISTINCT ?x1 WHERE {
         ?x0 rdf:type foaf:Person.
         ?x0 rdfs:label "Tom Cruise"@en.
         ?x0 rdfs:comment ?x1.
     }
+
+
+Using a very similar procedure you could generate and MQL query for the same question
+obtaining:
+
+.. code-block:: javascript
+
+    [{
+        "/common/topic/description": [{}],
+        "/type/object/name": "Tom Cruise",
+        "/type/object/type": "/people/person"
+    }]
 
 
 Installation
@@ -101,3 +114,11 @@ And the full documentation here:
 
 Join our `mailing list <http://groups.google.com/group/quepy>`_
 
+
+Contribute!
+===========
+
+Want to help develop quepy? Welcome aboard! Find us in
+
+    - #quepy at freenode
+    - quepydev at librelist.com

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -9,7 +8,14 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Init for testapp quepy.
+Settings for freebase app.
 """
 
-from basic import *
+# Generated query language
+LANGUAGE = "mql"
+
+# NLTK config
+NLTK_DATA_PATH = []  # List of paths with NLTK data
+
+# Encoding config
+DEFAULT_ENCODING = "utf-8"

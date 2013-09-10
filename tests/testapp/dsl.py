@@ -9,6 +9,6 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Semantics for testapp quepy.
+Intermediate representation for testapp quepy.
 """
 

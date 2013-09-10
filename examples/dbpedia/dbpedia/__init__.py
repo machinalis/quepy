@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -11,3 +10,11 @@
 """
 DBpedia quepy.
 """
+
+from basic import *
+from music import *
+from movies import *
+from people import *
+from country import *
+from tvshows import *
+from writers import *

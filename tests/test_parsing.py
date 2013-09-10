@@ -13,7 +13,7 @@ Tests for Regex module.
 """
 
 import unittest
-from quepy.regex import RegexTemplate, Particle, Lemma
+from quepy.parsing import QuestionTemplate, Particle, Lemma
 from quepy.tagger import Word
 
 
@@ -21,20 +21,20 @@ class Mockrule(object):
     rulename = "Mock"
 
 
-class TestRegexTemplate(unittest.TestCase):
+class TestQuestionTemplate(unittest.TestCase):
     def setUp(self):
         self.mockrule = Mockrule
 
-        class SomeRegex(RegexTemplate):
+        class SomeRegex(QuestionTemplate):
             regex = Lemma(u"hello")
 
-            def semantics(self, match):
+            def interpret(self, match):
                 return Mockrule
 
-        class SomeRegexWithData(RegexTemplate):
+        class SomeRegexWithData(QuestionTemplate):
             regex = Lemma(u"hello")
 
-            def semantics(self, match):
+            def interpret(self, match):
                 return Mockrule, 42
 
         self.regexinstance = SomeRegex()
@@ -42,48 +42,48 @@ class TestRegexTemplate(unittest.TestCase):
 
     def test_match(self):
         words = [Word(u"hi", u"hello")]
-        semantics, userdata = self.regexinstance.get_semantics(words)
-        self.assertTrue(semantics is self.mockrule)
+        ir, userdata = self.regexinstance.get_interpretation(words)
+        self.assertTrue(ir is self.mockrule)
         self.assertEqual(userdata, None)
 
     def test_no_match(self):
         words = [Word(u"hi", u"hello"), Word(u"girl", u"girl")]
-        semantics, userdata = self.regexinstance.get_semantics(words)
-        self.assertEqual(semantics, None)
+        ir, userdata = self.regexinstance.get_interpretation(words)
+        self.assertEqual(ir, None)
         self.assertEqual(userdata, None)
 
     def test_user_data(self):
         words = [Word(u"hi", u"hello")]
-        _, userdata = self.regex_with_data.get_semantics(words)
+        _, userdata = self.regex_with_data.get_interpretation(words)
         self.assertEqual(userdata, 42)
 
-    def test_no_semantics(self):
-        class SomeRegex(RegexTemplate):
+    def test_no_ir(self):
+        class SomeRegex(QuestionTemplate):
             regex = Lemma(u"hello")
 
         regexinstance = SomeRegex()
         words = [Word(u"hi", u"hello")]
-        self.assertRaises(NotImplementedError, regexinstance.get_semantics,
-                          words)
+        self.assertRaises(NotImplementedError,
+                          regexinstance.get_interpretation, words)
 
     def test_regex_empty(self):
-        class SomeRegex(RegexTemplate):
-            def semantics(self, match):
+        class SomeRegex(QuestionTemplate):
+            def interpret(self, match):
                 return Mockrule, "YES!"
 
         regexinstance = SomeRegex()
         words = [Word(u"hi", u"hello")]
-        semantics, userdata = regexinstance.get_semantics(words)
-        self.assertTrue(semantics is Mockrule)
+        ir, userdata = regexinstance.get_interpretation(words)
+        self.assertTrue(ir is Mockrule)
         self.assertEqual(userdata, "YES!")
 
     def test_match_words(self):
-        class SomeRegex(RegexTemplate):
-            def semantics(self, match):
+        class SomeRegex(QuestionTemplate):
+            def interpret(self, match):
                 return match
 
         words = [Word(u"|@€đ€łł@ð«|µnþ", u"hello"), Word(u"a", u"b", u"c")]
-        match, _ = SomeRegex().get_semantics(words)
+        match, _ = SomeRegex().get_interpretation(words)
         self.assertEqual(words, match.words)
 
 
@@ -92,13 +92,13 @@ class TestParticle(unittest.TestCase):
         class Person(Particle):
             regex = Lemma(u"Jim") | Lemma(u"Tonny")
 
-            def semantics(self, match):
+            def interpret(self, match):
                 return match
 
-        class PersonRegex(RegexTemplate):
+        class PersonRegex(QuestionTemplate):
             regex = Person() + Lemma(u"be") + Person(u"another")
 
-            def semantics(self, match):
+            def interpret(self, match):
                 return match
 
         class PersonAsset(Person):
@@ -112,14 +112,14 @@ class TestParticle(unittest.TestCase):
 
     def test_attrs(self):
         words = [Word(x, x) for x in u"Jim be Tonny".split()]
-        match, _ = self.personregex.get_semantics(words)
+        match, _ = self.personregex.get_interpretation(words)
         self.assertEqual(match.another.words[0], words[-1])
         self.assertEqual(match.person.words[0], words[0])
         self.assertRaises(AttributeError, lambda: match.pirulo)
 
     def test_nested_particle(self):
         words = [Word(x, x) for x in u"Jim 's car be Tonny".split()]
-        match, _ = self.nestedregex.get_semantics(words)
+        match, _ = self.nestedregex.get_interpretation(words)
         self.assertEqual(match.personasset.words[0], words[0])
         self.assertRaises(AttributeError, lambda: match.personasset.another)
 

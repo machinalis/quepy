@@ -3,16 +3,32 @@
 
 """
 Quepy command line tool.
+
+Usage:
+    quepy startapp <name>
+    quepy graph <app_name> <question> ...
+    quepy nltkdata <path>
+    quepy tag <app_name> <text> ...
+    quepy autotest <app_name>
+    quepy -v | --version
+
+Description:
+    startapp: Creates an application template.
+    graph: Generates an HTML inform with a graph representation of the query generated.
+    nltkdata: Downloads the necesary nltk data files into a supplied path
+    tag: Prints the POS tags of a given text.
+    autotest: Runs automatic tests for the application
 """
 
 import os
 import sys
 import base64
 import subprocess
+from docopt import docopt
 from xml.sax.saxutils import escape
 
 import quepy
-from quepy.printout import expression_to_dot, expression_to_sparql
+from quepy import generation
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 
@@ -45,30 +61,27 @@ class CommandNotFound(Exception):
     pass
 
 
-def startapp(name, *args):
-    """ Creates an application template. """
-
+def startapp(name):
     san_name = name.decode("ascii", "ignore").lower().replace(" ", "_")
-
-    header_template = "#!/usr/bin/env python\n" \
-                      "# coding: utf-8\n\n"\
-
+    header_template = "# coding: utf-8\n\n"
     main_template = "import quepy\n" \
-        "{san_name} = quepy.install(\"{name}\")\n"
-
+                    "{san_name} = quepy.install(\"{name}\")\n"
     description_template = "\"\"\"\n" \
-        "{module} for {name} quepy.\n" \
-        "\"\"\"\n\n" \
+                           "{module} for {name} quepy.\n" \
+                           "\"\"\"\n\n" \
 
     # Create the main folder
     folder = san_name
+    if os.path.exists(folder):
+        print "Error: folder '{}' already exists".format(folder)
+        return
     os.mkdir(folder)
     os.mkdir(os.path.join(folder, folder))
 
     main_filename = os.path.join(folder, "main.py")
-    regex_filename = os.path.join(folder, folder, "regex.py")
+    parsing_filename = os.path.join(folder, folder, "basic.py")
     init_filename = os.path.join(folder, folder, "__init__.py")
-    semantics_filename = os.path.join(folder, folder, "semantics.py")
+    dsl_filename = os.path.join(folder, folder, "dsl.py")
 
     # We'll copy the content of the settings on quepy to the app
     quepy_folder = os.path.dirname(quepy.__file__)
@@ -81,19 +94,22 @@ def startapp(name, *args):
                                              name=name))
         fh.write(main_template .format(san_name=san_name, name=name))
 
-    with open(regex_filename, "w") as fh:
+    with open(parsing_filename, "w") as fh:
         fh.write(header_template)
-        fh.write(description_template.format(module="Regex", name=name))
+        fh.write(description_template.format(module="Basic queries",
+                                             name=name))
+        fh.write("from dsl import *\n")
 
-    with open(semantics_filename, "w") as fh:
+    with open(dsl_filename, "w") as fh:
         fh.write(header_template)
-        fh.write(description_template.format(module="Semantics",
+        fh.write(description_template.format(module="Domain specific language",
                                              name=name))
 
     with open(init_filename, "w") as fh:
         fh.write(header_template)
         fh.write(description_template.format(module="Init",
                                              name=name))
+        fh.write("from basic import *\n")
 
     # Copy the content of settings
     with open(settings_real_file, "r") as fh:
@@ -101,30 +117,15 @@ def startapp(name, *args):
     with open(settings_filename, "w") as fh:
         fh.write(settings_content)
 
-
-def print_help(*args):
-    """ Shows this help message. """
-
-    print >> sys.stderr, "Usage {0} COMMAND [args]".format(sys.argv[0])
-    print >> sys.stderr, "Avaliable commands:"
-    for command, handler in COMMANDS_MAP.iteritems():
-        docs = handler.__doc__.strip()
-        print >> sys.stderr, " * {0} - {1}".format(command, docs)
+    print "Application template created on: {}".format(san_name)
 
 
-def print_version(*args):
-    """ Prints the current version of quepy. """
-
+def print_version():
     print "Quepy {0}".format(quepy.VERSION)
 
 
-def graph_query(app_name, question, *args):
-    """ HTML inform with a graph representation of the query generated.
-    Usage: app_name QUESTION
-    """
-
-    question = question.decode("utf-8")
-
+def graph_query(app_name, question):
+    question = question.decode("ascii")
     # Set the path to the app
     sys.path.append(os.getcwd())
 
@@ -137,8 +138,8 @@ def graph_query(app_name, question, *args):
 
     rows = ""
     for expression, userdata in app._iter_compiled_forms(question):
-        dot_string = expression_to_dot(expression)
-        target, query = expression_to_sparql(expression)
+        _, dot_string = generation.get_code(expression, "dot")
+        target, query = generation.get_code(expression, "sparql")
 
         dot_path = "/tmp/quepy_graph.dot"
         cmdline = "dot -Tpng %s" % dot_path
@@ -155,7 +156,6 @@ def graph_query(app_name, question, *args):
             sys.exit(1)
 
         image_base64 = base64.b64encode(output)
-
         query = "\n".join([x for x in query.split("\n")
                            if not x.startswith("PREFIX")])
         query = escape(query)
@@ -166,11 +166,7 @@ def graph_query(app_name, question, *args):
         filehandler.write(html)
 
 
-def print_tags(app_name, *args):
-    """ Prints the POS tags of a given text.
-    Usage: app_name TEXT.
-    """
-
+def print_tags(app_name, text):
     # Set the path to the app
     sys.path.append(os.getcwd())
 
@@ -182,20 +178,18 @@ def print_tags(app_name, *args):
                              (app_name, error)
         sys.exit(1)
 
-    text = " ".join(args).decode("ascii")
+    text = text.decode("ascii")
     tagger = quepy.tagger.get_tagger()
     tagger_out = tagger(text)
 
-    attrs = "TOKEN LEMMA POS PROB SENSE".split()
+    attrs = "TOKEN LEMMA POS PROB".split()
     print " ".join(["{:13.13}".format(x) for x in attrs])
-
     for word in tagger_out:
-        print word.fullstr()
+        attrs = unicode(word).split("|")
+        print " ".join(["{:13.13}".format(x) for x in attrs])
 
 
-def nltkdata(path, *args):
-    """Downloads needed nltk data files into a supplied path """
-
+def nltkdata(path):
     print "Preparing to download..."
     import nltk
     try:
@@ -207,9 +201,7 @@ def nltkdata(path, *args):
     print "Finished"
 
 
-def autotest(app_name, *args):
-    """ Auto tests the application """
-
+def autotest(app_name):
     import re
     import refo
 
@@ -225,14 +217,13 @@ def autotest(app_name, *args):
                              (app_name, error)
         sys.exit(1)
 
-    regex_module = __import__("{0}.regex".format(app_name), fromlist=[None])
-
+    parsing_module = __import__("{0}.parsing".format(app_name), fromlist=[None])
     errors_found = False
     regex_list = {}
-    for attr_name in dir(regex_module):
-        attr = getattr(regex_module, attr_name)
+    for attr_name in dir(parsing_module):
+        attr = getattr(parsing_module, attr_name)
         try:
-            if issubclass(attr, quepy.regex.RegexTemplate):
+            if issubclass(attr, quepy.parsing.QuestionTemplate):
                 examples = example_re.findall(attr.__doc__)
                 regex_list[attr] = examples
         except TypeError:
@@ -242,12 +233,14 @@ def autotest(app_name, *args):
         regex = regex_class.regex + refo.Literal(_EOL)
 
         for text in regex_list[regex_class]:
+            print "Testing {}...".format(text),
             text = encoding_flexible_conversion(text)
             tagger = quepy.tagger.get_tagger()
             words = tagger(text)
 
             match = refo.match(regex, words + [_EOL])
             if not match:
+                print "ERROR"
                 if not errors_found:
                     errors_found = True
                     print "The following errors have been found:\n"
@@ -255,43 +248,26 @@ def autotest(app_name, *args):
                 print regex_class.__name__
                 print words
                 print
+            else:
+                print "OK"
 
     if not errors_found:
         print "No errors were found :)"
 
 
-def run_command(command, args):
-    if command not in COMMANDS_MAP:
-        message = "Command {0!r} does not exists"
-        raise CommandNotFound(message.format(command))
-
-    handler = COMMANDS_MAP.get(command)
-    handler(*args)
-
-
-COMMANDS_MAP = {
-    "startapp": startapp,
-    "help": print_help,
-    "version": print_version,
-    "graph": graph_query,
-    "--version": print_version,
-    "nltkdata": nltkdata,
-    "tag": print_tags,
-    "autotest": autotest,
-}
-
-
 if __name__ == "__main__":
-    if len(sys.argv) <= 1:
-        print_help()
-        sys.exit(1)
-
-    command = sys.argv[1]
-    args = sys.argv[2:]
-
-    try:
-        run_command(command, args)
-    except CommandNotFound, error:
-        print >> sys.stderr, error
-        print
-        print_help()
+    args = docopt(__doc__)
+    if args["startapp"]:
+        startapp(args["<name>"])
+    elif args["graph"]:
+        question = " ".join(args["<question>"])
+        graph_query(args["<app_name>"], question)
+    elif args["nltkdata"]:
+        nltkdata(args["<path>"])
+    elif args["tag"]:
+        text = " ".join(args["<text>"])
+        print_tags(args["<app_name>"], text)
+    elif args["autotest"]:
+        autotest(args["<app_name>"])
+    elif args["-v"] or args["--version"]:
+        print_version()

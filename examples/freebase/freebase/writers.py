@@ -12,10 +12,10 @@ Writers related regex.
 """
 
 
+from dsl import *
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
-from dsl import IsBook, HasAuthor, AuthorOf, IsPerson, NameOf
 
 
 nouns = Pos("DT") | Pos("IN") | Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS")
@@ -50,7 +50,7 @@ class WhoWroteQuestion(QuestionTemplate):
 
     def interpret(self, match):
         author = NameOf(IsPerson() + AuthorOf(match.book))
-        return author, "literal"
+        return author
 
 
 class BooksByAuthorQuestion(QuestionTemplate):
@@ -66,4 +66,4 @@ class BooksByAuthorQuestion(QuestionTemplate):
     def interpret(self, match):
         book = IsBook() + HasAuthor(match.author)
         book_name = NameOf(book)
-        return book_name, "enum"
+        return book_name

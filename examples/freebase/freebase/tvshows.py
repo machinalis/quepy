@@ -4,11 +4,10 @@
 Tv Shows related regex.
 """
 
+from dsl import *
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
-from dsl import IsTvShow, ReleaseDateOf, IsPerson, StarsIn, LabelOf, \
-    HasShowName, NumberOfEpisodesIn, HasActor, ShowNameOf, CreatorOf
 
 nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
@@ -18,7 +17,7 @@ class TvShow(Particle):
 
     def interpret(self, match):
         name = match.words.tokens
-        return IsTvShow() + HasShowName(name)
+        return IsTvShow() + HasName(name)
 
 
 class Actor(Particle):
@@ -26,21 +25,7 @@ class Actor(Particle):
 
     def interpret(self, match):
         name = match.words.tokens
-        return IsPerson() + HasKeyword(name)
-
-
-# FIXME: clash with movies release regex
-class ReleaseDateQuestion(QuestionTemplate):
-    """
-    Ex: when was Friends release?
-    """
-
-    regex = Lemmas("when be") + TvShow() + Lemma("release") + \
-        Question(Pos("."))
-
-    def interpret(self, match):
-        release_date = ReleaseDateOf(match.tvshow)
-        return release_date, "literal"
+        return IsPerson() + HasName(name)
 
 
 class CastOfQuestion(QuestionTemplate):
@@ -57,9 +42,10 @@ class CastOfQuestion(QuestionTemplate):
             (Lemmas("list actor") + Pos("IN") + TvShow())
 
     def interpret(self, match):
-        actor = IsPerson() + StarsIn(match.tvshow)
-        name = LabelOf(actor)
-        return name, "enum"
+        cast = CastOf(match.tvshow)
+        actor = IsPerson() + IsActorOf(cast)
+        name = NameOf(actor)
+        return name
 
 
 class ListTvShows(QuestionTemplate):
@@ -71,8 +57,8 @@ class ListTvShows(QuestionTemplate):
 
     def interpret(self, match):
         show = IsTvShow()
-        label = LabelOf(show)
-        return label, "enum"
+        label = NameOf(show)
+        return label
 
 
 class EpisodeCountQuestion(QuestionTemplate):
@@ -88,7 +74,7 @@ class EpisodeCountQuestion(QuestionTemplate):
 
     def interpret(self, match):
         number_of_episodes = NumberOfEpisodesIn(match.tvshow)
-        return number_of_episodes, "literal"
+        return number_of_episodes
 
 
 class ShowsWithQuestion(QuestionTemplate):
@@ -105,14 +91,16 @@ class ShowsWithQuestion(QuestionTemplate):
             ((Lemma("show") | Lemma("shows")) + Pos("IN") + Actor())
 
     def interpret(self, match):
-        show = IsTvShow() + HasActor(match.actor)
-        show_name = ShowNameOf(show)
-        return show_name, "enum"
+        cast = HasActor(match.actor)
+        show = IsTvShow() + HasCast(cast)
+        show_name = NameOf(show)
+        return show_name
 
 
 class CreatorOfQuestion(QuestionTemplate):
     """
     Ex: "Who is the creator of Breaking Bad?"
+        "Who are the creators of Friends?"
     """
 
     regex = Question(Lemmas("who be") + Pos("DT")) + \
@@ -120,5 +108,5 @@ class CreatorOfQuestion(QuestionTemplate):
 
     def interpret(self, match):
         creator = CreatorOf(match.tvshow)
-        label = LabelOf(creator)
-        return label, "enum"
+        name = NameOf(creator)
+        return name

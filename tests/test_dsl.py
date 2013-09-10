@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -8,17 +7,13 @@
 # Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
-"""
-Tests for Semantics Module.
-"""
-
 import unittest
 from quepy.expression import Expression
-from quepy.semantics import HasKeyword
-from quepy.semantics import FixedRelation, FixedType, FixedDataRelation
+from quepy.dsl import HasKeyword, FixedRelation, FixedType, \
+    FixedDataRelation
 
 
-class TestSemantics(unittest.TestCase):
+class TestDSL(unittest.TestCase):
     def test_fixed_relation(self):
 
         class MyFixedRelation(FixedRelation):
@@ -46,8 +41,8 @@ class TestSemantics(unittest.TestCase):
         self.assertEqual(len(edges), 1)
         self.assertIsInstance(edges[0][0], unicode)
         self.assertEqual(edges[0][0], u"rdf:type")
-        self.assertIsInstance(edges[0][1].node, unicode)
-        self.assertEqual(edges[0][1].node, u"uranium:blowtorch")
+        self.assertIsInstance(edges[0][1], unicode)
+        self.assertEqual(edges[0][1], u"uranium:blowtorch")
 
     def test_fixed_data_relation(self):
 

@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 # Copyright (c) 2012, Machinalis S.R.L.
 # This file is part of quepy and is distributed under the Modified BSD License.
@@ -11,10 +11,10 @@
 People related regex
 """
 
+from dsl import *
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
-from dsl import IsPerson, LabelOf, DefinitionOf, BirthDateOf, BirthPlaceOf
 
 
 class Person(Particle):
@@ -35,7 +35,7 @@ class WhoIs(QuestionTemplate):
 
     def interpret(self, match):
         definition = DefinitionOf(match.person)
-        return definition, "define"
+        return definition
 
 
 class HowOldIsQuestion(QuestionTemplate):
@@ -48,7 +48,7 @@ class HowOldIsQuestion(QuestionTemplate):
 
     def interpret(self, match):
         birth_date = BirthDateOf(match.person)
-        return birth_date, "age"
+        return birth_date
 
 
 class WhereIsFromQuestion(QuestionTemplate):
@@ -61,6 +61,5 @@ class WhereIsFromQuestion(QuestionTemplate):
 
     def interpret(self, match):
         birth_place = BirthPlaceOf(match.person)
-        label = LabelOf(birth_place)
-
-        return label, "enum"
+        name = NameOf(birth_place)
+        return name

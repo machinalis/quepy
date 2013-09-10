@@ -12,16 +12,16 @@
 Regex for testapp quepy.
 """
 
-from quepy.regex import RegexTemplate, Token
-from quepy.semantics import HasKeyword
 from refo import Star, Any
+from quepy.dsl import HasKeyword
+from quepy.parsing import QuestionTemplate, Token
 
 
-class LowMatchAny(RegexTemplate):
+class LowMatchAny(QuestionTemplate):
     weight = 0.5
     regex = Star(Any())
 
-    def semantics(self, match):
+    def interpret(self, match):
         expr = None
 
         for word in match.words:
@@ -36,14 +36,14 @@ class LowMatchAny(RegexTemplate):
 class MatchAny(LowMatchAny):
     weight = 0.8
 
-    def semantics(self, match):
-        expr = super(MatchAny, self).semantics(match)
+    def interpret(self, match):
+        expr = super(MatchAny, self).interpret(match)
         return expr, 42
 
 
-class UserData(RegexTemplate):
+class UserData(QuestionTemplate):
     weight = 1.0
     regex = Token("user") + Token("data")
 
-    def semantics(self, match):
+    def interpret(self, match):
         return HasKeyword(match.words[0].token), "<user data>"

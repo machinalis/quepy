@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -14,5 +13,10 @@ Quepy converts Natural Language Question to database queries.
 
 VERSION = 0.1
 
-from quepy.quepyapp import install, QuepyApp, QuepyImportError
-from quepy.printout import set_loglevel
+import logging
+from quepy.quepyapp import install, QuepyApp
+
+
+def set_loglevel(level=logging.WARNING):
+    logger = logging.getLogger("quepy")
+    logger.setLevel(level)

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -35,10 +34,9 @@ def penn_to_morphy_tag(tag):
 def run_nltktagger(string, nltk_data_path=None):
     """
     Runs nltk tagger on `string` and returns a list of
-    :class:`quepy.freeling.Word` objects.
+    :class:`quepy.tagger.Word` objects.
     """
     assert_valid_encoding(string)
-
     global _penn_to_morphy_tag
 
     if nltk_data_path:
@@ -81,15 +79,3 @@ def run_nltktagger(string, nltk_data_path=None):
         words.append(word)
 
     return words
-
-
-if __name__ == "__main__":
-    import sys
-
-    tagger_out = run_nltktagger(" ".join(sys.argv[1:]).decode("ascii"))
-
-    attrs = "TOKEN LEMMA POS PROB SENSE".split()
-    print " ".join(["{:13.13}".format(x) for x in attrs])
-
-    for word in tagger_out:
-        print word.fullstr()

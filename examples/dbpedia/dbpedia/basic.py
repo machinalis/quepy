@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
 # This file is part of quepy and is distributed under the Modified BSD License.
@@ -6,25 +6,17 @@
 #
 # Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
-# coding: utf-8
 
 """
-Regex for DBpedia quepy.
+Basic questions for DBpedia.
 """
 
 from refo import Group, Plus, Question
-from quepy.semantics import HasKeyword, IsRelatedTo, HasType
-from quepy.regex import Lemma, Pos, RegexTemplate, Token
-from semantics import DefinitionOf, LabelOf, IsPlace, UTCof, LocationOf
-
-
-# Import all the specific type related regex
-from music import *
-from movies import *
-from people import *
-from country import *
-from tvshows import *
-from writers import *
+from quepy.parsing import Lemma, Pos, QuestionTemplate, Token, Particle, \
+                          Lemmas
+from quepy.dsl import HasKeyword, IsRelatedTo, HasType
+from dsl import DefinitionOf, LabelOf, IsPlace, \
+    UTCof, LocationOf
 
 
 # Openings
@@ -35,11 +27,11 @@ class Thing(Particle):
     regex = Question(Pos("JJ")) + (Pos("NN") | Pos("NNP") | Pos("NNS")) |\
             Pos("VBN")
 
-    def semantics(self, match):
+    def interpret(self, match):
         return HasKeyword(match.words.tokens)
 
 
-class WhatIs(RegexTemplate):
+class WhatIs(QuestionTemplate):
     """
     Regex for questions like "What is a blowtorch
     Ex: "What is a car"
@@ -49,13 +41,13 @@ class WhatIs(RegexTemplate):
     regex = Lemma("what") + Lemma("be") + Question(Pos("DT")) + \
         Thing() + Question(Pos("."))
 
-    def semantics(self, match):
+    def interpret(self, match):
         label = DefinitionOf(match.thing)
 
         return label, "define"
 
 
-class ListEntity(RegexTemplate):
+class ListEntity(QuestionTemplate):
     """
     Regex for questions like "List Microsoft software"
     """
@@ -64,7 +56,7 @@ class ListEntity(RegexTemplate):
     target = Group(Pos("NN") | Pos("NNS"), "target")
     regex = LISTOPEN + entity + target
 
-    def semantics(self, match):
+    def interpret(self, match):
         entity = HasKeyword(match.entity.tokens)
         target_type = HasKeyword(match.target.lemmas)
         target = HasType(target_type) + IsRelatedTo(entity)
@@ -73,7 +65,7 @@ class ListEntity(RegexTemplate):
         return label, "enum"
 
 
-class WhatTimeIs(RegexTemplate):
+class WhatTimeIs(QuestionTemplate):
     """
     Regex for questions about the time
     Ex: "What time is it in Cordoba"
@@ -88,14 +80,14 @@ class WhatTimeIs(RegexTemplate):
                Lemma("time")
     regex = openings + Pos("IN") + place + Question(Pos("."))
 
-    def semantics(self, match):
+    def interpret(self, match):
         place = HasKeyword(match.place.lemmas.title()) + IsPlace()
         utc_offset = UTCof(place)
 
         return utc_offset, "time"
 
 
-class WhereIsRegex(RegexTemplate):
+class WhereIsQuestion(QuestionTemplate):
     """
     Ex: "where in the world is the Eiffel Tower"
     """
@@ -105,7 +97,7 @@ class WhereIsRegex(RegexTemplate):
     regex = Lemma("where") + Question(Lemmas("in the world")) + Lemma("be") + \
         Question(Pos("DT")) + thing + Question(Pos("."))
 
-    def semantics(self, match):
+    def interpret(self, match):
         thing = HasKeyword(match.thing.tokens)
         location = LocationOf(thing)
         location_name = LabelOf(location)

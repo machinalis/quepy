@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 # pylint: disable=C0111
 
@@ -10,11 +9,11 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Semantics definitions.
+Domain specific language definitions.
 """
 
 from copy import copy
-from expression import Expression
+from quepy.expression import Expression
 from quepy.encodingpolicy import encoding_flexible_conversion
 
 
@@ -48,14 +47,6 @@ class FixedType(Expression):
     fixedtype = None
     fixedtyperelation = u"rdf:type"  # FIXME: sparql specific
 
-    class _hide_node(object):
-
-        def __init__(self, node):
-            self.node = node
-
-        def __unicode__(self):
-            return self.node
-
     def __init__(self):
         super(FixedType, self).__init__()
         if self.fixedtype is None:
@@ -64,7 +55,7 @@ class FixedType(Expression):
         self.fixedtype = encoding_flexible_conversion(self.fixedtype)
         self.fixedtyperelation = \
             encoding_flexible_conversion(self.fixedtyperelation)
-        self.add_data(self.fixedtyperelation, self._hide_node(self.fixedtype))
+        self.add_data(self.fixedtyperelation, self.fixedtype)
 
 
 class FixedDataRelation(Expression):
@@ -113,20 +104,3 @@ class IsRelatedTo(FixedRelation):
     pass
 # Looks weird, yes, here I am using `IsRelatedTo` as a unique identifier.
 IsRelatedTo.relation = IsRelatedTo
-
-
-if __name__ == "__main__":
-    from expression import expression_to_sparql
-
-    class WasBornIn(FixedRelation):
-        relation = u"example:WasBornIn"
-
-    class IsCountry(FixedType):
-        fixedtype = u"example:Country"
-
-    HasKeyword.language = u"en"
-    poet = HasKeyword(u"poet") + HasKeyword(u"famous")
-    germany = HasKeyword(u"germany") + IsCountry()
-    e = poet + WasBornIn(germany)
-
-    print expression_to_sparql(e)[1]

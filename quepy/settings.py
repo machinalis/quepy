@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -12,9 +11,8 @@
 Settings.
 """
 
-# Freeling config
-USE_FREELING = False
-FREELING_CMD = ""  # Only set if USE_FREELING it's True
+# Generated query language
+LANGUAGE = "sparql"
 
 # NLTK config
 NLTK_DATA_PATH = []  # List of paths with NLTK data

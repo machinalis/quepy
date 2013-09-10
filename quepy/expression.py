@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -209,53 +208,3 @@ class Expression(object):
         Amount of nodes in the graph.
         """
         return len(self.nodes)
-
-
-def make_canonical_expression(e):
-    i = 0
-    q = [e.get_head()]
-    seen = set()
-    while i != len(q):
-        node = q[i]
-        i += 1
-        assert node not in seen, "Nouuu, expression is cyclic!"
-        for relation, child in e.iter_edges(node):
-            if isnode(child):
-                q.append(child)
-    q.reverse()
-    canon = {}
-    for node in q:
-        childs = []
-        for label, child in e.iter_edges(node):
-            if isnode(child):
-                child = canon[child]
-            childs.append((label, child))
-        childs.sort()
-        canon[node] = tuple(childs)
-    return canon[e.get_head()]
-
-
-if __name__ == "__main__":
-    from printout import expression_to_dot, expression_to_sparql
-
-    def HasKeyword(x):
-        e = Expression()
-        e.add_data("Keyword", x)
-        return e
-
-    def HasTopic(e, reverse=False):
-        e.decapitate("HasTopic", reverse)
-        return e
-
-    def WasBornIn(e, reverse=False):
-        e.decapitate("WasBornIn", reverse)
-        return e
-
-    poet = HasKeyword("poet") + HasKeyword("famous")
-    drama = HasKeyword("drama")
-    germany = HasKeyword("germany")
-    E = poet + HasTopic(drama) + WasBornIn(germany)
-    print expression_to_dot(E)
-    print expression_to_sparql(E)[1]
-    from pprint import pprint
-    pprint(make_canonical_expression(E))

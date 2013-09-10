@@ -14,9 +14,7 @@ Movie related regex.
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
-from dsl import IsMovie, NameOf, IsPerson, \
-    DirectedBy, LabelOf, DurationOf, HasActor, HasName, ReleaseDateOf, \
-    DirectorOf, StarsIn, DefinitionOf
+from dsl import *
 
 nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 
@@ -34,7 +32,7 @@ class Actor(Particle):
 
     def interpret(self, match):
         name = match.words.tokens
-        return IsPerson() + HasKeyword(name)
+        return IsPerson() + IsActor() + HasKeyword(name)
 
 
 class Director(Particle):
@@ -42,7 +40,7 @@ class Director(Particle):
 
     def interpret(self, match):
         name = match.words.tokens
-        return IsPerson() + HasKeyword(name)
+        return IsPerson() + IsDirector() + HasKeyword(name)
 
 
 class ListMoviesQuestion(QuestionTemplate):
@@ -55,7 +53,7 @@ class ListMoviesQuestion(QuestionTemplate):
     def interpret(self, match):
         movie = IsMovie()
         name = NameOf(movie)
-        return name, "enum"
+        return name
 
 
 class MoviesByDirectorQuestion(QuestionTemplate):
@@ -72,9 +70,8 @@ class MoviesByDirectorQuestion(QuestionTemplate):
 
     def interpret(self, match):
         movie = IsMovie() + DirectedBy(match.director)
-        movie_name = LabelOf(movie)
-
-        return movie_name, "enum"
+        movie_name = NameOf(movie)
+        return movie_name
 
 
 class MovieDurationQuestion(QuestionTemplate):
@@ -89,8 +86,8 @@ class MovieDurationQuestion(QuestionTemplate):
             Question(Pos("."))
 
     def interpret(self, match):
-        duration = DurationOf(match.movie)
-        return duration, ("literal", "{} minutes long")
+        duration = DurationOf(RuntimeOf(match.movie))
+        return duration
 
 
 class ActedOnQuestion(QuestionTemplate):
@@ -112,9 +109,10 @@ class ActedOnQuestion(QuestionTemplate):
             (Question(Lemma("list")) + movie + Lemma("star") + Actor())
 
     def interpret(self, match):
-        movie = IsMovie() + HasActor(match.actor)
+        performance = IsPerformance() + PerformanceOfActor(match.actor)
+        movie = IsMovie() + HasPerformance(performance)
         movie_name = NameOf(movie)
-        return movie_name, "enum"
+        return movie_name
 
 
 class MovieReleaseDateQuestion(QuestionTemplate):
@@ -130,7 +128,7 @@ class MovieReleaseDateQuestion(QuestionTemplate):
 
     def interpret(self, match):
         release_date = ReleaseDateOf(match.movie)
-        return release_date, "literal"
+        return release_date
 
 
 class DirectorOfQuestion(QuestionTemplate):
@@ -147,7 +145,7 @@ class DirectorOfQuestion(QuestionTemplate):
     def interpret(self, match):
         director = IsPerson() + DirectorOf(match.movie)
         director_name = NameOf(director)
-        return director_name, "literal"
+        return director_name
 
 
 class ActorsOfQuestion(QuestionTemplate):
@@ -164,8 +162,10 @@ class ActorsOfQuestion(QuestionTemplate):
             ((Lemma("actors") | Lemma("actor")) + Pos("IN") + Movie())
 
     def interpret(self, match):
-        actor = NameOf(IsPerson() + StarsIn(match.movie))
-        return actor, "enum"
+        performance = IsPerformance() + PerformanceOfMovie(match.movie)
+        actor = IsActor() + PerformsIn(performance)
+        name = NameOf(actor)
+        return name
 
 
 class PlotOfQuestion(QuestionTemplate):
@@ -181,4 +181,4 @@ class PlotOfQuestion(QuestionTemplate):
 
     def interpret(self, match):
         definition = DefinitionOf(match.movie)
-        return definition, "define"
+        return definition

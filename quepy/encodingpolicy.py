@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 # Copyright (c) 2012, Machinalis S.R.L.
@@ -13,7 +12,7 @@ Functions to do encoding checkings.
 """
 
 import logging
-import settings
+from quepy import settings
 logger = logging.getLogger("quepy.encodingpolicy")
 
 

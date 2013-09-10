@@ -5,10 +5,8 @@ Library Reference
    :maxdepth: 1
 
    quepy
-   semantics
-   semantic_utils
-   regex
-   freeling
+   dsl
+   parsing
    nltktagger
-   handlers
    expression
+   generation
