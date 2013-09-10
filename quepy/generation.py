@@ -8,7 +8,12 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Code generation.
+Code generation from an expression to a database language.
+
+The currently supported languages are:
+    * MQL
+    * Sparql
+    * Dot: generation of graph images mainly for debugging.
 """
 
 from quepy.mql_generation import generate_mql
@@ -17,6 +22,11 @@ from quepy.sparql_generation import expression_to_sparql
 
 
 def get_code(expression, language):
+    """
+    Given an expression and a supported language, it
+    returns the query for that expression on that language.
+    """
+
     if language == "sparql":
         return expression_to_sparql(expression)
     elif language == "dot":

@@ -9,3 +9,4 @@ Library Reference
    parsing
    nltktagger
    expression
+   generation
