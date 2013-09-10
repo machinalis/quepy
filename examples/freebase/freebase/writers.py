@@ -18,12 +18,11 @@ from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
 
 
-nouns = Plus(Pos("DT") | Pos("IN") | Pos("NN") | Pos("NNS") |
-             Pos("NNP") | Pos("NNPS"))
+nouns = Pos("DT") | Pos("IN") | Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS")
 
 
 class Book(Particle):
-    regex = nouns
+    regex = Plus(nouns)
 
     def interpret(self, match):
         name = match.words.tokens
@@ -31,7 +30,7 @@ class Book(Particle):
 
 
 class Author(Particle):
-    regex = nouns
+    regex = Plus(nouns | Lemma("."))
 
     def interpret(self, match):
         name = match.words.tokens
