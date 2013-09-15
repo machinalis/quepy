@@ -90,7 +90,7 @@ obtaining:
 Installation
 ============
 
-You need to have installed `numpy <http://numpy.scipy.org/>`_.
+You need to have installed `docopt <http://docopt.org>`_ and `numpy <http://numpy.scipy.org/>`_.
 Other than that, you can just type:
 
 ::
