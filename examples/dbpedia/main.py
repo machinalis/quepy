@@ -63,8 +63,10 @@ def print_time(results, target, metadata=None):
 
         if ("to" in offset) or ("and" in offset):
             if "to" in offset:
+                connector = "and"
                 from_offset, to_offset = offset.split("to")
             else:
+                connector = "or"
                 from_offset, to_offset = offset.split("and")
 
             from_offset, to_offset = int(from_offset), int(to_offset)
@@ -81,8 +83,9 @@ def print_time(results, target, metadata=None):
             location_string = random.choice(["where you are",
                                              "your location"])
 
-            print "Between %s and %s, depending on %s" % \
+            print "Between %s %s %s, depending on %s" % \
                   (from_time.strftime("%H:%M"),
+                   connector,
                    to_time.strftime("%H:%M on %A"),
                    location_string)
 
