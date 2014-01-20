@@ -61,8 +61,12 @@ def print_time(results, target, metadata=None):
     for result in results["results"]["bindings"]:
         offset = result[target]["value"].replace(u"−", u"-")
 
-        if "to" in offset:
-            from_offset, to_offset = offset.split("to")
+        if ("to" in offset) or ("and" in offset):
+            if "to" in offset:
+                from_offset, to_offset = offset.split("to")
+            else:
+                from_offset, to_offset = offset.split("and")
+
             from_offset, to_offset = int(from_offset), int(to_offset)
 
             if from_offset > to_offset:
@@ -77,7 +81,7 @@ def print_time(results, target, metadata=None):
             location_string = random.choice(["where you are",
                                              "your location"])
 
-            print "Between %s and %s, depending %s" % \
+            print "Between %s and %s, depending on %s" % \
                   (from_time.strftime("%H:%M"),
                    to_time.strftime("%H:%M on %A"),
                    location_string)
