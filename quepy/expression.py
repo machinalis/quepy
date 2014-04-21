@@ -107,7 +107,7 @@ class Expression(object):
 
     def _add_node(self):
         """
-        Adds a blank node to the graph and returns it's index (a unique
+        Adds a blank node to the graph and returns its index (a unique
         identifier).
         """
         i = len(self.nodes)
