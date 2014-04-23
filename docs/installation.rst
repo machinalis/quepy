@@ -1,13 +1,13 @@
 Installation
 ============
 
-Dependeces
-----------
+Dependences
+-----------
 
 * `refo <http://github.com/machinalis/refo>`_
 * `nltk <http://nltk.org/>`_ - *if you intend to use nltk tagger*
 * `SPARQLWrapper <http://pypi.python.org/pypi/SPARQLWrapper>`_ *if you intend to use the examples*
-* `graphviz <http://www.graphviz.org/>`_ *if you intend to visulize your queries*
+* `graphviz <http://www.graphviz.org/>`_ *if you intend to visualize your queries*
 
 
 From pip
@@ -45,7 +45,7 @@ and then :ref:`check-installation`
 Checking the installation
 -------------------------
 
-to check if quepy was successufully installed do:
+To check if quepy was successufully installed run:
 
 ::
 
@@ -57,7 +57,7 @@ and you should obtain the version number.
 Set up the POS tagger
 ---------------------
 
-After that you need get the backend's POS tagger. It's ok if you don't
+After that you need to download the backend's POS tagger. It's ok if you don't
 know what that is, it's safe to treat it like a black box.
 Quepy uses `nltk <http://nltk.org/>`_.
 
@@ -68,4 +68,4 @@ To set up quepy to be able to use `nltk <http://nltk.org/>`_ type:
     $ quepy nltkdata /some/path/you/find/convenient
 
 Also, everytime you start a new app or use one, like the dbpedia example,
-you should configure `settings.py` to point to this path you chose.
+you should configure `settings.py` to point to the path you chose.
