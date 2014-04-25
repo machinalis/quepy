@@ -106,7 +106,7 @@ class ActiveYears(FixedRelation):
     reverse = True
 
 
-class MusicGenereOf(FixedRelation):
+class MusicGenreOf(FixedRelation):
     relation = "dbpedia-owl:genre"
     reverse = True
 
