@@ -14,7 +14,7 @@ Music related regex
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
-from dsl import IsBand, LabelOf, IsMemberOf, ActiveYears, MusicGenereOf, \
+from dsl import IsBand, LabelOf, IsMemberOf, ActiveYears, MusicGenreOf, \
     NameOf, IsAlbum, ProducedBy
 
 
@@ -73,8 +73,8 @@ class GenreQuestion(QuestionTemplate):
         Pos("IN") + Band() + Question(Pos("."))
 
     def interpret(self, match):
-        genere = MusicGenereOf(match.band)
-        label = LabelOf(genere)
+        genre = MusicGenreOf(match.band)
+        label = LabelOf(genre)
         return label, "enum"
 
 

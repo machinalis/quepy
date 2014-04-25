@@ -1,8 +1,8 @@
 Installation
 ============
 
-Dependences
------------
+Dependencies
+------------
 
 * `refo <http://github.com/machinalis/refo>`_
 * `nltk <http://nltk.org/>`_ - *if you intend to use nltk tagger*
