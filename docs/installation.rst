@@ -33,7 +33,7 @@ Download the *GIT* repository from `Github <https://github.com/machinalis/quepy>
 run the install script doing:
 
 ::
-    
+
     $ cd quepy
     $ sudo python setup.py install
 
@@ -49,7 +49,7 @@ To check if quepy was successufully installed run:
 
 ::
 
-    $ quepy version
+    $ quepy --version
 
 and you should obtain the version number.
 
