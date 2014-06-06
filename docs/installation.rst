@@ -45,7 +45,7 @@ and then :ref:`check-installation`
 Checking the installation
 -------------------------
 
-To check if quepy was successufully installed run:
+To check if quepy was successfully installed run:
 
 ::
 
@@ -67,5 +67,5 @@ To set up quepy to be able to use `nltk <http://nltk.org/>`_ type:
 
     $ quepy nltkdata /some/path/you/find/convenient
 
-Also, everytime you start a new app or use one, like the dbpedia example,
+Also, every time you start a new app or use one, like the dbpedia example,
 you should configure `settings.py` to point to the path you chose.
