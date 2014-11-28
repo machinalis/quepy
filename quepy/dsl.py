@@ -81,7 +81,7 @@ class FixedDataRelation(Expression):
 
 class HasKeyword(FixedDataRelation):
     """
-    Abstraction of an information retrival key, something standarized used
+    Abstraction of an information retrieval key, something standarized used
     to look up things in the database.
     """
     relation = u"quepy:Keyword"

@@ -14,7 +14,7 @@ This file implements the ``Expression`` class.
 It's meant to carry all the information necessary to build a database query in
 an abstract form.
 
-By desing it's aimed specifically to represent a SPARQL query, but it should
+By design it's aimed specifically to represent a SPARQL query, but it should
 be able to represent queries in other database languages too.
 
 A (simple) SPARQL query can be thought as a subgraph that has to match into a
@@ -23,7 +23,7 @@ edge a relation. So in order to represent a query, ``Expression`` implements a
 this subgraph using adjacency lists.
 
 Also, ``Expression`` instances are meant to be combined with each other somehow
-to make complex queries out of simple ones (this is one main objectives
+to make complex queries out of simple ones (this is one of the main objectives
 of quepy).
 
 To do that, every ``Expression`` has a special node called the ``head``, which
@@ -83,7 +83,7 @@ The reasons are:
       plus to other(it's a plus to me))
 
     - There are just 3 really basic operations and their semantics are defined
-      consisely without special cases (if you care for that kind of stuff
+      concisely without special cases (if you care for that kind of stuff
       (I do)).
 """
 

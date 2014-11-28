@@ -45,7 +45,7 @@ For example, if your IRkeys are always in lowercase, you can define:
 Particles
 ---------
 
-It's very common to find patters that are repeated on several regex so quepy
+It's very common to find patterns that are repeated on several regex so quepy
 provides a mechanism to do this easily. For example, in the DBpedia example,
 a country it's used several times as regex and it has always the same interpretation.
 In order to do this in a clean way, one can define a Particle by doing:

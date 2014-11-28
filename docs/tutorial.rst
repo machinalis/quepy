@@ -44,8 +44,8 @@ Starting a quepy project
 ------------------------
 
 To start a quepy project, you must create a quepy application.  In our
-example, our application is called dbpedia, and we create the
-application by doing:
+example, our application is called `dbpedia`, and we create the
+application by running:
 
 ::
 
@@ -72,15 +72,15 @@ It should look like this:
 
 This is the basic structure of every quepy project.
 
-* dbpedia/parsing.py: the file where you will define the regular expressions
+* `dbpedia/parsing.py`: the file where you will define the regular expressions
   that will match natural language questions and transform them into an
   abstract semantic representation.
-* dbpedia/dsl.py: the file where you will define the domain specific language
+* `dbpedia/dsl.py`: the file where you will define the domain specific language
   of your database schema. In the case of SPARQL, here you will be specifing
   things that usually go in the ontology: relation names and such.
-* dbpedia/settings.py: the configuration file for some aspects of the
+* `dbpedia/settings.py`: the configuration file for some aspects of the
   installation.
-* main.py: this file is a optional kickstart point where you can have all the
+* `main.py`: this file is a optional kickstart point where you can have all the
   code you need to interact with your app. If you want, you can safely remove
   this file.
 
@@ -94,11 +94,11 @@ data for the `nltk tagger <http://nltk.org/>`_. If not check the
 :doc:`installation section. <installation>`
 
 Now edit *dbpedia/settings.py* and add the path to the nltk data to the
-NLTK_DATA variable.
+`NLTK_DATA` variable.
 This file has some other configuration options, but we are not going to need
 them for this example.
 
-Also configure the **LANGUAGE**, in this example we'll use ``sparql``.
+Also configure the `LANGUAGE`, in this example we'll use ``sparql``.
 
 .. Note::
     
@@ -125,7 +125,7 @@ Defining the regex
 
 We need to define the regular expressions that will match natural
 language questions and transform them into an abstract semantic
-representation. This will define especifically which questions the
+representation. This will define specifically which questions the
 system will be able to handle and *what* to do with them.
 
 In our example, we'll be editing the file *dbpedia/parsing.py*. Let's
@@ -204,8 +204,8 @@ matched question:
         return definition
 
 In this example, the contents of the target variable are the argument
-of a HasKeyword predicate. The HasKeyword predicate is part of the
-vocabulary of our specific database. In contrast, the IsDefinedIn
+of a `HasKeyword` predicate. The `HasKeyword` predicate is part of the
+vocabulary of our specific database. In contrast, the `IsDefinedIn`
 predicate is part of the abstract semantics component that is
 described in the next section.
 
@@ -221,14 +221,14 @@ transparent manner.
 In our example, the domain specific language is defined in the file
 *dbpedia/dsl.py*.
 
-Let's see an example of the dsl definition. The predicate IsDefinedIn
-was used in Line 21 of the previous example:
+Let's see an example of the dsl definition. The predicate `IsDefinedIn`
+was used in line 21 of the previous example:
 
 .. code-block:: python
 
     definition = IsDefinedIn(target)
 
-IsDefinedIn is defined in the dsl file as follows:
+`IsDefinedIn` is defined in the `dsl.py` file as follows:
 
 .. code-block:: python
 
@@ -238,8 +238,8 @@ IsDefinedIn is defined in the dsl file as follows:
         relation = "rdfs:comment"
         reverse = True
 
-This means that IsDefinedIn is a Relation where the subject has
-rdf:comment. By creating a quepy class, we provide a further level of
+This means that `IsDefinedIn` is a Relation where the subject has
+`rdf:comment`. By creating a quepy class, we provide a further level of
 abstraction on this feature which allows to integrate it in regular
 expressions seamlessly.
 

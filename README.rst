@@ -118,7 +118,4 @@ Join our `mailing list <http://groups.google.com/group/quepy>`_
 Contribute!
 ===========
 
-Want to help develop quepy? Welcome aboard! Find us in
-
-    - #quepy at freenode
-    - quepydev at librelist.com
+Want to help develop quepy? Welcome aboard! Find us in http://groups.google.com/group/quepy
