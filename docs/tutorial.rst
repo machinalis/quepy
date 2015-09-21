@@ -63,7 +63,7 @@ It should look like this:
     .
     ├── dbpedia
     │   ├── __init__.py
-    │   ├── parsing.py
+    │   ├── basic.py
     │   ├── dsl.py
     │   └── settings.py
     └── main.py
@@ -72,7 +72,7 @@ It should look like this:
 
 This is the basic structure of every quepy project.
 
-* `dbpedia/parsing.py`: the file where you will define the regular expressions
+* `dbpedia/basic.py`: the file where you will define the regular expressions
   that will match natural language questions and transform them into an
   abstract semantic representation.
 * `dbpedia/dsl.py`: the file where you will define the domain specific language
@@ -128,7 +128,7 @@ language questions and transform them into an abstract semantic
 representation. This will define specifically which questions the
 system will be able to handle and *what* to do with them.
 
-In our example, we'll be editing the file *dbpedia/parsing.py*. Let's
+In our example, we'll be editing the file *dbpedia/basic.py*. Let's
 look at an example of regular expression to handle *"What is ..."*
 questions. The whole definition would look like this:
 
