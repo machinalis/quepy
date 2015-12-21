@@ -8,7 +8,7 @@
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
 
 """
-Coutry related regex
+Country related regex
 """
 
 from refo import Plus, Question

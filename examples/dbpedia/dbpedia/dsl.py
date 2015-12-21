@@ -30,6 +30,10 @@ class IsCountry(FixedType):
     fixedtype = "dbpedia-owl:Country"
 
 
+class IsPopulatedPlace(FixedType):
+    fixedtype = "dbpedia-owl:PopulatedPlace"
+
+
 class IsBand(FixedType):
     fixedtype = "dbpedia-owl:Band"
 
