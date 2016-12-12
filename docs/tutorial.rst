@@ -52,7 +52,7 @@ application by running:
     $ quepy.py startapp dbpedia
 
 
-You'll find out that a folder and some files where created.
+You'll find out that a folder and some files were created.
 It should look like this:
 
 ::
@@ -76,11 +76,11 @@ This is the basic structure of every quepy project.
   that will match natural language questions and transform them into an
   abstract semantic representation.
 * `dbpedia/dsl.py`: the file where you will define the domain specific language
-  of your database schema. In the case of SPARQL, here you will be specifing
+  of your database schema. In the case of SPARQL, here you will be specifying
   things that usually go in the ontology: relation names and such.
 * `dbpedia/settings.py`: the configuration file for some aspects of the
   installation.
-* `main.py`: this file is a optional kickstart point where you can have all the
+* `main.py`: this file is an optional kickstart point where you can have all the
   code you need to interact with your app. If you want, you can safely remove
   this file.
 
