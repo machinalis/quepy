@@ -89,7 +89,7 @@ This is the basic structure of every quepy project.
 Configuring the application
 ---------------------------
 
-First make sure you have already downloaded the necesary
+First make sure you have already downloaded the necessary
 data for the `nltk tagger <http://nltk.org/>`_. If not check the
 :doc:`installation section. <installation>`
 
