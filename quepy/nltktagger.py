@@ -12,7 +12,7 @@ Tagging using NLTK.
 """
 
 # Requiered data files are:
-#   - "maxent_treebank_pos_tagger" in Models
+#   - "averaged_perceptron_tagger" in Models
 #   - "wordnet" in Corpora
 
 import nltk

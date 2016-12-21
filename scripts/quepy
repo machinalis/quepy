@@ -197,7 +197,7 @@ def nltkdata(path):
     except OSError:
         pass
     nltk.download("wordnet", path)
-    nltk.download("maxent_treebank_pos_tagger", path)
+    nltk.download("averaged_perceptron_tagger", path)
     print "Finished"
 
 
