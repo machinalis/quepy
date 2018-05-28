@@ -4,13 +4,13 @@ python:
  
 
 install: 
-  - pip install -U pytest setuptools wheel twine
+  - pip install -U pytest setuptools wheel
   - python setup.py install
   - python -m nltk.downloader wordnet
+  - python -m nltk.downloader averaged_perceptron_tagger
 
 script:
-  - pip install --upgrade setuptools wheel
-  - python setup.py sdist bdist_wheel
+  - pytest
 
 deploy:
   provider: pypi
