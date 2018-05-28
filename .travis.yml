@@ -1,0 +1,14 @@
+language: python
+python:
+ - 2.7
+ 
+
+install: 
+  - python install -U pytest setuptools wheel twine
+  - python setup.py install
+
+script:
+  - pip install --upgrade setuptools wheel
+  - python setup.py sdist bdist_wheel
+  - twine register -u $PYPI_USER -p $PYPI_PASS --repository-url $PYPI_REPO
+  - twine upload --repository-url $PYPI_REPO dist/*
