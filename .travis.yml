@@ -4,8 +4,9 @@ python:
  
 
 install: 
-  - python install -U pytest setuptools wheel twine
+  - pip install -U pytest setuptools wheel twine
   - python setup.py install
+  - python -m nltk.downloader wordnet
 
 script:
   - pip install --upgrade setuptools wheel
