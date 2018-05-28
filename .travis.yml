@@ -11,5 +11,9 @@ install:
 script:
   - pip install --upgrade setuptools wheel
   - python setup.py sdist bdist_wheel
-  - twine register -u $PYPI_USER -p $PYPI_PASS --repository-url $PYPI_REPO
-  - twine upload --repository-url $PYPI_REPO dist/*
+
+deploy:
+  provider: pypi
+  user: $PYPI_USER
+  distributions: sdist bdist_wheel
+  password: $PYPI_PASS
